@@ -1,0 +1,542 @@
+[
+    {
+        "id": 0,
+        "predicted_recovery": 0.8475836960541306,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 8.4,
+            "supplier": "Mary Anne",
+            "supplied_m3": 2.9
+        }
+    },
+    {
+        "id": 1,
+        "predicted_recovery": 0.6951959066561723,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 8.45,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 6.5
+        }
+    },
+    {
+        "id": 2,
+        "predicted_recovery": 0.694045361949293,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 9.416666666666666,
+            "supplier": "Mary",
+            "supplied_m3": 5.0
+        }
+    },
+    {
+        "id": 3,
+        "predicted_recovery": 0.655142375699061,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 11.95,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 6.3
+        }
+    },
+    {
+        "id": 4,
+        "predicted_recovery": 0.7921555839033233,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 12.766666666666667,
+            "supplier": "Mary Anne",
+            "supplied_m3": 3.0
+        }
+    },
+    {
+        "id": 5,
+        "predicted_recovery": 0.60720395669677,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 13.816666666666666,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 3.7
+        }
+    },
+    {
+        "id": 6,
+        "predicted_recovery": 0.738858339062261,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 14.816666666666666,
+            "supplier": "Mary Anne",
+            "supplied_m3": 2.9
+        }
+    },
+    {
+        "id": 7,
+        "predicted_recovery": 0.6796488990845617,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 8.283333333333333,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 6.7
+        }
+    },
+    {
+        "id": 8,
+        "predicted_recovery": 0.7471897423425239,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 8.5,
+            "supplier": "Mary",
+            "supplied_m3": 5.1
+        }
+    },
+    {
+        "id": 9,
+        "predicted_recovery": 0.6343243076223272,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 10.266666666666667,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 7.0
+        }
+    },
+    {
+        "id": 10,
+        "predicted_recovery": 0.7733551643607229,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 10.733333333333333,
+            "supplier": "Mary Anne",
+            "supplied_m3": 3.1
+        }
+    },
+    {
+        "id": 11,
+        "predicted_recovery": 0.7828922240518812,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 11.65,
+            "supplier": "Mary Anne",
+            "supplied_m3": 2.8
+        }
+    },
+    {
+        "id": 12,
+        "predicted_recovery": 0.6592678828682702,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 12.55,
+            "supplier": "Mary Jane",
+            "supplied_m3": 4.9
+        }
+    },
+    {
+        "id": 13,
+        "predicted_recovery": 0.5868450233181427,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 14.15,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 4.0
+        }
+    },
+    {
+        "id": 14,
+        "predicted_recovery": 0.7352514440200358,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 15.883333333333333,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 1.9
+        }
+    },
+    {
+        "id": 15,
+        "predicted_recovery": 0.7019214533863012,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 8.166666666666666,
+            "supplier": "Mary Therese",
+            "supplied_m3": 4.1
+        }
+    },
+    {
+        "id": 16,
+        "predicted_recovery": 0.7113997432167346,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 8.233333333333333,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 4.2
+        }
+    },
+    {
+        "id": 17,
+        "predicted_recovery": 0.6922841101733467,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 9.266666666666667,
+            "supplier": "Mary",
+            "supplied_m3": 4.9
+        }
+    },
+    {
+        "id": 18,
+        "predicted_recovery": 0.7641892150409839,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 11.616666666666667,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.1
+        }
+    },
+    {
+        "id": 19,
+        "predicted_recovery": 0.786585489848634,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 12.683333333333334,
+            "supplier": "Mary Anne",
+            "supplied_m3": 2.9
+        }
+    },
+    {
+        "id": 20,
+        "predicted_recovery": 0.6412110833228628,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 12.75,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 3.9
+        }
+    },
+    {
+        "id": 21,
+        "predicted_recovery": 0.7122552927663841,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 14.366666666666667,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.0
+        }
+    },
+    {
+        "id": 22,
+        "predicted_recovery": 0.6280451083250866,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 14.483333333333333,
+            "supplier": "Mary",
+            "supplied_m3": 5.0
+        }
+    },
+    {
+        "id": 23,
+        "predicted_recovery": 0.7106648880352142,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 15.583333333333334,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.0
+        }
+    },
+    {
+        "id": 24,
+        "predicted_recovery": 0.706016215372371,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 8.216666666666667,
+            "supplier": "Mary Therese",
+            "supplied_m3": 3.7
+        }
+    },
+    {
+        "id": 25,
+        "predicted_recovery": 0.8017353888624783,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 8.35,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.0
+        }
+    },
+    {
+        "id": 26,
+        "predicted_recovery": 0.6489782497542615,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 9.35,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 3.7
+        }
+    },
+    {
+        "id": 27,
+        "predicted_recovery": 0.7835826303771821,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 10.983333333333333,
+            "supplier": "Mary Anne",
+            "supplied_m3": 2.9
+        }
+    },
+    {
+        "id": 28,
+        "predicted_recovery": 0.6235310034892094,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 11.566666666666666,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 4.3
+        }
+    },
+    {
+        "id": 29,
+        "predicted_recovery": 0.683327291145879,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 12.433333333333334,
+            "supplier": "Mary",
+            "supplied_m3": 4.9
+        }
+    },
+    {
+        "id": 30,
+        "predicted_recovery": 0.7598248130837822,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 13.183333333333334,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.0
+        }
+    },
+    {
+        "id": 31,
+        "predicted_recovery": 0.7399964090561045,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 14.766666666666667,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 1.9
+        }
+    },
+    {
+        "id": 32,
+        "predicted_recovery": 0.5802900210632911,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 15.316666666666666,
+            "supplier": "Mary Therese",
+            "supplied_m3": 4.3
+        }
+    },
+    {
+        "id": 33,
+        "predicted_recovery": 0.813223247861572,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 8.283333333333333,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 1.9
+        }
+    },
+    {
+        "id": 34,
+        "predicted_recovery": 0.7913981355206837,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 8.3,
+            "supplier": "Mary Therese",
+            "supplied_m3": 4.7
+        }
+    },
+    {
+        "id": 35,
+        "predicted_recovery": 0.66937359193905,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 9.4,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 5.5
+        }
+    },
+    {
+        "id": 36,
+        "predicted_recovery": 0.7019713450180147,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 9.783333333333333,
+            "supplier": "Mary",
+            "supplied_m3": 4.9
+        }
+    },
+    {
+        "id": 37,
+        "predicted_recovery": 0.6353802787592251,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 11.516666666666667,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 4.2
+        }
+    },
+    {
+        "id": 38,
+        "predicted_recovery": 0.7570181776406592,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 13.2,
+            "supplier": "Mary Anne",
+            "supplied_m3": 3.1
+        }
+    },
+    {
+        "id": 39,
+        "predicted_recovery": 0.5948260260889657,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 13.216666666666667,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 4.0
+        }
+    },
+    {
+        "id": 40,
+        "predicted_recovery": 0.6280490873044904,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 14.3,
+            "supplier": "Mary Jane",
+            "supplied_m3": 5.2
+        }
+    },
+    {
+        "id": 41,
+        "predicted_recovery": 0.7116537059612099,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 14.7,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.1
+        }
+    },
+    {
+        "id": 42,
+        "predicted_recovery": 0.7242252836481362,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 15.833333333333334,
+            "supplier": "Mary Anne",
+            "supplied_m3": 3.1
+        }
+    },
+    {
+        "id": 43,
+        "predicted_recovery": 0.7379174253548294,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 8.566666666666666,
+            "supplier": "Mary Therese",
+            "supplied_m3": 3.9
+        }
+    },
+    {
+        "id": 44,
+        "predicted_recovery": 0.6561349939741307,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 8.75,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 5.8
+        }
+    },
+    {
+        "id": 45,
+        "predicted_recovery": 0.6869463200112581,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 10.283333333333333,
+            "supplier": "Mary Jane",
+            "supplied_m3": 5.3
+        }
+    },
+    {
+        "id": 46,
+        "predicted_recovery": 0.7810945685304294,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 11.333333333333334,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 1.9
+        }
+    },
+    {
+        "id": 47,
+        "predicted_recovery": 0.6782505154653874,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 13.083333333333334,
+            "supplier": "Mary Therese",
+            "supplied_m3": 4.6
+        }
+    },
+    {
+        "id": 48,
+        "predicted_recovery": 0.5952472658895116,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 13.216666666666667,
+            "supplier": "Dick Tracey",
+            "supplied_m3": 6.8
+        }
+    },
+    {
+        "id": 49,
+        "predicted_recovery": 0.6863429939103316,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 9.016666666666667,
+            "supplier": "Mary",
+            "supplied_m3": 5.0
+        }
+    },
+    {
+        "id": 50,
+        "predicted_recovery": 0.8011238895937527,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 9.266666666666667,
+            "supplier": "Harry Houdini",
+            "supplied_m3": 2.0
+        }
+    },
+    {
+        "id": 51,
+        "predicted_recovery": 0.6353802787592251,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 11.2,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 4.2
+        }
+    },
+    {
+        "id": 52,
+        "predicted_recovery": 0.669960695929015,
+        "prediction_feature_values": {
+            "facility": "Bundaberg",
+            "time_start_hour_minute": 12.166666666666666,
+            "supplier": "Mary Jane",
+            "supplied_m3": 5.2
+        }
+    },
+    {
+        "id": 53,
+        "predicted_recovery": 0.5679279509483742,
+        "prediction_feature_values": {
+            "facility": "Newcastle",
+            "time_start_hour_minute": 16.033333333333335,
+            "supplier": "Tom Hanks",
+            "supplied_m3": 3.8
+        }
+    }
+]

@@ -463,8 +463,7 @@ def plot_model_results(
 
     plt.tight_layout()
 
-    # Save
-    if save_path is None:
+    if not save_path:
         save_path = f"model_results_{target_name}.png"
 
     fig.savefig(save_path, dpi=150, bbox_inches="tight")

@@ -1,10 +1,11 @@
 import lightgbm as lgb
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 import numpy as np
-from typing import List, Tuple, Literal
+from typing import Any, List, Tuple, Literal
 import pandas as pd
 import json
 import os
+import joblib
 
 from visualisation import visualize_model_predictions
 from data_managment import (
@@ -142,18 +143,20 @@ def _get_model_file_name(model_name):
     return os.path.join(current_dir, "model_data", model_name)
 
 
-def save_model(model, filename=DEFAULT_MODEL_NAME):
-    import joblib
-
-    filename = _get_model_file_name(filename)
+def save_model(model, model_name=DEFAULT_MODEL_NAME):
+    filename = _get_model_file_name(model_name)
     joblib.dump(model, filename)
 
 
-def load_and_predict(model_filename: str, X: pd.DataFrame = None) -> np.ndarray:
-    import joblib
+def load_model(model_name=DEFAULT_MODEL_NAME):
+    filename = _get_model_file_name(model_name)
+    if not os.path.exists(filename):
+        raise FileNotFoundError(f"Model file not found: {filename}")
+    return joblib.load(filename)
 
-    model_filename = _get_model_file_name(model_filename)
-    model: lgb.LGBMRegressor = joblib.load(model_filename)
+
+def load_and_predict(model_filename: str, X: pd.DataFrame = None) -> np.ndarray:
+    model = load_model(model_filename)
     assert (
         type(model) == lgb.LGBMRegressor
     ), f"Loaded model is not a LightGBM regressor: {type(model)}"
@@ -252,7 +255,10 @@ RESULTS_RATIO_MODEL_FILENAME = "lgbm_recovery_ratio_model_results.json"
 RESULTS_VOLUME_MODEL_FILENAME = "lgbm_recovery_volume_model_results.json"
 
 
-def ImpliedModelResultsInferedRatioFromVolume():
+def ImpliedModelResultsInferedRatioFromVolume(
+    model,
+) -> Tuple[dict[str, Any], np.ndarray, np.ndarray, pd.DataFrame]:
+    """Returns (results, actual_ratios, predicted_ratios, X_test) for visualization."""
     X, Y, not_selected = load_train_test_sets_target_recovery_volume()
 
     X_train, X_test, y_train, y_test, not_selected_train, not_selected_test = (
@@ -260,49 +266,71 @@ def ImpliedModelResultsInferedRatioFromVolume():
     )
 
     volume_predictions = load_and_predict(VOLUME_MODEL_FILENAME, X_test)
-    implied_ratios = y_test / X_test["supplied_m3"]
-    actual_ratios = volume_predictions / X_test["supplied_m3"]
+    actual_ratios = y_test / X_test["supplied_m3"]
+    predicted_ratios = volume_predictions / X_test["supplied_m3"]
 
     model_results = _get_results(
+        model=model,
         y_test=actual_ratios,
-        y_test_pred=implied_ratios,
+        y_test_pred=predicted_ratios,
         type="ratio",
         supplied_m3=X_test["supplied_m3"],
+        feature_names=X_train.columns.tolist(),
     )
 
-    return model_results
+    return model_results, actual_ratios, predicted_ratios, X_test
 
 
 def _do_implied_volume_recovery_model(
-    X_volume, X_volume_not_encoded, predictions_volume
+    X, X_not_encoded, predictions_volume, visualise_model=False
 ):
+    try:
+        model = load_model(VOLUME_MODEL_FILENAME)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"implied recovery ratio model relies on volume model existing. Please run do_recovery_volume_model() first to train and save the model to {VOLUME_MODEL_FILENAME}."
+        )
 
-    supplied_volume = X_volume["supplied_m3"].values
+    # Get test set results and data for visualization
+    results, actual_ratios, predicted_ratios, X_test = (
+        ImpliedModelResultsInferedRatioFromVolume(model)
+    )
 
+    # Save predictions for scheduled data
+    supplied_volume = X["supplied_m3"].values
     volume_recovery_predictions = retrieve_predictions(RESULTS_VOLUME_MODEL_FILENAME)
     volume_recovery_predictions = np.array(
         [pred["predicted_recovery"] for pred in volume_recovery_predictions]
     )
-    implied_recovery_volume_predictions = supplied_volume / volume_recovery_predictions
-    implied_recovery_volume_predictions_jsonable = make_predictions_jsonable(
-        X_volume,
-        implied_recovery_volume_predictions,
-        X_not_encoded=X_volume_not_encoded,
+    implied_ratios_for_schedule = volume_recovery_predictions / supplied_volume
+    implied_recovery_predictions_jsonable = make_predictions_jsonable(
+        X,
+        implied_ratios_for_schedule,
+        X_not_encoded=X_not_encoded,
     )
 
     save_predictions(
-        implied_recovery_volume_predictions_jsonable,
-        "implied_recovery_volume_predictions.json",
+        implied_recovery_predictions_jsonable,
+        "implied_recovery_ratio_predictions.json",
     )
 
-    implied_ratio_results = ImpliedModelResultsInferedRatioFromVolume()
+    print_model_results(results, model_name="Implied Ratio Model")
 
-    print_model_results(implied_ratio_results, model_name="Implied Ratio Model")
+    if visualise_model:
+        visualize_model_predictions(
+            y_true=actual_ratios,
+            y_pred=predicted_ratios,
+            feature_importance=results["feature_importance"],
+            X_features=X_test,
+            target_name="implied_recovery_ratio",
+            model=model,
+            image_filename="implied_recovery_ratio_model.png",
+        )
 
 
 if __name__ == "__main__":
-    do_recovery_ratio_model(RATIO_MODEL_FILENAME, visualse_model=False)
-    do_recovery_volume_model(VOLUME_MODEL_FILENAME, visualse_model=False)
+    do_recovery_ratio_model(RATIO_MODEL_FILENAME, visualse_model=True)
+    do_recovery_volume_model(VOLUME_MODEL_FILENAME, visualse_model=True)
 
     X_ratio, X_ratio_not_encoded = get_schedule_model_features(m_type="ratio")
 
@@ -313,15 +341,15 @@ if __name__ == "__main__":
         X_not_encoded=X_ratio_not_encoded,
     )
 
-    X_volume, X_volume_not_encoded = get_schedule_model_features(m_type="volume")
+    X, X_not_encoded = get_schedule_model_features(m_type="volume")
 
     predictions_volume = make_and_save_predictions(
-        X_volume,
+        X,
         model_filename=VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_VOLUME_MODEL_FILENAME,
-        X_not_encoded=X_volume_not_encoded,
+        X_not_encoded=X_not_encoded,
     )
 
     _do_implied_volume_recovery_model(
-        X_volume, X_volume_not_encoded, predictions_volume
+        X, X_not_encoded, predictions_volume, visualise_model=True
     )
