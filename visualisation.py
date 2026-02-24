@@ -538,7 +538,6 @@ def visualize_model_predictions(
             shap.summary_plot(shap_values, X_features, show=False)
             plt.tight_layout()
             plt.savefig(shap_path, dpi=150, bbox_inches="tight")
-            print(f"Saved SHAP: {shap_path}")
             plt.show()
             plt.close()
         except ImportError:

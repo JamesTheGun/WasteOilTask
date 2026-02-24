@@ -1,6 +1,6 @@
 from datetime import timedelta
 import pandas as pd
-from typing import Tuple
+from typing import Literal, Tuple
 from sklearn.model_selection import train_test_split as sk_train_test_split
 from data_loading import load_data_with_derived_features, load_scheduled_data
 from sklearn.preprocessing import LabelEncoder
@@ -19,6 +19,16 @@ def load_train_test_sets_target_recovery_ratio() -> (
 ):
     data_with_derived = load_data_with_derived_features()
     X, y, not_selected = get_model_features_target_recovery_ratio(data_with_derived)
+    return X, y, not_selected
+
+
+def load_train_test_sets_target_recovery_ratio_with_supplied_volume() -> (
+    Tuple[pd.DataFrame, pd.Series, pd.DataFrame]
+):
+    data_with_derived = load_data_with_derived_features()
+    X, y, not_selected = get_model_features_target_recovery_ratio_with_supplied_volume(
+        data_with_derived
+    )
     return X, y, not_selected
 
 
@@ -93,7 +103,20 @@ def get_model_features_target_recovery_ratio(
     return (encoded_features, target, not_selected)
 
 
-def get_schedule_model_features(m_type: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def get_model_features_target_recovery_ratio_with_supplied_volume(
+    data_with_derived: pd.DataFrame,
+) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
+    encoded_features = encode_features(data_with_derived[MODEL_FEATURES])
+    target = data_with_derived[MODEL_TARGET_RECOVERY_RATIO]
+    not_selected = data_with_derived.drop(
+        columns=MODEL_FEATURES + [MODEL_TARGET_RECOVERY_RATIO]
+    )
+    return (encoded_features, target, not_selected)
+
+
+def get_schedule_model_features(
+    m_type: Literal["ratio", "volume", "ratio_with_supplied_volume"],
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Load scheduled delivery data and prepare features for model prediction.
 
@@ -103,8 +126,10 @@ def get_schedule_model_features(m_type: str) -> Tuple[pd.DataFrame, pd.DataFrame
     scheduled_data = load_scheduled_data()
     if m_type == "ratio":
         features = MODEL_FEATURES_TARGET_RECOVERY_RATIO
-    else:
+    elif m_type == "volume":
         features = MODEL_FEATURES
+    elif m_type == "ratio_with_supplied_volume":
+        features = MODEL_FEATURES  # with supplied_m3 included for ratio model
     raw_features = scheduled_data[features].copy()
     encoded_features = encode_features(scheduled_data[features])
     return encoded_features, raw_features
