@@ -5,7 +5,7 @@
         "time_start": "2022-11-01T08:22:00",
         "time_end": "2022-11-01T10:39:00",
         "process_time_mins": 137.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.25,
         "recovered_m3": 2.5
     },
@@ -35,7 +35,7 @@
         "time_start": "2022-11-01T11:03:00",
         "time_end": "2022-11-01T12:07:00",
         "process_time_mins": 64.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.45
     },
@@ -45,7 +45,7 @@
         "time_start": "2022-11-01T12:37:00",
         "time_end": "2022-11-01T13:20:00",
         "process_time_mins": 43.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.5
     },
@@ -65,7 +65,7 @@
         "time_start": "2022-11-01T13:37:00",
         "time_end": "2022-11-01T15:38:00",
         "process_time_mins": 121.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.5,
         "recovered_m3": 3.1
     },
@@ -85,7 +85,7 @@
         "time_start": "2022-11-01T15:58:00",
         "time_end": "2022-11-01T17:13:00",
         "process_time_mins": 75.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.0,
         "recovered_m3": 1.8
     },
@@ -95,7 +95,7 @@
         "time_start": "2022-11-02T08:14:00",
         "time_end": "2022-11-02T10:20:00",
         "process_time_mins": 126.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.65,
         "recovered_m3": 4.85
     },
@@ -115,7 +115,7 @@
         "time_start": "2022-11-02T10:40:00",
         "time_end": "2022-11-02T14:21:00",
         "process_time_mins": 221.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.75,
         "recovered_m3": 4.45
     },
@@ -145,7 +145,7 @@
         "time_start": "2022-11-02T14:34:00",
         "time_end": "2022-11-02T16:34:00",
         "process_time_mins": 120.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.15,
         "recovered_m3": 3.05
     },
@@ -165,7 +165,7 @@
         "time_start": "2022-11-03T08:17:00",
         "time_end": "2022-11-03T10:18:00",
         "process_time_mins": 121.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.8,
         "recovered_m3": 2.15
     },
@@ -195,7 +195,7 @@
         "time_start": "2022-11-03T10:44:00",
         "time_end": "2022-11-03T11:20:00",
         "process_time_mins": 36.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.65
     },
@@ -205,7 +205,7 @@
         "time_start": "2022-11-03T11:34:00",
         "time_end": "2022-11-03T13:19:00",
         "process_time_mins": 105.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.5,
         "recovered_m3": 3.6
     },
@@ -235,7 +235,7 @@
         "time_start": "2022-11-03T13:42:00",
         "time_end": "2022-11-03T14:28:00",
         "process_time_mins": 46.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.4
     },
@@ -245,7 +245,7 @@
         "time_start": "2022-11-03T14:48:00",
         "time_end": "2022-11-03T16:35:00",
         "process_time_mins": 107.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.65,
         "recovered_m3": 3.55
     },
@@ -285,7 +285,7 @@
         "time_start": "2022-11-04T08:28:00",
         "time_end": "2022-11-04T11:08:00",
         "process_time_mins": 160.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.25,
         "recovered_m3": 4.8
     },
@@ -305,7 +305,7 @@
         "time_start": "2022-11-04T11:30:00",
         "time_end": "2022-11-04T13:59:00",
         "process_time_mins": 149.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.2,
         "recovered_m3": 3.1
     },
@@ -325,7 +325,7 @@
         "time_start": "2022-11-04T14:19:00",
         "time_end": "2022-11-04T15:51:00",
         "process_time_mins": 92.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.75,
         "recovered_m3": 3.2
     },
@@ -345,7 +345,7 @@
         "time_start": "2022-11-05T08:39:00",
         "time_end": "2022-11-05T13:35:00",
         "process_time_mins": 296.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.75,
         "recovered_m3": 4.15
     },
@@ -375,7 +375,7 @@
         "time_start": "2022-11-05T14:27:00",
         "time_end": "2022-11-05T15:44:00",
         "process_time_mins": 77.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.75,
         "recovered_m3": 1.65
     },
@@ -395,7 +395,7 @@
         "time_start": "2022-11-06T09:17:00",
         "time_end": "2022-11-06T11:08:00",
         "process_time_mins": 111.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.9,
         "recovered_m3": 2.7
     },
@@ -415,7 +415,7 @@
         "time_start": "2022-11-06T12:38:00",
         "time_end": "2022-11-06T13:19:00",
         "process_time_mins": 41.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.5
     },
@@ -425,7 +425,7 @@
         "time_start": "2022-11-06T14:21:00",
         "time_end": "2022-11-06T16:11:00",
         "process_time_mins": 110.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.2,
         "recovered_m3": 3.4
     },
@@ -445,7 +445,7 @@
         "time_start": "2022-11-07T08:22:00",
         "time_end": "2022-11-07T10:48:00",
         "process_time_mins": 146.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.25,
         "recovered_m3": 4.15
     },
@@ -465,7 +465,7 @@
         "time_start": "2022-11-07T10:58:00",
         "time_end": "2022-11-07T12:21:00",
         "process_time_mins": 83.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.0,
         "recovered_m3": 3.65
     },
@@ -495,7 +495,7 @@
         "time_start": "2022-11-07T12:49:00",
         "time_end": "2022-11-07T13:49:00",
         "process_time_mins": 60.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.45
     },
@@ -505,7 +505,7 @@
         "time_start": "2022-11-07T14:16:00",
         "time_end": "2022-11-07T15:23:00",
         "process_time_mins": 67.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.4
     },
@@ -525,7 +525,7 @@
         "time_start": "2022-11-07T15:53:00",
         "time_end": "2022-11-07T16:31:00",
         "process_time_mins": 38.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.4
     },
@@ -545,7 +545,7 @@
         "time_start": "2022-11-08T08:19:00",
         "time_end": "2022-11-08T09:02:00",
         "process_time_mins": 43.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.9,
         "recovered_m3": 1.45
     },
@@ -555,7 +555,7 @@
         "time_start": "2022-11-08T09:21:00",
         "time_end": "2022-11-08T12:39:00",
         "process_time_mins": 198.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.05,
         "recovered_m3": 4.05
     },
@@ -595,7 +595,7 @@
         "time_start": "2022-11-08T13:04:00",
         "time_end": "2022-11-08T15:22:00",
         "process_time_mins": 138.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.3,
         "recovered_m3": 2.0
     },
@@ -605,7 +605,7 @@
         "time_start": "2022-11-08T15:42:00",
         "time_end": "2022-11-08T17:07:00",
         "process_time_mins": 85.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.15,
         "recovered_m3": 2.2
     },
@@ -635,7 +635,7 @@
         "time_start": "2022-11-09T08:28:00",
         "time_end": "2022-11-09T09:13:00",
         "process_time_mins": 45.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.5
     },
@@ -645,7 +645,7 @@
         "time_start": "2022-11-09T09:38:00",
         "time_end": "2022-11-09T10:38:00",
         "process_time_mins": 60.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.5
     },
@@ -665,7 +665,7 @@
         "time_start": "2022-11-09T11:00:00",
         "time_end": "2022-11-09T13:02:00",
         "process_time_mins": 122.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.45,
         "recovered_m3": 4.05
     },
@@ -685,7 +685,7 @@
         "time_start": "2022-11-09T13:23:00",
         "time_end": "2022-11-09T15:02:00",
         "process_time_mins": 99.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.15,
         "recovered_m3": 3.5
     },
@@ -695,7 +695,7 @@
         "time_start": "2022-11-09T15:15:00",
         "time_end": "2022-11-09T18:00:00",
         "process_time_mins": 165.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.75,
         "recovered_m3": 3.65
     },
@@ -715,7 +715,7 @@
         "time_start": "2022-11-10T08:10:00",
         "time_end": "2022-11-10T09:52:00",
         "process_time_mins": 102.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.05,
         "recovered_m3": 4.05
     },
@@ -735,7 +735,7 @@
         "time_start": "2022-11-10T10:15:00",
         "time_end": "2022-11-10T11:34:00",
         "process_time_mins": 79.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.7,
         "recovered_m3": 2.15
     },
@@ -745,7 +745,7 @@
         "time_start": "2022-11-10T11:49:00",
         "time_end": "2022-11-10T14:57:00",
         "process_time_mins": 188.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.85,
         "recovered_m3": 4.4
     },
@@ -765,7 +765,7 @@
         "time_start": "2022-11-10T15:07:00",
         "time_end": "2022-11-10T16:19:00",
         "process_time_mins": 72.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.15,
         "recovered_m3": 3.15
     },
@@ -775,7 +775,7 @@
         "time_start": "2022-11-11T08:21:00",
         "time_end": "2022-11-11T09:50:00",
         "process_time_mins": 89.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.5
     },
@@ -805,7 +805,7 @@
         "time_start": "2022-11-11T10:19:00",
         "time_end": "2022-11-11T12:11:00",
         "process_time_mins": 112.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.3,
         "recovered_m3": 4.3
     },
@@ -815,7 +815,7 @@
         "time_start": "2022-11-11T12:22:00",
         "time_end": "2022-11-11T15:15:00",
         "process_time_mins": 173.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.35,
         "recovered_m3": 4.4
     },
@@ -835,7 +835,7 @@
         "time_start": "2022-11-11T15:28:00",
         "time_end": "2022-11-11T16:40:00",
         "process_time_mins": 72.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.35
     },
@@ -845,7 +845,7 @@
         "time_start": "2022-11-12T08:35:00",
         "time_end": "2022-11-12T09:44:00",
         "process_time_mins": 69.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.5
     },
@@ -865,7 +865,7 @@
         "time_start": "2022-11-12T10:15:00",
         "time_end": "2022-11-12T12:20:00",
         "process_time_mins": 125.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.35,
         "recovered_m3": 4.25
     },
@@ -885,7 +885,7 @@
         "time_start": "2022-11-12T12:51:00",
         "time_end": "2022-11-12T14:33:00",
         "process_time_mins": 102.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.25,
         "recovered_m3": 2.7
     },
@@ -895,7 +895,7 @@
         "time_start": "2022-11-12T15:16:00",
         "time_end": "2022-11-12T18:19:00",
         "process_time_mins": 183.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.25,
         "recovered_m3": 2.0
     },
@@ -925,7 +925,7 @@
         "time_start": "2022-11-13T09:30:00",
         "time_end": "2022-11-13T13:04:00",
         "process_time_mins": 214.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.8,
         "recovered_m3": 3.7
     },
@@ -945,7 +945,7 @@
         "time_start": "2022-11-13T14:11:00",
         "time_end": "2022-11-13T15:44:00",
         "process_time_mins": 93.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.3
     },
@@ -965,7 +965,7 @@
         "time_start": "2022-11-14T08:25:00",
         "time_end": "2022-11-14T12:45:00",
         "process_time_mins": 260.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.8,
         "recovered_m3": 3.6
     },
@@ -995,7 +995,7 @@
         "time_start": "2022-11-14T13:03:00",
         "time_end": "2022-11-14T14:19:00",
         "process_time_mins": 76.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.45
     },
@@ -1015,7 +1015,7 @@
         "time_start": "2022-11-14T14:44:00",
         "time_end": "2022-11-14T15:28:00",
         "process_time_mins": 44.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.1,
         "recovered_m3": 1.55
     },
@@ -1035,7 +1035,7 @@
         "time_start": "2022-11-14T15:43:00",
         "time_end": "2022-11-14T16:46:00",
         "process_time_mins": 63.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.4
     },
@@ -1045,7 +1045,7 @@
         "time_start": "2022-11-15T08:11:00",
         "time_end": "2022-11-15T09:46:00",
         "process_time_mins": 95.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.15,
         "recovered_m3": 3.8
     },
@@ -1075,7 +1075,7 @@
         "time_start": "2022-11-15T10:12:00",
         "time_end": "2022-11-15T10:54:00",
         "process_time_mins": 42.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.9,
         "recovered_m3": 1.45
     },
@@ -1085,7 +1085,7 @@
         "time_start": "2022-11-15T11:16:00",
         "time_end": "2022-11-15T14:25:00",
         "process_time_mins": 189.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.95,
         "recovered_m3": 2.05
     },
@@ -1105,7 +1105,7 @@
         "time_start": "2022-11-15T14:45:00",
         "time_end": "2022-11-15T15:20:00",
         "process_time_mins": 35.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.35
     },
@@ -1125,7 +1125,7 @@
         "time_start": "2022-11-15T15:41:00",
         "time_end": "2022-11-15T18:15:00",
         "process_time_mins": 154.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.2,
         "recovered_m3": 2.05
     },
@@ -1145,7 +1145,7 @@
         "time_start": "2022-11-16T08:14:00",
         "time_end": "2022-11-16T10:15:00",
         "process_time_mins": 121.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.45,
         "recovered_m3": 4.95
     },
@@ -1165,7 +1165,7 @@
         "time_start": "2022-11-16T10:34:00",
         "time_end": "2022-11-16T14:47:00",
         "process_time_mins": 253.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.65,
         "recovered_m3": 4.85
     },
@@ -1195,7 +1195,7 @@
         "time_start": "2022-11-16T15:13:00",
         "time_end": "2022-11-16T17:29:00",
         "process_time_mins": 136.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.9,
         "recovered_m3": 1.95
     },
@@ -1215,7 +1215,7 @@
         "time_start": "2022-11-17T08:19:00",
         "time_end": "2022-11-17T09:27:00",
         "process_time_mins": 68.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.2,
         "recovered_m3": 3.2
     },
@@ -1235,7 +1235,7 @@
         "time_start": "2022-11-17T09:49:00",
         "time_end": "2022-11-17T10:25:00",
         "process_time_mins": 36.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.5
     },
@@ -1245,7 +1245,7 @@
         "time_start": "2022-11-17T10:38:00",
         "time_end": "2022-11-17T12:06:00",
         "process_time_mins": 88.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.85,
         "recovered_m3": 2.6
     },
@@ -1265,7 +1265,7 @@
         "time_start": "2022-11-17T12:16:00",
         "time_end": "2022-11-17T13:29:00",
         "process_time_mins": 73.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.15,
         "recovered_m3": 3.35
     },
@@ -1275,7 +1275,7 @@
         "time_start": "2022-11-17T13:40:00",
         "time_end": "2022-11-17T16:50:00",
         "process_time_mins": 190.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.9,
         "recovered_m3": 3.85
     },
@@ -1305,7 +1305,7 @@
         "time_start": "2022-11-18T08:24:00",
         "time_end": "2022-11-18T09:17:00",
         "process_time_mins": 53.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.6
     },
@@ -1315,7 +1315,7 @@
         "time_start": "2022-11-18T09:39:00",
         "time_end": "2022-11-18T11:19:00",
         "process_time_mins": 100.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.1,
         "recovered_m3": 3.0
     },
@@ -1335,7 +1335,7 @@
         "time_start": "2022-11-18T11:30:00",
         "time_end": "2022-11-18T14:27:00",
         "process_time_mins": 177.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.05,
         "recovered_m3": 3.7
     },
@@ -1365,7 +1365,7 @@
         "time_start": "2022-11-18T14:44:00",
         "time_end": "2022-11-18T17:38:00",
         "process_time_mins": 174.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.5,
         "recovered_m3": 3.8
     },
@@ -1395,7 +1395,7 @@
         "time_start": "2022-11-19T08:44:00",
         "time_end": "2022-11-19T09:47:00",
         "process_time_mins": 63.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.55
     },
@@ -1405,7 +1405,7 @@
         "time_start": "2022-11-19T10:19:00",
         "time_end": "2022-11-19T11:21:00",
         "process_time_mins": 62.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.35
     },
@@ -1425,7 +1425,7 @@
         "time_start": "2022-11-19T11:55:00",
         "time_end": "2022-11-19T15:04:00",
         "process_time_mins": 189.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.9,
         "recovered_m3": 1.8
     },
@@ -1445,7 +1445,7 @@
         "time_start": "2022-11-19T15:57:00",
         "time_end": "2022-11-19T18:10:00",
         "process_time_mins": 133.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.25,
         "recovered_m3": 3.1
     },
@@ -1455,7 +1455,7 @@
         "time_start": "2022-11-20T09:02:00",
         "time_end": "2022-11-20T10:46:00",
         "process_time_mins": 104.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.85,
         "recovered_m3": 3.05
     },
@@ -1475,7 +1475,7 @@
         "time_start": "2022-11-20T11:56:00",
         "time_end": "2022-11-20T14:31:00",
         "process_time_mins": 155.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.55,
         "recovered_m3": 4.05
     },
@@ -1495,7 +1495,7 @@
         "time_start": "2022-11-20T15:58:00",
         "time_end": "2022-11-20T17:00:00",
         "process_time_mins": 62.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.4
     },
@@ -1515,7 +1515,7 @@
         "time_start": "2022-11-21T08:24:00",
         "time_end": "2022-11-21T11:41:00",
         "process_time_mins": 197.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.45,
         "recovered_m3": 4.15
     },
@@ -1545,7 +1545,7 @@
         "time_start": "2022-11-21T11:57:00",
         "time_end": "2022-11-21T14:12:00",
         "process_time_mins": 135.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.05,
         "recovered_m3": 4.35
     },
@@ -1565,7 +1565,7 @@
         "time_start": "2022-11-21T14:32:00",
         "time_end": "2022-11-21T15:08:00",
         "process_time_mins": 36.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.4
     },
@@ -1575,7 +1575,7 @@
         "time_start": "2022-11-21T15:23:00",
         "time_end": "2022-11-21T17:29:00",
         "process_time_mins": 126.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.1,
         "recovered_m3": 3.45
     },
@@ -1595,7 +1595,7 @@
         "time_start": "2022-11-22T08:27:00",
         "time_end": "2022-11-22T11:03:00",
         "process_time_mins": 156.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.05,
         "recovered_m3": 3.15
     },
@@ -1615,7 +1615,7 @@
         "time_start": "2022-11-22T11:25:00",
         "time_end": "2022-11-22T13:13:00",
         "process_time_mins": 108.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.25,
         "recovered_m3": 3.1
     },
@@ -1625,7 +1625,7 @@
         "time_start": "2022-11-22T13:35:00",
         "time_end": "2022-11-22T16:20:00",
         "process_time_mins": 165.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.05,
         "recovered_m3": 1.95
     },
@@ -1665,7 +1665,7 @@
         "time_start": "2022-11-23T08:14:00",
         "time_end": "2022-11-23T11:29:00",
         "process_time_mins": 195.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.05,
         "recovered_m3": 3.05
     },
@@ -1685,7 +1685,7 @@
         "time_start": "2022-11-23T11:47:00",
         "time_end": "2022-11-23T13:46:00",
         "process_time_mins": 119.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.45,
         "recovered_m3": 3.75
     },
@@ -1705,7 +1705,7 @@
         "time_start": "2022-11-23T13:57:00",
         "time_end": "2022-11-23T18:11:00",
         "process_time_mins": 254.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.6,
         "recovered_m3": 3.4
     },
@@ -1725,7 +1725,7 @@
         "time_start": "2022-11-24T08:23:00",
         "time_end": "2022-11-24T08:56:00",
         "process_time_mins": 33.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.55
     },
@@ -1735,7 +1735,7 @@
         "time_start": "2022-11-24T09:16:00",
         "time_end": "2022-11-24T10:58:00",
         "process_time_mins": 102.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.45,
         "recovered_m3": 3.9
     },
@@ -1755,7 +1755,7 @@
         "time_start": "2022-11-24T11:16:00",
         "time_end": "2022-11-24T12:56:00",
         "process_time_mins": 100.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.1,
         "recovered_m3": 3.1
     },
@@ -1765,7 +1765,7 @@
         "time_start": "2022-11-24T13:26:00",
         "time_end": "2022-11-24T18:06:00",
         "process_time_mins": 280.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.85,
         "recovered_m3": 3.65
     },
@@ -1795,7 +1795,7 @@
         "time_start": "2022-11-25T08:12:00",
         "time_end": "2022-11-25T09:28:00",
         "process_time_mins": 76.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.0,
         "recovered_m3": 3.0
     },
@@ -1825,7 +1825,7 @@
         "time_start": "2022-11-25T09:58:00",
         "time_end": "2022-11-25T11:04:00",
         "process_time_mins": 66.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.75,
         "recovered_m3": 2.9
     },
@@ -1835,7 +1835,7 @@
         "time_start": "2022-11-25T11:32:00",
         "time_end": "2022-11-25T13:25:00",
         "process_time_mins": 113.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.05,
         "recovered_m3": 4.0
     },
@@ -1865,7 +1865,7 @@
         "time_start": "2022-11-25T13:38:00",
         "time_end": "2022-11-25T16:45:00",
         "process_time_mins": 187.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.6,
         "recovered_m3": 3.2
     },
@@ -1895,7 +1895,7 @@
         "time_start": "2022-11-26T08:37:00",
         "time_end": "2022-11-26T09:15:00",
         "process_time_mins": 38.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.4
     },
@@ -1905,7 +1905,7 @@
         "time_start": "2022-11-26T10:04:00",
         "time_end": "2022-11-26T11:25:00",
         "process_time_mins": 81.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.85,
         "recovered_m3": 2.6
     },
@@ -1925,7 +1925,7 @@
         "time_start": "2022-11-26T12:01:00",
         "time_end": "2022-11-26T13:10:00",
         "process_time_mins": 69.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.9,
         "recovered_m3": 1.25
     },
@@ -1945,7 +1945,7 @@
         "time_start": "2022-11-26T14:04:00",
         "time_end": "2022-11-26T16:21:00",
         "process_time_mins": 137.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 3.85,
         "recovered_m3": 2.25
     },
@@ -1965,7 +1965,7 @@
         "time_start": "2022-11-27T09:01:00",
         "time_end": "2022-11-27T10:45:00",
         "process_time_mins": 104.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.95,
         "recovered_m3": 1.5
     },
@@ -1985,7 +1985,7 @@
         "time_start": "2022-11-27T12:09:00",
         "time_end": "2022-11-27T12:59:00",
         "process_time_mins": 50.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.4
     },
@@ -2005,7 +2005,7 @@
         "time_start": "2022-11-27T14:19:00",
         "time_end": "2022-11-27T15:40:00",
         "process_time_mins": 81.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.15,
         "recovered_m3": 3.05
     },
@@ -2015,7 +2015,7 @@
         "time_start": "2022-11-28T08:24:00",
         "time_end": "2022-11-28T11:44:00",
         "process_time_mins": 200.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.25,
         "recovered_m3": 4.95
     },
@@ -2055,7 +2055,7 @@
         "time_start": "2022-11-28T12:08:00",
         "time_end": "2022-11-28T12:47:00",
         "process_time_mins": 39.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.5
     },
@@ -2075,7 +2075,7 @@
         "time_start": "2022-11-28T13:11:00",
         "time_end": "2022-11-28T14:37:00",
         "process_time_mins": 86.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.0,
         "recovered_m3": 1.95
     },
@@ -2095,7 +2095,7 @@
         "time_start": "2022-11-28T14:58:00",
         "time_end": "2022-11-28T15:53:00",
         "process_time_mins": 55.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.4
     },
@@ -2105,7 +2105,7 @@
         "time_start": "2022-11-28T16:10:00",
         "time_end": "2022-11-28T18:58:00",
         "process_time_mins": 168.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.3,
         "recovered_m3": 2.35
     },
@@ -2125,7 +2125,7 @@
         "time_start": "2022-11-29T08:25:00",
         "time_end": "2022-11-29T09:54:00",
         "process_time_mins": 89.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.0,
         "recovered_m3": 1.65
     },
@@ -2145,7 +2145,7 @@
         "time_start": "2022-11-29T10:08:00",
         "time_end": "2022-11-29T10:48:00",
         "process_time_mins": 40.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 1.9,
         "recovered_m3": 1.4
     },
@@ -2155,7 +2155,7 @@
         "time_start": "2022-11-29T11:14:00",
         "time_end": "2022-11-29T14:38:00",
         "process_time_mins": 204.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 6.4,
         "recovered_m3": 4.15
     },
@@ -2185,7 +2185,7 @@
         "time_start": "2022-11-29T14:56:00",
         "time_end": "2022-11-29T16:21:00",
         "process_time_mins": 85.0,
-        "supplier": "har",
+        "supplier": "Harry Houdini",
         "supplied_m3": 2.05,
         "recovered_m3": 1.45
     },
@@ -2205,7 +2205,7 @@
         "time_start": "2022-11-30T08:27:00",
         "time_end": "2022-11-30T09:57:00",
         "process_time_mins": 90.0,
-        "supplier": "dic",
+        "supplier": "Dick Tracey",
         "supplied_m3": 5.45,
         "recovered_m3": 3.85
     },
@@ -2225,7 +2225,7 @@
         "time_start": "2022-11-30T10:26:00",
         "time_end": "2022-11-30T13:15:00",
         "process_time_mins": 169.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.2,
         "recovered_m3": 3.05
     },
@@ -2255,7 +2255,7 @@
         "time_start": "2022-11-30T13:30:00",
         "time_end": "2022-11-30T15:33:00",
         "process_time_mins": 123.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.05,
         "recovered_m3": 2.8
     },
@@ -2275,7 +2275,7 @@
         "time_start": "2022-11-30T15:50:00",
         "time_end": "2022-11-30T18:43:00",
         "process_time_mins": 173.0,
-        "supplier": "tom",
+        "supplier": "Tom Hanks",
         "supplied_m3": 4.15,
         "recovered_m3": 2.2
     }

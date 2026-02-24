@@ -1,9 +1,48 @@
 from datetime import timedelta
+import os
+import joblib
 import pandas as pd
 from typing import Literal, Tuple
-from sklearn.model_selection import train_test_split as sk_train_test_split
 from data_loading import load_data_with_derived_features, load_scheduled_data
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OrdinalEncoder
+
+
+ENCODER_FILENAME = "label_encoder.pkl"
+
+
+def _get_encoder_path():
+    return os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "model_data", ENCODER_FILENAME
+    )
+
+
+def fit_encoder(df: pd.DataFrame) -> OrdinalEncoder:
+    """Fit an OrdinalEncoder on the categorical columns of the training data."""
+    cat_cols = df.select_dtypes(include=["object", "category"]).columns.tolist()
+    encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)
+    encoder.fit(df[cat_cols])
+    encoder.cat_cols_ = cat_cols
+    return encoder
+
+
+def save_encoder(encoder: OrdinalEncoder):
+    joblib.dump(encoder, _get_encoder_path())
+
+
+def load_encoder() -> OrdinalEncoder:
+    path = _get_encoder_path()
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            f"Encoder not found at {path}. Train a model first to create the encoder."
+        )
+    return joblib.load(path)
+
+
+def encode_with_encoder(df: pd.DataFrame, encoder: OrdinalEncoder) -> pd.DataFrame:
+    """Transform a DataFrame using a previously-fit encoder."""
+    encoded = df.copy()
+    encoded[encoder.cat_cols_] = encoder.transform(df[encoder.cat_cols_]).astype(int)
+    return encoded
 
 
 def load_train_test_sets_target_recovery_volume() -> (
@@ -55,11 +94,10 @@ def train_test_time_series_split(
 
 
 def encode_features(model_features: pd.DataFrame) -> pd.DataFrame:
-    df = model_features.copy()
-    label_encoder = LabelEncoder()
-    for col in df.select_dtypes(include=["object", "category"]).columns:
-        df[col] = label_encoder.fit_transform(df[col])
-    return df
+    """Encode categorical features. Only for standalone/exploratory use.
+    For training pipelines, use fit_encoder + encode_with_encoder instead."""
+    encoder = fit_encoder(model_features)
+    return encode_with_encoder(model_features, encoder)
 
 
 MODEL_FEATURES = [
@@ -75,11 +113,11 @@ MODEL_TARGET = "recovered_m3"
 def get_model_features_target_recovery_volume(
     data_with_derived: pd.DataFrame,
 ) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
-    encoded_features = encode_features(data_with_derived[MODEL_FEATURES])
+    features = data_with_derived[MODEL_FEATURES].copy()
     target = data_with_derived[MODEL_TARGET]
     not_selected = data_with_derived.drop(columns=MODEL_FEATURES + [MODEL_TARGET])
     return (
-        encoded_features,
+        features,
         target,
         not_selected,
     )
@@ -93,25 +131,23 @@ MODEL_TARGET_RECOVERY_RATIO = "recovery_ratio"
 def get_model_features_target_recovery_ratio(
     data_with_derived: pd.DataFrame,
 ) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
-    encoded_features = encode_features(
-        data_with_derived[MODEL_FEATURES_TARGET_RECOVERY_RATIO]
-    )
+    features = data_with_derived[MODEL_FEATURES_TARGET_RECOVERY_RATIO].copy()
     target = data_with_derived[MODEL_TARGET_RECOVERY_RATIO]
     not_selected = data_with_derived.drop(
         columns=MODEL_FEATURES_TARGET_RECOVERY_RATIO + [MODEL_TARGET_RECOVERY_RATIO]
     )
-    return (encoded_features, target, not_selected)
+    return (features, target, not_selected)
 
 
 def get_model_features_target_recovery_ratio_with_supplied_volume(
     data_with_derived: pd.DataFrame,
 ) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
-    encoded_features = encode_features(data_with_derived[MODEL_FEATURES])
+    features = data_with_derived[MODEL_FEATURES].copy()
     target = data_with_derived[MODEL_TARGET_RECOVERY_RATIO]
     not_selected = data_with_derived.drop(
         columns=MODEL_FEATURES + [MODEL_TARGET_RECOVERY_RATIO]
     )
-    return (encoded_features, target, not_selected)
+    return (features, target, not_selected)
 
 
 def get_schedule_model_features(
@@ -119,6 +155,7 @@ def get_schedule_model_features(
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Load scheduled delivery data and prepare features for model prediction.
+    Uses the saved encoder from training to ensure consistent encoding.
 
     Returns:
         Tuple of (encoded features DataFrame, raw features DataFrame)
@@ -129,9 +166,10 @@ def get_schedule_model_features(
     elif m_type == "volume":
         features = MODEL_FEATURES
     elif m_type == "ratio_with_supplied_volume":
-        features = MODEL_FEATURES  # with supplied_m3 included for ratio model
+        features = MODEL_FEATURES
     raw_features = scheduled_data[features].copy()
-    encoded_features = encode_features(scheduled_data[features])
+    encoder = load_encoder()
+    encoded_features = encode_with_encoder(raw_features, encoder)
     return encoded_features, raw_features
 
 

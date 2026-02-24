@@ -1,7 +1,7 @@
 [
     {
         "id": 0,
-        "predicted_recovery": 0.8574200927703771,
+        "predicted_recovery": 0.8122435746653347,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 8.4,
@@ -11,7 +11,7 @@
     },
     {
         "id": 1,
-        "predicted_recovery": 0.7301570922037927,
+        "predicted_recovery": 0.7248321256016359,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 8.45,
@@ -21,7 +21,7 @@
     },
     {
         "id": 2,
-        "predicted_recovery": 0.7032317012243433,
+        "predicted_recovery": 0.7149969456147994,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 9.416666666666666,
@@ -31,7 +31,7 @@
     },
     {
         "id": 3,
-        "predicted_recovery": 0.6640731732476107,
+        "predicted_recovery": 0.6797007013860896,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 11.95,
@@ -41,7 +41,7 @@
     },
     {
         "id": 4,
-        "predicted_recovery": 0.8081683753534646,
+        "predicted_recovery": 0.729408715383256,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 12.766666666666667,
@@ -51,7 +51,7 @@
     },
     {
         "id": 5,
-        "predicted_recovery": 0.6388607358247402,
+        "predicted_recovery": 0.6292659150683437,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 13.816666666666666,
@@ -61,7 +61,7 @@
     },
     {
         "id": 6,
-        "predicted_recovery": 0.7509876277835206,
+        "predicted_recovery": 0.6884147088849606,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 14.816666666666666,
@@ -71,7 +71,7 @@
     },
     {
         "id": 7,
-        "predicted_recovery": 0.7043498232274336,
+        "predicted_recovery": 0.7282760243995743,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 8.283333333333333,
@@ -81,7 +81,7 @@
     },
     {
         "id": 8,
-        "predicted_recovery": 0.7673625956353091,
+        "predicted_recovery": 0.7392445913178026,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 8.5,
@@ -91,7 +91,7 @@
     },
     {
         "id": 9,
-        "predicted_recovery": 0.6370797061377722,
+        "predicted_recovery": 0.6697526372869709,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 10.266666666666667,
@@ -101,7 +101,7 @@
     },
     {
         "id": 10,
-        "predicted_recovery": 0.776848479857767,
+        "predicted_recovery": 0.7722972594656734,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 10.733333333333333,
@@ -111,7 +111,7 @@
     },
     {
         "id": 11,
-        "predicted_recovery": 0.7715295933626216,
+        "predicted_recovery": 0.7559194569421526,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 11.65,
@@ -121,7 +121,7 @@
     },
     {
         "id": 12,
-        "predicted_recovery": 0.6733614496656533,
+        "predicted_recovery": 0.684918647893266,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 12.55,
@@ -131,7 +131,7 @@
     },
     {
         "id": 13,
-        "predicted_recovery": 0.6003973064227236,
+        "predicted_recovery": 0.5971548818733963,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 14.15,
@@ -141,7 +141,7 @@
     },
     {
         "id": 14,
-        "predicted_recovery": 0.693454075558893,
+        "predicted_recovery": 0.7144413950869511,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 15.883333333333333,
@@ -151,7 +151,7 @@
     },
     {
         "id": 15,
-        "predicted_recovery": 0.6956299220415303,
+        "predicted_recovery": 0.7659647903117307,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 8.166666666666666,
@@ -161,7 +161,7 @@
     },
     {
         "id": 16,
-        "predicted_recovery": 0.7046855706478881,
+        "predicted_recovery": 0.7143389590339577,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 8.233333333333333,
@@ -171,7 +171,7 @@
     },
     {
         "id": 17,
-        "predicted_recovery": 0.6918177292609324,
+        "predicted_recovery": 0.702878519913088,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 9.266666666666667,
@@ -181,7 +181,7 @@
     },
     {
         "id": 18,
-        "predicted_recovery": 0.7127152258081396,
+        "predicted_recovery": 0.7556829945906615,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 11.616666666666667,
@@ -191,7 +191,7 @@
     },
     {
         "id": 19,
-        "predicted_recovery": 0.8044823619644792,
+        "predicted_recovery": 0.729408715383256,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 12.683333333333334,
@@ -201,7 +201,7 @@
     },
     {
         "id": 20,
-        "predicted_recovery": 0.6551341233850002,
+        "predicted_recovery": 0.6452955932392738,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 12.75,
@@ -211,7 +211,7 @@
     },
     {
         "id": 21,
-        "predicted_recovery": 0.6811846399452789,
+        "predicted_recovery": 0.7206116235604112,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 14.366666666666667,
@@ -221,7 +221,7 @@
     },
     {
         "id": 22,
-        "predicted_recovery": 0.6310228725389752,
+        "predicted_recovery": 0.6462197446425284,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 14.483333333333333,
@@ -231,7 +231,7 @@
     },
     {
         "id": 23,
-        "predicted_recovery": 0.6797480771294457,
+        "predicted_recovery": 0.7144413950869511,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 15.583333333333334,
@@ -241,7 +241,7 @@
     },
     {
         "id": 24,
-        "predicted_recovery": 0.7050157638775779,
+        "predicted_recovery": 0.7425661675453159,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 8.216666666666667,
@@ -251,7 +251,7 @@
     },
     {
         "id": 25,
-        "predicted_recovery": 0.7964617368566704,
+        "predicted_recovery": 0.7838752578176321,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 8.35,
@@ -261,7 +261,7 @@
     },
     {
         "id": 26,
-        "predicted_recovery": 0.6323394887900935,
+        "predicted_recovery": 0.6369903267894024,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 9.35,
@@ -271,7 +271,7 @@
     },
     {
         "id": 27,
-        "predicted_recovery": 0.803939691740523,
+        "predicted_recovery": 0.756769882839461,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 10.983333333333333,
@@ -281,7 +281,7 @@
     },
     {
         "id": 28,
-        "predicted_recovery": 0.6282152924065622,
+        "predicted_recovery": 0.6375736404408049,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 11.566666666666666,
@@ -291,7 +291,7 @@
     },
     {
         "id": 29,
-        "predicted_recovery": 0.6650497247831353,
+        "predicted_recovery": 0.6938583296526005,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 12.433333333333334,
@@ -301,7 +301,7 @@
     },
     {
         "id": 30,
-        "predicted_recovery": 0.7245701110306056,
+        "predicted_recovery": 0.738778433596338,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 13.183333333333334,
@@ -311,7 +311,7 @@
     },
     {
         "id": 31,
-        "predicted_recovery": 0.7017364075580235,
+        "predicted_recovery": 0.7206116235604112,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 14.766666666666667,
@@ -321,7 +321,7 @@
     },
     {
         "id": 32,
-        "predicted_recovery": 0.6070084671638377,
+        "predicted_recovery": 0.612176782481819,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 15.316666666666666,
@@ -331,7 +331,7 @@
     },
     {
         "id": 33,
-        "predicted_recovery": 0.8160396228589941,
+        "predicted_recovery": 0.781957070631775,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 8.283333333333333,
@@ -341,7 +341,7 @@
     },
     {
         "id": 34,
-        "predicted_recovery": 0.7932188323087449,
+        "predicted_recovery": 0.7667028972106711,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 8.3,
@@ -351,7 +351,7 @@
     },
     {
         "id": 35,
-        "predicted_recovery": 0.6503581544120304,
+        "predicted_recovery": 0.6816488786873695,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 9.4,
@@ -361,7 +361,7 @@
     },
     {
         "id": 36,
-        "predicted_recovery": 0.7140875292436617,
+        "predicted_recovery": 0.7183352586993759,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 9.783333333333333,
@@ -371,7 +371,7 @@
     },
     {
         "id": 37,
-        "predicted_recovery": 0.6248604932831864,
+        "predicted_recovery": 0.6068936053404643,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 11.516666666666667,
@@ -381,7 +381,7 @@
     },
     {
         "id": 38,
-        "predicted_recovery": 0.7379046445976407,
+        "predicted_recovery": 0.7174720160003849,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 13.2,
@@ -391,7 +391,7 @@
     },
     {
         "id": 39,
-        "predicted_recovery": 0.5890006830009007,
+        "predicted_recovery": 0.6000338234627794,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 13.216666666666667,
@@ -401,7 +401,7 @@
     },
     {
         "id": 40,
-        "predicted_recovery": 0.6397215804907774,
+        "predicted_recovery": 0.6391251717975059,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 14.3,
@@ -411,7 +411,7 @@
     },
     {
         "id": 41,
-        "predicted_recovery": 0.6814296116011015,
+        "predicted_recovery": 0.7270724019513072,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 14.7,
@@ -421,7 +421,7 @@
     },
     {
         "id": 42,
-        "predicted_recovery": 0.709890033962756,
+        "predicted_recovery": 0.6808242249040635,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 15.833333333333334,
@@ -431,7 +431,7 @@
     },
     {
         "id": 43,
-        "predicted_recovery": 0.7137762939217828,
+        "predicted_recovery": 0.7058588093157399,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 8.566666666666666,
@@ -441,7 +441,7 @@
     },
     {
         "id": 44,
-        "predicted_recovery": 0.667823558916005,
+        "predicted_recovery": 0.667803073115516,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 8.75,
@@ -451,7 +451,7 @@
     },
     {
         "id": 45,
-        "predicted_recovery": 0.7187072810534159,
+        "predicted_recovery": 0.7181314043873395,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 10.283333333333333,
@@ -461,7 +461,7 @@
     },
     {
         "id": 46,
-        "predicted_recovery": 0.7440957470052946,
+        "predicted_recovery": 0.7462585077002367,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 11.333333333333334,
@@ -471,7 +471,7 @@
     },
     {
         "id": 47,
-        "predicted_recovery": 0.6757585786975708,
+        "predicted_recovery": 0.6535521822458411,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 13.083333333333334,
@@ -481,7 +481,7 @@
     },
     {
         "id": 48,
-        "predicted_recovery": 0.6015390636921397,
+        "predicted_recovery": 0.6305982303736339,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 13.216666666666667,
@@ -491,7 +491,7 @@
     },
     {
         "id": 49,
-        "predicted_recovery": 0.6762792599447215,
+        "predicted_recovery": 0.6964974038353908,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 9.016666666666667,
@@ -501,7 +501,7 @@
     },
     {
         "id": 50,
-        "predicted_recovery": 0.7527172645882342,
+        "predicted_recovery": 0.7655385649031653,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 9.266666666666667,
@@ -511,7 +511,7 @@
     },
     {
         "id": 51,
-        "predicted_recovery": 0.6233302309117317,
+        "predicted_recovery": 0.6068936053404643,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 11.2,
@@ -521,7 +521,7 @@
     },
     {
         "id": 52,
-        "predicted_recovery": 0.7154382374934442,
+        "predicted_recovery": 0.7139834222607875,
         "prediction_feature_values": {
             "facility": "Bundaberg",
             "time_start_hour_minute": 12.166666666666666,
@@ -531,7 +531,7 @@
     },
     {
         "id": 53,
-        "predicted_recovery": 0.5511335340841211,
+        "predicted_recovery": 0.5567390283138781,
         "prediction_feature_values": {
             "facility": "Newcastle",
             "time_start_hour_minute": 16.033333333333335,

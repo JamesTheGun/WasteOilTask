@@ -8,6 +8,47 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 MONTH_FILES = ["AUGUST", "OCTOBER", "NOVEMBER"]
 
+SUPPLIER_CODE_TO_NAME = {
+    "dic": "Dick Tracey",
+    "har": "Harry Houdini",
+    "tom": "Tom Hanks",
+}
+SUPPLIER_NAME_TO_CODE = {v: k for k, v in SUPPLIER_CODE_TO_NAME.items()}
+
+
+ALL_SUPPLIERS = [
+    "Dick Tracey",
+    "Harry Houdini",
+    "Tom Hanks",
+    "Mary",
+    "Mary Anne",
+    "Mary Jane",
+    "Mary Therese",
+]
+
+
+def _resolve_supplier(record: dict) -> str | None:
+    """
+    Extract a consistent full supplier name from a raw record.
+
+    Newcastle records carry a ``supplierCode`` field with short codes
+    (dic, har, tom).  Bundaberg records carry a ``supplier`` field with
+    full names.  Some OCTOBER Newcastle records have ``supplier: "N/A"``
+    instead of a code — these are resolved via ``supplierCode`` when
+    available.
+
+    Returns the full supplier name, or None if neither field is present.
+    """
+    code = record.get("supplierCode")
+    if code and code in SUPPLIER_CODE_TO_NAME:
+        return SUPPLIER_CODE_TO_NAME[code]
+
+    name = record.get("supplier")
+    if name and name != "N/A":
+        return name
+
+    return None
+
 
 def _parse_newcastle_record(record: dict) -> dict:
     date = pd.to_datetime(record["date"], format="%b %d, %Y")
@@ -25,7 +66,7 @@ def _parse_newcastle_record(record: dict) -> dict:
         "time_start": time_start.isoformat(),
         "time_end": time_end.isoformat(),
         "process_time_mins": round((time_end - time_start).total_seconds() / 60, 2),
-        "supplier": record.get("supplierCode"),
+        "supplier": _resolve_supplier(record),
         "supplied_m3": record["suppliedM3"],
         "recovered_m3": record["recoveredM3"],
     }
@@ -41,7 +82,7 @@ def _parse_bundaberg_record(record: dict) -> dict:
         "time_start": time_start.isoformat(),
         "time_end": time_end.isoformat(),
         "process_time_mins": round(h * 60 + m, 2),
-        "supplier": record.get("supplier"),
+        "supplier": _resolve_supplier(record),
         "supplied_m3": record["suppliedM3"],
         "recovered_m3": record["recoveredM3"],
     }
@@ -184,7 +225,6 @@ def load_scheduled_data() -> pd.DataFrame:
     df = pd.DataFrame(records)
     df = df.rename(columns={"volumeM3": "supplied_m3"})
 
-    # Parse time to extract hour and minute
     df["time_parsed"] = pd.to_datetime(df["time"], format="%I:%M:%S %p")
     df["time_start_hour_minute"] = (
         df["time_parsed"].dt.hour + df["time_parsed"].dt.minute / 60

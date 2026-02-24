@@ -167,7 +167,6 @@ def density_scatter(
 
     if df[x_col].dtype == "object" or str(df[x_col].dtype) == "category":
         unique_x = sorted(df[x_col].unique())
-        x_codes = [df_numeric[x_col].unique() for _ in range(1)]
         x_ticks = np.sort(df_numeric[x_col].unique())
         ax.set_xticks(x_ticks)
         ax.set_xticklabels([unique_x[int(i)] for i in x_ticks], rotation=45, ha="right")
@@ -221,6 +220,7 @@ def plot_lgbm_model(data, feature_cols: list[str], target_col: str, title=None):
     df = data[feature_cols + [target_col]].dropna().copy()
     X = []
     for col in feature_cols:
+        print(df[col])
         enc, _ = _encode_for_model(df[col])
         X.append(enc)
     X = np.column_stack(X)
@@ -311,7 +311,6 @@ def display_simple_model_with_lgbm_and_density_scatter(
         alpha:      Point opacity. Default 0.5.
     """
     print(f"--- LightGBM: {x_col}, {y_col}  →  {target_col} ---")
-    print(target_col)
 
     plot_lgbm_model(
         data,
@@ -543,6 +542,9 @@ def visualize_model_predictions(
         except ImportError:
             print("SHAP not installed. Run: pip install shap")
         except Exception as e:
+            import traceback
+
             print(f"SHAP plot failed: {e}")
+            traceback.print_exc()
 
     return result_path
