@@ -220,7 +220,6 @@ def plot_lgbm_model(data, feature_cols: list[str], target_col: str, title=None):
     df = data[feature_cols + [target_col]].dropna().copy()
     X = []
     for col in feature_cols:
-        print(df[col])
         enc, _ = _encode_for_model(df[col])
         X.append(enc)
     X = np.column_stack(X)
@@ -262,12 +261,32 @@ def plot_lgbm_model(data, feature_cols: list[str], target_col: str, title=None):
 
     # Predicted vs actual
     if is_classifier:
+        from sklearn.metrics import accuracy_score, f1_score
+
         correct = preds == y
+        acc = accuracy_score(y, preds)
+        f1 = f1_score(y, preds, average="weighted")
         axes[1].scatter(range(len(y)), y, c=correct, cmap="RdYlGn", alpha=0.5, s=10)
-        axes[1].set_title(f"Correct predictions  |  accuracy={correct.mean():.2%}")
+        axes[1].set_title(f"Correct predictions  |  accuracy={acc:.2%}")
         axes[1].set_xlabel("Sample index")
         axes[1].set_ylabel(f"{target_col} (encoded)")
+        stats_text = f"Accuracy = {acc:.4f}\nF1 (weighted) = {f1:.4f}\nn = {len(y)}"
+        axes[1].text(
+            0.02,
+            0.98,
+            stats_text,
+            transform=axes[1].transAxes,
+            fontsize=9,
+            verticalalignment="top",
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.9, edgecolor="gray"),
+        )
     else:
+        from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+
+        r2 = r2_score(y, preds)
+        mae = mean_absolute_error(y, preds)
+        rmse = np.sqrt(mean_squared_error(y, preds))
+        correlation = np.corrcoef(y, preds)[0, 1]
         axes[1].scatter(y, preds, alpha=0.4, s=10, color="steelblue")
         lims = [min(y.min(), preds.min()), max(y.max(), preds.max())]
         axes[1].plot(lims, lims, "r--", linewidth=1, label="Perfect fit")
@@ -277,6 +296,19 @@ def plot_lgbm_model(data, feature_cols: list[str], target_col: str, title=None):
             f"Predicted vs Actual  |  features: {', '.join(feature_cols)}"
         )
         axes[1].legend()
+        stats_text = (
+            f"R² = {r2:.4f}\nMAE = {mae:.4f}\nRMSE = {rmse:.4f}\n"
+            f"Corr = {correlation:.4f}\nn = {len(y)}"
+        )
+        axes[1].text(
+            0.02,
+            0.98,
+            stats_text,
+            transform=axes[1].transAxes,
+            fontsize=9,
+            verticalalignment="top",
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.9, edgecolor="gray"),
+        )
 
     plt.suptitle(
         title if title is not None else f"LightGBM: predicting {target_col}",
@@ -293,34 +325,29 @@ import pandas as pd
 
 
 def display_simple_model_with_lgbm_and_density_scatter(
-    data: pd.DataFrame, x_col, y_col, target_col, bw=0.3, alpha=0.5
+    data: pd.DataFrame, feat_1, feat_2, target, bw=0.3, alpha=0.5
 ):
-    """
-    Train a simple LightGBM model then show both the model diagnostics
-    and a KDE density scatter for the same three columns.
-
-    The last argument (target_col) is the prediction target for the model
-    and the colour dimension for the scatter.
+    """Train a simple LightGBM model and display a density scatter plot for two features against a target.
 
     Args:
-        data:       DataFrame
-        x_col:      Feature / x-axis column
-        y_col:      Feature / y-axis column
-        target_col: Target for the model; colour column for the scatter
-        bw:         KDE bandwidth. Default 0.3.
-        alpha:      Point opacity. Default 0.5.
+        data (pd.DataFrame): DataFrame containing the features and target columns.
+        feat_1 (str): First feature column name, used as model input and scatter x-axis.
+        target (str): Target column name to predict.
+        feat_2 (str): Second feature column name, used as model input and scatter colour.
+        bw (float, optional): KDE bandwidth for the density scatter. Defaults to 0.3.
+        alpha (float, optional): Opacity of scatter points. Defaults to 0.5.
     """
-    print(f"--- LightGBM: {x_col}, {y_col}  →  {target_col} ---")
+    print(f"--- LightGBM: {feat_1}, {feat_2}  →  {target} ---")
 
     plot_lgbm_model(
         data,
-        [x_col, y_col],
-        target_col,
-        title=f"Model: {x_col}, {y_col} → {target_col}",
+        [feat_1, feat_2],
+        target,
+        title=f"Model: {feat_1}, {feat_2} → {target}",
     )
 
-    print(f"--- Density scatter: {x_col} vs {y_col}, colour={target_col} ---")
-    density_scatter(data, x_col, y_col, target_col, bw=bw, alpha=alpha)
+    print(f"--- Density scatter: {feat_1} vs {target}, colour={feat_2} ---")
+    density_scatter(data, feat_1, target, feat_2, bw=bw, alpha=alpha)
 
 
 # model visualisation functions:

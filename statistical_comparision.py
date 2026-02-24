@@ -186,6 +186,24 @@ def compare_two_conditions(
     return results_df
 
 
+def compare_all_cols_to_target(data: pd.DataFrame, target_col: str):
+    all_results = []
+    for col in data.columns:
+        if col != target_col:
+            results = compare_two_columns(data, col, target_col)
+            results["column"] = col
+            all_results.append(results)
+
+    results_df = pd.DataFrame(all_results)
+    print_impact_summary(results_df, alpha=0.1)
+    return results_df
+
+
+def compare_all_cols_to_target_visualise(data: pd.DataFrame, target_col: str):
+    results_df = compare_all_cols_to_target(data, target_col)
+    visualise_impact_summary(results_df, alpha=0.1)
+
+
 def compare_two_columns(df: pd.DataFrame, col_a: str, col_b: str) -> Dict[str, Any]:
     """
     Statistically compare two columns, auto-detecting types.

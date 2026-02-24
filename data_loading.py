@@ -20,7 +20,7 @@ ALL_SUPPLIERS = [
     "Dick Tracey",
     "Harry Houdini",
     "Tom Hanks",
-    "Mary",
+    "Mary NO_LAST_NAME",
     "Mary Anne",
     "Mary Jane",
     "Mary Therese",
