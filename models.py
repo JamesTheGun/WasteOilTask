@@ -14,6 +14,7 @@ from data_managment import (
     fit_encoder,
     save_encoder,
     encode_with_encoder,
+    deterministic_encoded_train_test_split,
 )
 from model_constants import (
     RATIO_MODELS,
@@ -97,25 +98,9 @@ def _train_lgbm_recovery_model(
     type: Literal["ratio", "volume", "ratio_with_supplied_volume"],
 ) -> Tuple[dict, lgb.LGBMRegressor]:
 
-    np.random.seed(1)
-    if type == "ratio":
-        X, y, not_selected = load_train_test_sets_target_recovery_ratio()
-    elif type == "volume":
-        X, y, not_selected = load_train_test_sets_target_recovery_volume()
-    elif type == "ratio_with_supplied_volume":
-        X, y, not_selected = (
-            load_train_test_sets_target_recovery_ratio_with_supplied_volume()
-        )
-
     X_train, X_test, y_train, y_test, not_selected_train, not_selected_test = (
-        train_test_time_series_split(X, y, not_selected)
+        deterministic_encoded_train_test_split(type)
     )
-
-    # Fit encoder on training data only, then encode train and test
-    encoder = fit_encoder(X_train)
-    save_encoder(encoder)
-    X_train = encode_with_encoder(X_train, encoder)
-    X_test = encode_with_encoder(X_test, encoder)
 
     # Split training data further into train/val for early stopping
     # (using the last 20% of training data as validation)

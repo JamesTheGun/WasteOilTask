@@ -3,9 +3,13 @@ import numpy as np
 import lightgbm as lgb
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import gaussian_kde
+from typing import List, Optional, Tuple, Any
+import pandas as pd
 
 
-def generate_plots(data, targets=None, alpha=0.8):
+def generate_plots(
+    data: pd.DataFrame, targets: Optional[List[str]] = None, alpha: float = 0.8
+) -> None:
     """
     Generate histogram or bar plots for each feature in the dataset.
 
@@ -47,7 +51,111 @@ def generate_plots(data, targets=None, alpha=0.8):
         plt.close(fig)
 
 
-def scatter_coloured(data, x_col, y_col, colour_col):
+def base_scatter_builder(
+    data: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    colour_col: str,
+    figsize: Tuple[float, float] = (9, 6),
+) -> Tuple[pd.DataFrame, plt.Figure, plt.Axes]:
+    """Initialise a scatter plot and return core objects.
+
+    This helper performs the common pre-processing used by the various
+    scatter-based visualisations defined in this module.  It:
+
+    * selects and drops NA rows for the three columns
+    * creates a ``matplotlib`` ``fig``/``ax`` pair with a sensible size
+
+    Returns ``(df, fig, ax)`` where ``df`` is the filtered DataFrame.
+    """
+
+    df = data[[x_col, y_col, colour_col]].dropna().copy()
+    fig, ax = plt.subplots(figsize=figsize)
+    return df, fig, ax
+
+
+def _finalise_scatter_axes(
+    ax: plt.Axes,
+    df: pd.DataFrame,
+    df_numeric: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    colour_col: str,
+    title: str,
+) -> None:
+    """Apply labels/ticks/title to a scatter axis.
+
+    The logic handles categorical x/y axes by substituting numeric ticks with
+    the original category strings, using ``df_numeric`` for location values.
+    ``title`` should already include any extra information (e.g. KDE bandwidth).
+    """
+    if df[x_col].dtype == "object" or str(df[x_col].dtype) == "category":
+        unique_x = sorted(df[x_col].unique())
+        x_ticks = np.sort(df_numeric[x_col].unique())
+        ax.set_xticks(x_ticks)
+        ax.set_xticklabels([unique_x[int(i)] for i in x_ticks], rotation=45, ha="right")
+
+    if df[y_col].dtype == "object" or str(df[y_col].dtype) == "category":
+        unique_y = sorted(df[y_col].unique())
+        y_ticks = np.sort(df_numeric[y_col].unique())
+        ax.set_yticks(y_ticks)
+        ax.set_yticklabels([unique_y[int(i)] for i in y_ticks])
+
+    ax.set_xlabel(x_col, fontsize=10)
+    ax.set_ylabel(y_col, fontsize=10)
+    ax.set_title(title, fontsize=11)
+
+
+def _plot_coloured_data(
+    ax: plt.Axes,
+    df: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    colour_col: str,
+    point_size: int = 20,
+    alpha: float = 0.7,
+) -> None:
+    """Draw scatter points on ``ax`` coloured by ``colour_col`` in ``df``.
+
+    Handles both categorical and numeric colour columns.  If the column is
+    categorical, each category gets a distinct colour and a legend is created;
+    otherwise a continuous ``viridis`` colourmap is used and a colourbar is
+    attached to ``ax``.
+
+    Parameters mirror those used in ``scatter_coloured`` and ``density_scatter``.
+    """
+    if df[colour_col].dtype == "object" or str(df[colour_col].dtype) == "category":
+        categories = sorted(df[colour_col].unique())
+        cmap = plt.get_cmap("tab10", len(categories))
+        for i, cat in enumerate(categories):
+            mask = df[colour_col] == cat
+            ax.scatter(
+                df.loc[mask, x_col],
+                df.loc[mask, y_col],
+                label=str(cat),
+                color=cmap(i),
+                alpha=alpha,
+                s=point_size,
+                linewidths=0,
+            )
+        ax.legend(
+            title=colour_col, bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8
+        )
+    else:
+        sc = ax.scatter(
+            df[x_col],
+            df[y_col],
+            c=df[colour_col],
+            cmap="viridis",
+            alpha=alpha,
+            s=point_size,
+        )
+        plt.colorbar(sc, ax=ax, label=colour_col)
+
+
+def scatter_coloured(
+    data: pd.DataFrame, x_col: str, y_col: str, colour_col: str
+) -> None:
     """
     Create a colour-coded scatter plot across three dimensions.
 
@@ -58,46 +166,180 @@ def scatter_coloured(data, x_col, y_col, colour_col):
         colour_col:  Column name used to colour the points
     """
 
-    df = data[[x_col, y_col, colour_col]].dropna()
+    df, fig, ax = base_scatter_builder(data, x_col, y_col, colour_col)
 
-    fig, ax = plt.subplots(figsize=(9, 6))
+    _plot_coloured_data(ax, df, x_col, y_col, colour_col, point_size=20, alpha=0.7)
 
-    # Categorical colour column
-    if df[colour_col].dtype == "object" or str(df[colour_col].dtype) == "category":
-        categories = df[colour_col].unique()
-        cmap = plt.get_cmap("tab10", len(categories))
-        for i, cat in enumerate(sorted(categories)):
-            mask = df[colour_col] == cat
-            ax.scatter(
-                df.loc[mask, x_col],
-                df.loc[mask, y_col],
-                label=str(cat),
-                color=cmap(i),
-                alpha=0.7,
-                s=20,
-            )
-        ax.legend(
-            title=colour_col, bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8
-        )
-    else:
-        # Numeric colour column — use a continuous colourmap
-        sc = ax.scatter(
-            df[x_col], df[y_col], c=df[colour_col], cmap="viridis", alpha=0.7, s=20
-        )
-        plt.colorbar(sc, ax=ax, label=colour_col)
-
-    ax.set_xlabel(x_col, fontsize=10)
-    ax.set_ylabel(y_col, fontsize=10)
-    ax.set_title(f"{x_col} vs {y_col}  |  colour: {colour_col}", fontsize=11)
+    _finalise_scatter_axes(
+        ax,
+        df,
+        df,
+        x_col,
+        y_col,
+        colour_col,
+        title=f"{x_col} vs {y_col}  |  colour: {colour_col}",
+    )
     plt.tight_layout()
 
     plt.show()
     plt.close(fig)
 
 
+def scatter_confidence(
+    data: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    colour_col: str,
+    confidence_col: str,
+    true_col: Optional[str] = None,
+    pred_col: Optional[str] = None,
+    point_scale: float = 100,
+) -> None:
+    """Confidence scatter plot with size and outline semantics.
+
+    * **point size** – proportional to ``confidence_col``; higher confidence =
+      larger marker.
+    * **outline colour/width** – when ``true_col`` and ``pred_col`` are given,
+      mismatched points will receive a **red outline** (thicker than the
+      default) to highlight incorrect predictions.
+
+    ``colour_col`` still controls point colour exactly as in
+    :func:`scatter_coloured`.  ``confidence_col`` must be numeric and is
+    normalised before scaling by ``point_scale``.
+    """
+
+    cols = [x_col, y_col, colour_col, confidence_col]
+    if true_col:
+        cols.append(true_col)
+    if pred_col:
+        cols.append(pred_col)
+
+    df = data[cols].dropna().copy()
+
+    conf = df[confidence_col].astype(float)
+    norm = (conf - conf.min()) / (conf.max() - conf.min() + 1e-9)
+    sizes = norm * point_scale + point_scale * 0.1
+
+    wrong_mask = None
+    if true_col and pred_col:
+        wrong_mask = df[true_col] != df[pred_col]
+        # calculate delta and normalised percentiles for colour mapping
+        delta = (df[true_col].astype(float) - df[pred_col].astype(float)).abs()
+        dnorm = (delta - delta.min()) / (delta.max() - delta.min() + 1e-9)
+        cmap = plt.get_cmap("Reds")
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    if df[colour_col].dtype == "object" or str(df[colour_col].dtype) == "category":
+        categories = sorted(df[colour_col].unique())
+        cmap = plt.get_cmap("tab10", len(categories))
+        for i, cat in enumerate(categories):
+            mask = df[colour_col] == cat
+            if wrong_mask is not None:
+                edgecolors = []
+                for idx, m in df[mask].iterrows():
+                    if wrong_mask.loc[idx]:
+                        edgecolors.append(cmap(dnorm.loc[idx]))
+                    else:
+                        edgecolors.append("white")
+            else:
+                edgecolors = "none"
+            ax.scatter(
+                df.loc[mask, x_col],
+                df.loc[mask, y_col],
+                label=str(cat),
+                color=cmap(i),
+                alpha=0.7,
+                s=sizes[mask],
+                edgecolors=edgecolors,
+                linewidths=1.5,
+            )
+        ax.legend(
+            title=colour_col, bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8
+        )
+    else:
+        if wrong_mask is not None:
+            edgecolors = []
+            for idx, m in df.iterrows():
+                if wrong_mask.loc[idx]:
+                    edgecolors.append(cmap(dnorm.loc[idx]))
+                else:
+                    edgecolors.append("white")
+        else:
+            edgecolors = "none"
+        sc = ax.scatter(
+            df[x_col],
+            df[y_col],
+            c=df[colour_col],
+            cmap="viridis",
+            alpha=0.7,
+            s=sizes,
+            edgecolors=edgecolors,
+            linewidths=1.5,
+        )
+        plt.colorbar(sc, ax=ax, label=colour_col)
+
+    _finalise_scatter_axes(
+        ax,
+        df,
+        df,
+        x_col,
+        y_col,
+        colour_col,
+        title=f"{x_col} vs {y_col}  |  colour: {colour_col}  |  confidence: {confidence_col}",
+    )
+    plt.tight_layout()
+    plt.show()
+    plt.close(fig)
+
+
+def confidence_histogram(
+    data: pd.DataFrame,
+    confidence_col: str,
+    true_col: str,
+    pred_col: str,
+    bins: int = 20,
+) -> None:
+    """Histogram of confidence scores coloured by correctness.
+
+    Arguments mirror :func:`scatter_confidence` but only ``confidence_col`` is
+    required.  Bars show the count of points within each confidence bin; green
+    for correct predictions, red for incorrect.
+    """
+    df = data[[confidence_col, true_col, pred_col]].dropna().copy()
+    df["correct"] = df[true_col] == df[pred_col]
+
+    plt.figure(figsize=(8, 5))
+    correct_vals = df.loc[df["correct"], confidence_col]
+    incorrect_vals = df.loc[~df["correct"], confidence_col]
+
+    plt.hist(
+        [correct_vals, incorrect_vals],
+        bins=bins,
+        color=["green", "red"],
+        label=["correct", "incorrect"],
+        stacked=False,
+        alpha=0.7,
+    )
+    plt.xlabel(confidence_col)
+    plt.ylabel("Count")
+    plt.title(f"Confidence histogram coloured by correctness")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+
 def density_scatter(
-    data, x_col, y_col, colour_col, bw=0.3, point_size=15, alpha=0.7, pad=0.5
-):
+    data: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    colour_col: str,
+    bw: float = 0.3,
+    point_size: int = 15,
+    alpha: float = 0.7,
+    pad: float = 0.5,
+) -> None:
     """
     Scatter plot with a KDE density heatmap rendered behind the points,
     colour-coded by a third column.
@@ -115,7 +357,7 @@ def density_scatter(
                      integers so points aren't flush against the edge. Default 0.5.
     """
 
-    df = data[[x_col, y_col, colour_col]].dropna().copy()
+    df, fig, ax = base_scatter_builder(data, x_col, y_col, colour_col)
     df_numeric = df.copy()
 
     for col in [x_col, y_col]:
@@ -130,8 +372,6 @@ def density_scatter(
     x = df_numeric[x_col].values.astype(float)
     y = df_numeric[y_col].values.astype(float)
 
-    fig, ax = plt.subplots(figsize=(9, 6))
-
     xmin, xmax = x.min() - pad, x.max() + pad
     ymin, ymax = y.min() - pad, y.max() + pad
     xx, yy = np.mgrid[xmin:xmax:200j, ymin:ymax:200j]
@@ -141,47 +381,22 @@ def density_scatter(
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
 
-    if df[colour_col].dtype == "object" or str(df[colour_col].dtype) == "category":
-        categories = sorted(df[colour_col].unique())
-        cmap = plt.get_cmap("tab10", len(categories))
-        for i, cat in enumerate(categories):
-            mask = df[colour_col] == cat
-            ax.scatter(
-                x[mask],
-                y[mask],
-                label=str(cat),
-                color=cmap(i),
-                alpha=alpha,
-                s=point_size,
-                linewidths=0,
-            )
-        ax.legend(
-            title=colour_col, bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8
-        )
-    else:
-        c_vals = df[colour_col].values.astype(float)
-        sc = ax.scatter(
-            x, y, c=c_vals, cmap="viridis", alpha=alpha, s=point_size, linewidths=0
-        )
-        plt.colorbar(sc, ax=ax, label=colour_col)
-
-    if df[x_col].dtype == "object" or str(df[x_col].dtype) == "category":
-        unique_x = sorted(df[x_col].unique())
-        x_ticks = np.sort(df_numeric[x_col].unique())
-        ax.set_xticks(x_ticks)
-        ax.set_xticklabels([unique_x[int(i)] for i in x_ticks], rotation=45, ha="right")
-
-    if df[y_col].dtype == "object" or str(df[y_col].dtype) == "category":
-        unique_y = sorted(df[y_col].unique())
-        y_ticks = np.sort(df_numeric[y_col].unique())
-        ax.set_yticks(y_ticks)
-        ax.set_yticklabels([unique_y[int(i)] for i in y_ticks])
-
-    ax.set_xlabel(x_col, fontsize=10)
-    ax.set_ylabel(y_col, fontsize=10)
-    ax.set_title(
-        f"{x_col} vs {y_col}  |  colour: {colour_col}  |  KDE bw={bw}", fontsize=11
+    df_plot = df.copy()
+    df_plot[x_col] = x
+    _plot_coloured_data(
+        ax, df_plot, x_col, y_col, colour_col, point_size=point_size, alpha=alpha
     )
+
+    _finalise_scatter_axes(
+        ax,
+        df,
+        df_numeric,
+        x_col,
+        y_col,
+        colour_col,
+        title=f"{x_col} vs {y_col}  |  colour: {colour_col}  |  KDE bw={bw}",
+    )
+
     plt.tight_layout()
 
     plt.show()
@@ -200,7 +415,12 @@ def _encode_for_model(series):
         return series.values.astype(float), None
 
 
-def plot_lgbm_model(data, feature_cols: list[str], target_col: str, title=None):
+def plot_lgbm_model(
+    data: pd.DataFrame,
+    feature_cols: List[str],
+    target_col: str,
+    title: Optional[str] = None,
+) -> Any:
     """
     Train a simple LightGBM model predicting target_col from feature_cols,
     then plot feature importances and predicted vs actual.
@@ -252,14 +472,12 @@ def plot_lgbm_model(data, feature_cols: list[str], target_col: str, title=None):
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-    # Feature importance
     axes[0].barh(
         feature_cols, model.feature_importances_, color="steelblue", edgecolor="white"
     )
     axes[0].set_xlabel("Importance (split count)")
     axes[0].set_title(f"Feature Importance → {target_col}")
 
-    # Predicted vs actual
     if is_classifier:
         from sklearn.metrics import accuracy_score, f1_score
 
@@ -325,8 +543,13 @@ import pandas as pd
 
 
 def display_simple_model_with_lgbm_and_density_scatter(
-    data: pd.DataFrame, feat_1, feat_2, target, bw=0.3, alpha=0.5
-):
+    data: pd.DataFrame,
+    feat_1: str,
+    feat_2: str,
+    target: str,
+    bw: float = 0.3,
+    alpha: float = 0.5,
+) -> None:
     """Train a simple LightGBM model and display a density scatter plot for two features against a target.
 
     Args:
@@ -348,10 +571,6 @@ def display_simple_model_with_lgbm_and_density_scatter(
 
     print(f"--- Density scatter: {feat_1} vs {target}, colour={feat_2} ---")
     density_scatter(data, feat_1, target, feat_2, bw=bw, alpha=alpha)
-
-
-# model visualisation functions:
-# ...existing code...
 
 
 def plot_model_results(
@@ -386,11 +605,9 @@ def plot_model_results(
     y_true = np.array(y_true).astype(float)
     y_pred = np.array(y_pred).astype(float)
 
-    # Find most important feature
     top_feature = max(feature_importance, key=feature_importance.get)
     colour_values = feature_values[top_feature]
 
-    # Calculate statistics
     r2 = r2_score(y_true, y_pred)
     mae = mean_absolute_error(y_true, y_pred)
     rmse = np.sqrt(mean_squared_error(y_true, y_pred))
@@ -398,7 +615,6 @@ def plot_model_results(
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    # KDE density heatmap
     pad = 0.05 * (y_true.max() - y_true.min())
     xmin, xmax = y_true.min() - pad, y_true.max() + pad
     ymin, ymax = y_pred.min() - pad, y_pred.max() + pad
@@ -408,9 +624,8 @@ def plot_model_results(
         density = kde(np.vstack([xx.ravel(), yy.ravel()])).reshape(xx.shape)
         ax.contourf(xx, yy, density, levels=12, cmap="Blues", alpha=0.4)
     except Exception:
-        pass  # Skip KDE if it fails (e.g., singular matrix)
+        pass
 
-    # Determine if colour column is categorical
     is_categorical = isinstance(colour_values, (list, np.ndarray)) and (
         isinstance(colour_values[0], str) or len(np.unique(colour_values)) < 15
     )
@@ -437,13 +652,11 @@ def plot_model_results(
         )
         plt.colorbar(sc, ax=ax, label=top_feature)
 
-    # Perfect fit line
     lims = [min(np.min(y_true), np.min(y_pred)), max(np.max(y_true), np.max(y_pred))]
     ax.plot(lims, lims, "r--", linewidth=1.5, label="Perfect fit", zorder=0)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
 
-    # Labels and title
     ax.set_xlabel(f"Actual {target_name}", fontsize=11)
     ax.set_ylabel(f"Predicted {target_name}", fontsize=11)
     ax.set_title(
@@ -451,7 +664,6 @@ def plot_model_results(
         fontsize=12,
     )
 
-    # Statistics text box
     stats_text = (
         f"R² = {r2:.4f}\n"
         f"MAE = {mae:.4f}\n"
@@ -469,7 +681,6 @@ def plot_model_results(
         bbox=dict(boxstyle="round", facecolor="white", alpha=0.9, edgecolor="gray"),
     )
 
-    # Feature importance text
     importance_text = "Feature Importance:\n" + "\n".join(
         f"  {k}: {v:.1f}"
         for k, v in sorted(feature_importance.items(), key=lambda x: -x[1])[:5]
@@ -507,9 +718,9 @@ def visualize_model_predictions(
     feature_importance: dict,
     X_features: pd.DataFrame,
     target_name: str,
-    model=None,
+    model: Any = None,
     image_filename: str = "model_results.png",
-):
+) -> str:
     """
     Visualise actual vs predicted, coloured by most important feature.
     Optionally includes SHAP summary plot if model is provided.
@@ -548,7 +759,6 @@ def visualize_model_predictions(
         save_path=save_path,
     )
 
-    # SHAP plot if model provided
     if model is not None:
         try:
             import shap

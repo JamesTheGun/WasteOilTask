@@ -100,6 +100,35 @@ def encode_features(model_features: pd.DataFrame) -> pd.DataFrame:
     return encode_with_encoder(model_features, encoder)
 
 
+def deterministic_encoded_train_test_split(
+    split_type: Literal["ratio", "volume", "ratio_with_supplied_volume"],
+) -> Tuple[
+    pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.DataFrame, pd.DataFrame
+]:
+    if split_type == "ratio":
+        X, y, not_selected = load_train_test_sets_target_recovery_ratio()
+    elif split_type == "volume":
+        X, y, not_selected = load_train_test_sets_target_recovery_volume()
+    elif split_type == "ratio_with_supplied_volume":
+        X, y, not_selected = (
+            load_train_test_sets_target_recovery_ratio_with_supplied_volume()
+        )
+    else:
+        raise ValueError(f"Unknown split_type '{split_type}'")
+
+    X_train, X_test, y_train, y_test, not_selected_train, not_selected_test = (
+        train_test_time_series_split(X, y, not_selected)
+    )
+
+    encoder_x = fit_encoder(X_train)
+    save_encoder(encoder_x)
+
+    X_train = encode_with_encoder(X_train, encoder_x)
+    X_test = encode_with_encoder(X_test, encoder_x)
+
+    return X_train, X_test, y_train, y_test, not_selected_train, not_selected_test
+
+
 MODEL_FEATURES = [
     "facility",
     "time_start_hour_minute",
