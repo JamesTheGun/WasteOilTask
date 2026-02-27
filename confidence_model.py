@@ -37,9 +37,7 @@ def confidence_model(
     clusters_and_deltas = to_get_confidences.copy()
     clusters_and_deltas["clusters"] = predicted_clusters
     clusters_and_deltas["deltas"] = deltas
-    get_cluster_points = lambda cluster: clusters_and_deltas.loc[
-        clusters_and_deltas["clusters"] == cluster, "deltas"
-    ]
+    get_cluster_points = lambda cluster: clusters_and_deltas["clusters"] == cluster
 
     cluster_Ps: dict[int, float] = {
         cluster: get_p_of_exceeding_delta_for_cluster(
@@ -47,19 +45,24 @@ def confidence_model(
             is_percentage_delta,
             get_cluster_points(cluster),
         )
-        for cluster in np.unique(predicted_clusters["clusters"])
+        for cluster in np.unique(predicted_clusters)
     }
-    return cluster_model, cluster_Ps
+    return cluster_model, cluster_Ps, features
 
 
 def get_p_of_exceeding_delta_for_cluster(
     delta_threshold: float, is_percentage_delta: bool, cluster_points: pd.Series
 ) -> pd.Series:
+    # delta_threshold =
     if is_percentage_delta:
-        cluster_points = cluster_points.apply(lambda x: abs(x) / abs(x - 1))
+        cluster_points = cluster_points.apply(
+            lambda x: abs(x) / abs(x - 1) if x - 1 != 0 else 0
+        )
+    print(f"cluster_points: {cluster_points}")
     F_hat = np.mean(cluster_points <= delta_threshold)
     n = len(cluster_points)
     prob_exceeding = 1 - F_hat**n
+    print(prob_exceeding)
     return prob_exceeding
 
 
@@ -187,7 +190,7 @@ if __name__ == "__main__":
         index=X_train.index,
     )
 
-    cluster_model_test, cluster_Ps_test = confidence_model(
+    cluster_model_test, cluster_Ps_test, cluster_features_test = confidence_model(
         X_train,
         X_test,
         y_pred_test,
@@ -195,7 +198,7 @@ if __name__ == "__main__":
         critical_percentage_delta=0.2,
     )
 
-    cluster_model_train, cluster_Ps_train = confidence_model(
+    cluster_model_train, cluster_Ps_train, cluster_features_train = confidence_model(
         X_train,
         X_train,
         y_pred_train,
@@ -206,7 +209,7 @@ if __name__ == "__main__":
     # optionally visualise clusters using the scatter plot helper
     from visualisation import scatter_coloured, scatter_confidence
 
-    clusters = cluster_model_test.predict(X_test)
+    clusters = cluster_model_test.predict(X_test[cluster_features_test])
     viz_df = X_test.copy()
     pcaed_viz_df = add_pcas_of_features(viz_df)
     pcaed_viz_df["clusters"] = clusters
@@ -216,6 +219,7 @@ if __name__ == "__main__":
     data_with_confidences = add_cluster_confidences(
         pcaed_viz_df, "clusters", cluster_Ps_train
     )
+    print(cluster_Ps_train)
     data_with_trues_and_preds = data_with_confidences.copy()
     data_with_trues_and_preds["true"] = y_test.reset_index(drop=True)
     data_with_trues_and_preds["pred"] = y_pred_test.reset_index(drop=True)
