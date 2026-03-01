@@ -12,6 +12,7 @@ from sklearn.preprocessing import StandardScaler
 
 import statsmodels.stats.proportion as smp
 import lightgbm
+from model_constants import MODEL_TYPE_DISPLAY_NAMES
 
 CIKind = Literal["wilson", "beta"]
 BetaPrior = Tuple[float, float]
@@ -270,7 +271,7 @@ def _visualise_confidence(
         os.path.dirname(os.path.abspath(__file__)),
         "data_exploration_visualisations",
         "models",
-        f"recovery_{model_type}",
+        f"recovery_{MODEL_TYPE_DISPLAY_NAMES.get(model_type, model_type)}",
         "confidence",
     )
     os.makedirs(save_dir, exist_ok=True)

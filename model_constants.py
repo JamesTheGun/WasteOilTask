@@ -1,5 +1,11 @@
 RATIO_MODELS = ["ratio", "ratio_with_supplied_volume"]
 
+MODEL_TYPE_DISPLAY_NAMES = {
+    "ratio": "ratio_without_supplied_volume",
+    "volume": "volume",
+    "ratio_with_supplied_volume": "ratio_with_supplied_volume",
+}
+
 DEFAULT_MODEL_NAME = "lgbm_recovery_model.pkl"
 
 RATIO_WITHOUT_VOL_MODEL_FILENAME = "lgbm_recovery_ratio_model.pkl"

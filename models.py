@@ -12,6 +12,7 @@ from data_managment import (
 )
 from model_constants import (
     RATIO_MODELS,
+    MODEL_TYPE_DISPLAY_NAMES,
     RATIO_WITHOUT_VOL_MODEL_FILENAME,
     VOLUME_MODEL_FILENAME,
     RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
@@ -137,14 +138,15 @@ def _train_ratio_with_vol_lgbm_recovery_ratio_model(
     )
 
     if visualise_model:
+        display_type = MODEL_TYPE_DISPLAY_NAMES.get(type, type)
         visualize_model_predictions(
             y_true=y_test,
             y_pred=y_test_pred,
             feature_importance=results["feature_importance"],
             X_features=X_test,
-            target_name=f"recovery_{type}",
+            target_name=f"recovery_{display_type}",
             model=model,
-            image_filename=f"recovery_{type}_model.png",
+            image_filename=f"recovery_{display_type}_model.png",
         )
 
     do_confidence(X_test, model, type, visualise=visualise_model)
