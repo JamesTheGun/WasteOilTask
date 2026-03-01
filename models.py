@@ -4,21 +4,15 @@ import numpy as np
 from typing import Any, List, Tuple, Literal
 import pandas as pd
 
+from confidence_model import do_confidence
 from visualisation import visualize_model_predictions
 from data_managment import (
     get_schedule_model_features,
-    load_train_test_sets_target_recovery_ratio,
-    load_train_test_sets_target_recovery_ratio_with_supplied_volume,
-    load_train_test_sets_target_recovery_volume,
-    train_test_time_series_split,
-    fit_encoder,
-    save_encoder,
-    encode_with_encoder,
     deterministic_encoded_train_test_split,
 )
 from model_constants import (
     RATIO_MODELS,
-    RATIO_MODEL_FILENAME,
+    RATIO_WITHOUT_VOL_MODEL_FILENAME,
     VOLUME_MODEL_FILENAME,
     RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
     RESULTS_RATIO_MODEL_FILENAME,
@@ -35,13 +29,17 @@ from model_utils import print_model_results
 def _train_lgbm_recovery_volume_model(
     visualise_model: bool,
 ) -> Tuple[dict, lgb.LGBMRegressor]:
-    return _train_lgbm_recovery_model(visualise_model, type="volume")
+    return _train_ratio_with_vol_lgbm_recovery_ratio_model(
+        visualise_model, type="volume"
+    )
 
 
-def _train_lgbm_recovery_ratio_model(
+def _train_lgbm_recovery_ratio_without_vol_model(
     visualise_model: bool,
 ) -> Tuple[dict, lgb.LGBMRegressor]:
-    return _train_lgbm_recovery_model(visualise_model, type="ratio")
+    return _train_ratio_with_vol_lgbm_recovery_ratio_model(
+        visualise_model, type="ratio"
+    )
 
 
 def _get_results(
@@ -93,7 +91,7 @@ def _get_results(
     return results
 
 
-def _train_lgbm_recovery_model(
+def _train_ratio_with_vol_lgbm_recovery_ratio_model(
     visualise_model: bool,
     type: Literal["ratio", "volume", "ratio_with_supplied_volume"],
 ) -> Tuple[dict, lgb.LGBMRegressor]:
@@ -149,13 +147,16 @@ def _train_lgbm_recovery_model(
             image_filename=f"recovery_{type}_model.png",
         )
 
+    do_confidence(X_test, model, type, visualise=visualise_model)
+
     return results, model
 
 
-def do_recovery_ratio_model(
-    model_filename: str = RATIO_MODEL_FILENAME, visualise_model: bool = False
+def do_recovery_ratio_model_without_vol(
+    model_filename: str = RATIO_WITHOUT_VOL_MODEL_FILENAME,
+    visualise_model: bool = False,
 ):
-    ratio_results, model = _train_lgbm_recovery_ratio_model(visualise_model)
+    ratio_results, model = _train_lgbm_recovery_ratio_without_vol_model(visualise_model)
     print_model_results(ratio_results, model_name="Recovery Ratio Model")
     save_model(model, model_filename)
 
@@ -172,7 +173,7 @@ def do_recovery_ratio_model_with_supplied_volume(
     model_filename: str = RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
     visualise_model: bool = False,
 ):
-    ratio_results, model = _train_lgbm_recovery_model(
+    ratio_results, model = _train_ratio_with_vol_lgbm_recovery_ratio_model(
         visualise_model, type="ratio_with_supplied_volume"
     )
     print_model_results(
@@ -184,7 +185,9 @@ def do_recovery_ratio_model_with_supplied_volume(
 if __name__ == "__main__":
     from implied_models import do_implied_ratio_model, do_implied_volume_model
 
-    do_recovery_ratio_model(RATIO_MODEL_FILENAME, visualise_model=True)
+    do_recovery_ratio_model_without_vol(
+        RATIO_WITHOUT_VOL_MODEL_FILENAME, visualise_model=True
+    )
     do_recovery_volume_model(VOLUME_MODEL_FILENAME, visualise_model=True)
     do_recovery_ratio_model_with_supplied_volume(
         RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME, visualise_model=True
@@ -193,7 +196,8 @@ if __name__ == "__main__":
     X_ratio, X_ratio_not_encoded = get_schedule_model_features(m_type="ratio")
     make_and_save_predictions(
         X_ratio,
-        model_filename=RATIO_MODEL_FILENAME,
+        "ratio",
+        model_filename=RATIO_WITHOUT_VOL_MODEL_FILENAME,
         predictions_filename=RESULTS_RATIO_MODEL_FILENAME,
         X_not_encoded=X_ratio_not_encoded,
     )
@@ -201,6 +205,7 @@ if __name__ == "__main__":
     X_volume, X_volume_not_encoded = get_schedule_model_features(m_type="volume")
     make_and_save_predictions(
         X_volume,
+        "volume",
         model_filename=VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_VOLUME_MODEL_FILENAME,
         X_not_encoded=X_volume_not_encoded,
@@ -211,6 +216,7 @@ if __name__ == "__main__":
     )
     make_and_save_predictions(
         X_rsv,
+        "ratio_with_supplied_volume",
         model_filename=RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
         X_not_encoded=X_rsv_not_encoded,

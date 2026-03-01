@@ -47,7 +47,6 @@ def generate_plots(
         ax.set_ylabel("Count", fontsize=10)
 
         plt.tight_layout()
-        plt.show()
         plt.close(fig)
 
 
@@ -80,15 +79,19 @@ def _finalise_scatter_axes(
     df_numeric: pd.DataFrame,
     x_col: str,
     y_col: str,
-    colour_col: str,
     title: str,
+    dark: bool = True,
 ) -> None:
     """Apply labels/ticks/title to a scatter axis.
 
     The logic handles categorical x/y axes by substituting numeric ticks with
     the original category strings, using ``df_numeric`` for location values.
     ``title`` should already include any extra information (e.g. KDE bandwidth).
+    When ``dark=True`` labels and title are rendered in white.
     """
+
+    text_colour = "white" if dark else "black"
+
     if df[x_col].dtype == "object" or str(df[x_col].dtype) == "category":
         unique_x = sorted(df[x_col].unique())
         x_ticks = np.sort(df_numeric[x_col].unique())
@@ -101,9 +104,9 @@ def _finalise_scatter_axes(
         ax.set_yticks(y_ticks)
         ax.set_yticklabels([unique_y[int(i)] for i in y_ticks])
 
-    ax.set_xlabel(x_col, fontsize=10)
-    ax.set_ylabel(y_col, fontsize=10)
-    ax.set_title(title, fontsize=11)
+    ax.set_xlabel(x_col, fontsize=10, color=text_colour)
+    ax.set_ylabel(y_col, fontsize=10, color=text_colour)
+    ax.set_title(title, fontsize=11, color=text_colour)
 
 
 def _plot_coloured_data(
@@ -114,19 +117,44 @@ def _plot_coloured_data(
     colour_col: str,
     point_size: int = 20,
     alpha: float = 0.7,
+    dark: bool = True,
 ) -> None:
     """Draw scatter points on ``ax`` coloured by ``colour_col`` in ``df``.
 
     Handles both categorical and numeric colour columns.  If the column is
     categorical, each category gets a distinct colour and a legend is created;
-    otherwise a continuous ``viridis`` colourmap is used and a colourbar is
-    attached to ``ax``.
+    otherwise a continuous colourmap is used and a colourbar is attached to
+    ``ax``.
+
+    When ``dark=True`` (the default) the axes and parent figure backgrounds
+    are set to a dark colour and brighter palettes / white text are used so
+    that points remain clearly visible.
 
     Parameters mirror those used in ``scatter_coloured`` and ``density_scatter``.
     """
+
+    if dark:
+        bg = "black"
+        ax.set_facecolor(bg)
+        ax.figure.patch.set_facecolor(bg)
+        ax.tick_params(colors="white")
+        for spine in ax.spines.values():
+            spine.set_edgecolor("#555555")
+        cat_palette = "Set2"  # bright pastels that pop on dark bg
+        seq_palette = "plasma"  # vivid sequential map
+        legend_kw = dict(
+            facecolor="#2a2a2a",
+            edgecolor="#555555",
+            labelcolor="white",
+        )
+    else:
+        cat_palette = "tab10"
+        seq_palette = "viridis"
+        legend_kw = {}
+
     if df[colour_col].dtype == "object" or str(df[colour_col].dtype) == "category":
         categories = sorted(df[colour_col].unique())
-        cmap = plt.get_cmap("tab10", len(categories))
+        cmap = plt.get_cmap(cat_palette, max(len(categories), 3))
         for i, cat in enumerate(categories):
             mask = df[colour_col] == cat
             ax.scatter(
@@ -138,23 +166,39 @@ def _plot_coloured_data(
                 s=point_size,
                 linewidths=0,
             )
-        ax.legend(
+        leg = ax.legend(
             title=colour_col, bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8
         )
+        if dark and leg is not None:
+            leg.get_frame().set_facecolor(legend_kw.get("facecolor", "white"))
+            leg.get_frame().set_edgecolor(legend_kw.get("edgecolor", "black"))
+            for text in leg.get_texts():
+                text.set_color("white")
+            leg.get_title().set_color("white")
     else:
         sc = ax.scatter(
             df[x_col],
             df[y_col],
             c=df[colour_col],
-            cmap="viridis",
+            cmap=seq_palette,
             alpha=alpha,
             s=point_size,
         )
-        plt.colorbar(sc, ax=ax, label=colour_col)
+        cbar = plt.colorbar(sc, ax=ax, label=colour_col)
+        if dark:
+            cbar.ax.yaxis.set_tick_params(color="white")
+            plt.setp(cbar.ax.yaxis.get_ticklabels(), color="white")
+            cbar.set_label(colour_col, color="white")
 
 
 def scatter_coloured(
-    data: pd.DataFrame, x_col: str, y_col: str, colour_col: str
+    data: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    colour_col: str,
+    title: str = None,
+    alpha: float = 0.7,
+    point_size: int = 20,
 ) -> None:
     """
     Create a colour-coded scatter plot across three dimensions.
@@ -164,11 +208,18 @@ def scatter_coloured(
         x_col:       Column name for the x-axis
         y_col:       Column name for the y-axis
         colour_col:  Column name used to colour the points
+        alpha:       Opacity of the points. Default 0.7.
+        point_size:  Size of scatter points. Default 20.
     """
 
     df, fig, ax = base_scatter_builder(data, x_col, y_col, colour_col)
 
-    _plot_coloured_data(ax, df, x_col, y_col, colour_col, point_size=20, alpha=0.7)
+    _plot_coloured_data(
+        ax, df, x_col, y_col, colour_col, point_size=point_size, alpha=alpha
+    )
+
+    if not title:
+        title = f"{x_col} vs {y_col} coloured by {colour_col}"
 
     _finalise_scatter_axes(
         ax,
@@ -176,12 +227,10 @@ def scatter_coloured(
         df,
         x_col,
         y_col,
-        colour_col,
-        title=f"{x_col} vs {y_col}  |  colour: {colour_col}",
+        title=title,
     )
     plt.tight_layout()
 
-    plt.show()
     plt.close(fig)
 
 
@@ -223,7 +272,6 @@ def scatter_confidence(
     wrong_mask = None
     if true_col and pred_col:
         wrong_mask = df[true_col] != df[pred_col]
-        # calculate delta and normalised percentiles for colour mapping
         delta = (df[true_col].astype(float) - df[pred_col].astype(float)).abs()
         dnorm = (delta - delta.min()) / (delta.max() - delta.min() + 1e-9)
         cmap = plt.get_cmap("Reds")
@@ -285,11 +333,9 @@ def scatter_confidence(
         df,
         x_col,
         y_col,
-        colour_col,
         title=f"{x_col} vs {y_col}  |  colour: {colour_col}  |  confidence: {confidence_col}",
     )
     plt.tight_layout()
-    plt.show()
     plt.close(fig)
 
 
@@ -326,8 +372,25 @@ def confidence_histogram(
     plt.title(f"Confidence histogram coloured by correctness")
     plt.legend()
     plt.tight_layout()
-    plt.show()
     plt.close()
+
+
+def _compute_density_scatter_defaults(
+    x: np.ndarray,
+    y: np.ndarray,
+    bw: Optional[float] = None,
+    pad: Optional[float] = None,
+) -> Tuple[float, float]:
+    x_range = np.max(x) - np.min(x)
+    y_range = np.max(y) - np.min(y)
+    combined_range = (x_range + y_range) / 2.0
+
+    if bw is None:
+        bw = max(combined_range / 10.0, 0.01)
+    if pad is None:
+        pad = max(combined_range / 20.0, 0.1)
+
+    return float(bw), float(pad)
 
 
 def density_scatter(
@@ -335,10 +398,14 @@ def density_scatter(
     x_col: str,
     y_col: str,
     colour_col: str,
-    bw: float = 0.3,
+    bw: Optional[float] = None,
     point_size: int = 15,
-    alpha: float = 0.7,
-    pad: float = 0.5,
+    point_alpha: float = 0.7,
+    kde_vis_alpha: float = 0.5,
+    pad: Optional[float] = None,
+    dark: bool = True,
+    title: str = None,
+    save_path: Optional[str] = None,
 ) -> None:
     """
     Scatter plot with a KDE density heatmap rendered behind the points,
@@ -349,12 +416,14 @@ def density_scatter(
         x_col:       Column name for the x-axis
         y_col:       Column name for the y-axis
         colour_col:  Column name used to colour the points
-        bw:          KDE bandwidth (smaller = tighter fit). Default 0.3.
-        point_size:  Size of scatter points. Default 15.
-        alpha:       Opacity of scatter points. Default 0.7.
-        pad:         Padding added around the data extent for the KDE grid and axis
-                     limits. Useful when an axis has discrete categories encoded as
-                     integers so points aren't flush against the edge. Default 0.5.
+        bw:            KDE bandwidth (smaller = tighter fit). If None, computed from data range.
+        point_size:    Size of scatter points. Default 15.
+        point_alpha:   Opacity of scatter points. Default 0.7.
+        kde_vis_alpha: Opacity of the KDE density contour fill. Default 0.5.
+        pad:           Padding around the data extent. If None, computed from data range.
+        dark:          Use dark theme for background and text. Default True.
+        title:         Optional title for the plot. Default generates one from column names.
+        save_path:     If provided, save the figure to this path instead of displaying it.
     """
 
     df, fig, ax = base_scatter_builder(data, x_col, y_col, colour_col)
@@ -372,20 +441,41 @@ def density_scatter(
     x = df_numeric[x_col].values.astype(float)
     y = df_numeric[y_col].values.astype(float)
 
+    bw, pad = _compute_density_scatter_defaults(x, y, bw=bw, pad=pad)
+
     xmin, xmax = x.min() - pad, x.max() + pad
     ymin, ymax = y.min() - pad, y.max() + pad
     xx, yy = np.mgrid[xmin:xmax:200j, ymin:ymax:200j]
     kde = gaussian_kde(np.vstack([x, y]), bw_method=bw)
     density = kde(np.vstack([xx.ravel(), yy.ravel()])).reshape(xx.shape)
-    ax.contourf(xx, yy, density, levels=14, cmap="Blues", alpha=0.5)
+    ax.contourf(xx, yy, density, levels=14, cmap="Blues", alpha=kde_vis_alpha)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
+
+    if dark:
+        ax.grid(True, linestyle="--", alpha=0.4, color="#555555")
+        ax.minorticks_on()
+        ax.grid(which="minor", linestyle=":", alpha=0.2, color="#555555")
+    else:
+        ax.grid(True, linestyle="--", alpha=0.5)
+        ax.minorticks_on()
+        ax.grid(which="minor", linestyle=":", alpha=0.3)
 
     df_plot = df.copy()
     df_plot[x_col] = x
     _plot_coloured_data(
-        ax, df_plot, x_col, y_col, colour_col, point_size=point_size, alpha=alpha
+        ax,
+        df_plot,
+        x_col,
+        y_col,
+        colour_col,
+        point_size=point_size,
+        alpha=point_alpha,
+        dark=dark,
     )
+
+    if not title:
+        title = f"{x_col} vs {y_col}  |  colour: {colour_col}  |  KDE bw={bw}"
 
     _finalise_scatter_axes(
         ax,
@@ -393,14 +483,21 @@ def density_scatter(
         df_numeric,
         x_col,
         y_col,
-        colour_col,
-        title=f"{x_col} vs {y_col}  |  colour: {colour_col}  |  KDE bw={bw}",
+        title=title,
+        dark=dark,
     )
 
     plt.tight_layout()
 
-    plt.show()
-    plt.close(fig)
+    if save_path is not None:
+        import os
+
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+    else:
+        plt.show()
+        plt.close(fig)
 
 
 def _encode_for_model(series):
@@ -534,7 +631,6 @@ def plot_lgbm_model(
     )
     plt.tight_layout()
 
-    plt.show()
     plt.close(fig)
     return model
 
@@ -706,7 +802,6 @@ def plot_model_results(
     fig.savefig(save_path, dpi=150, bbox_inches="tight")
     print(f"Saved: {save_path}")
 
-    plt.show()
     plt.close(fig)
 
     return save_path
@@ -732,7 +827,7 @@ def visualize_model_predictions(
         X_features:         Feature DataFrame for colouring
         target_name:        Name for labels (e.g. "recovery_ratio")
         model:              Trained model for SHAP analysis (optional)
-        image_filename:     Output filename in data_exploration_visualisations/models/
+        image_filename:     Output filename in data_exploration_visualisations/models/{target_name}/
 
     Returns:
         Path to saved image
@@ -745,6 +840,7 @@ def visualize_model_predictions(
         os.path.dirname(os.path.abspath(__file__)),
         "data_exploration_visualisations",
         "models",
+        target_name,
     )
     os.makedirs(save_dir, exist_ok=True)
 
@@ -774,7 +870,6 @@ def visualize_model_predictions(
             shap.summary_plot(shap_values, X_features, show=False)
             plt.tight_layout()
             plt.savefig(shap_path, dpi=150, bbox_inches="tight")
-            plt.show()
             plt.close()
         except ImportError:
             print("SHAP not installed. Run: pip install shap")

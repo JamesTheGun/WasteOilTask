@@ -6,6 +6,7 @@ def make_predictions_jsonable(
     X: pd.DataFrame,
     predictions: np.ndarray,
     X_not_encoded: pd.DataFrame = None,
+    confidence_df: pd.DataFrame = None,
 ):
     display = X_not_encoded if X_not_encoded is not None else X
     features = display.columns.tolist()
@@ -17,6 +18,18 @@ def make_predictions_jsonable(
             "prediction_feature_values": prediction_feature_values,
         }
     )
+
+    if confidence_df is not None:
+        conf_cols = [
+            "clusters",
+            "confidence_center",
+            "confidence_lower",
+            "confidence_upper",
+        ]
+        for col in conf_cols:
+            if col in confidence_df.columns:
+                predictions_with_id[col] = confidence_df[col].values
+
     return predictions_with_id.to_dict(orient="records")
 
 

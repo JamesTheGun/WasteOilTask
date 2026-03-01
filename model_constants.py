@@ -2,7 +2,7 @@ RATIO_MODELS = ["ratio", "ratio_with_supplied_volume"]
 
 DEFAULT_MODEL_NAME = "lgbm_recovery_model.pkl"
 
-RATIO_MODEL_FILENAME = "lgbm_recovery_ratio_model.pkl"
+RATIO_WITHOUT_VOL_MODEL_FILENAME = "lgbm_recovery_ratio_model.pkl"
 VOLUME_MODEL_FILENAME = "lgbm_recovery_volume_model.pkl"
 RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME = (
     "lgbm_recovery_ratio_with_supplied_volume_model.pkl"
