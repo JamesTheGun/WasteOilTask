@@ -4,7 +4,7 @@ import numpy as np
 from typing import Any, List, Tuple, Literal
 import pandas as pd
 
-from confidence_model import do_confidence
+from confidence_model import get_confidence_results
 from visualisation import visualize_model_predictions
 from data_managment import (
     get_schedule_model_features,
@@ -149,7 +149,7 @@ def _train_ratio_with_vol_lgbm_recovery_ratio_model(
             image_filename=f"recovery_{display_type}_model.png",
         )
 
-    do_confidence(X_test, model, type, visualise=visualise_model)
+    get_confidence_results(X_test, model, type, visualise=visualise_model)
 
     return results, model
 

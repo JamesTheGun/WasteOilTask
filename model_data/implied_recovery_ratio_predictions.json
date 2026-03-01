@@ -1,542 +1,1626 @@
 [
     {
         "id": 0,
-        "predicted_recovery": 0.8574200927703771,
+        "predicted_recovery": 0.5971290884214002,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 8.4,
-            "supplier": "Mary Anne",
-            "supplied_m3": 2.9
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 15.683333333333334,
+            "supplier": 6.0,
+            "supplied_m3": 4.2
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
     },
     {
         "id": 1,
-        "predicted_recovery": 0.7301570922037927,
+        "predicted_recovery": 0.7316502039726829,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 8.45,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 6.5
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 8.233333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 6.45
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
     },
     {
         "id": 2,
-        "predicted_recovery": 0.7032317012243433,
+        "predicted_recovery": 0.7280049468839856,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 9.416666666666666,
-            "supplier": "Mary",
-            "supplied_m3": 5.0
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.233333333333333,
+            "supplier": 5.0,
+            "supplied_m3": 3.55
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 3,
-        "predicted_recovery": 0.6640731732476107,
+        "predicted_recovery": 0.7058518033993206,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 11.95,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 6.3
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 9.433333333333334,
+            "supplier": 2.0,
+            "supplied_m3": 4.94
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 4,
-        "predicted_recovery": 0.8081683753534646,
+        "predicted_recovery": 0.6706102169871286,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 12.766666666666667,
-            "supplier": "Mary Anne",
-            "supplied_m3": 3.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 10.566666666666666,
+            "supplier": 0.0,
+            "supplied_m3": 6.65
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
     },
     {
         "id": 5,
-        "predicted_recovery": 0.6388607358247402,
+        "predicted_recovery": 0.6577339911428292,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 13.816666666666666,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 3.7
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 11.716666666666667,
+            "supplier": 5.0,
+            "supplied_m3": 3.81
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 6,
-        "predicted_recovery": 0.7509876277835206,
+        "predicted_recovery": 0.7517928904159299,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 14.816666666666666,
-            "supplier": "Mary Anne",
-            "supplied_m3": 2.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 14.15,
+            "supplier": 3.0,
+            "supplied_m3": 3.05
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 7,
-        "predicted_recovery": 0.7043498232274336,
+        "predicted_recovery": 0.5395963156811712,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 8.283333333333333,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 6.7
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 15.216666666666667,
+            "supplier": 6.0,
+            "supplied_m3": 3.9
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
     },
     {
         "id": 8,
-        "predicted_recovery": 0.7673625956353091,
+        "predicted_recovery": 0.5326718261942357,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 8.5,
-            "supplier": "Mary",
-            "supplied_m3": 5.1
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 15.383333333333333,
+            "supplier": 5.0,
+            "supplied_m3": 4.08
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 9,
-        "predicted_recovery": 0.6370797061377722,
+        "predicted_recovery": 0.7046855706478881,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 10.266666666666667,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 7.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 8.316666666666666,
+            "supplier": 6.0,
+            "supplied_m3": 4.2
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
     },
     {
         "id": 10,
-        "predicted_recovery": 0.776848479857767,
+        "predicted_recovery": 0.7207156127319209,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 10.733333333333333,
-            "supplier": "Mary Anne",
-            "supplied_m3": 3.1
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.466666666666667,
+            "supplier": 5.0,
+            "supplied_m3": 3.69
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 11,
-        "predicted_recovery": 0.7715295933626216,
+        "predicted_recovery": 0.7776103177001136,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 11.65,
-            "supplier": "Mary Anne",
-            "supplied_m3": 2.8
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 9.816666666666666,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
     },
     {
         "id": 12,
-        "predicted_recovery": 0.6733614496656533,
+        "predicted_recovery": 0.6338824345386759,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 12.55,
-            "supplier": "Mary Jane",
-            "supplied_m3": 4.9
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 10.633333333333333,
+            "supplier": 6.0,
+            "supplied_m3": 3.85
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
     },
     {
         "id": 13,
-        "predicted_recovery": 0.6003973064227236,
+        "predicted_recovery": 0.7703706097771853,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 14.15,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 4.0
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 11.95,
+            "supplier": 3.0,
+            "supplied_m3": 2.83
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 14,
-        "predicted_recovery": 0.693454075558893,
+        "predicted_recovery": 0.6239286369394806,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 15.883333333333333,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 1.9
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 12.266666666666667,
+            "supplier": 6.0,
+            "supplied_m3": 4.15
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
     },
     {
         "id": 15,
-        "predicted_recovery": 0.6956299220415303,
+        "predicted_recovery": 0.6569998060886987,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 8.166666666666666,
-            "supplier": "Mary Therese",
-            "supplied_m3": 4.1
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 13.666666666666666,
+            "supplier": 0.0,
+            "supplied_m3": 5.9
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 16,
-        "predicted_recovery": 0.7046855706478881,
+        "predicted_recovery": 0.75591736920509,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 8.233333333333333,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 4.2
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 14.683333333333334,
+            "supplier": 3.0,
+            "supplied_m3": 2.97
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 17,
-        "predicted_recovery": 0.6918177292609324,
+        "predicted_recovery": 0.7500592166140725,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 9.266666666666667,
-            "supplier": "Mary",
-            "supplied_m3": 4.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.3,
+            "supplier": 4.0,
+            "supplied_m3": 5.26
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 18,
-        "predicted_recovery": 0.7127152258081396,
+        "predicted_recovery": 0.7694532938940819,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 11.616666666666667,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.1
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 8.4,
+            "supplier": 1.0,
+            "supplied_m3": 2.0
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
     },
     {
         "id": 19,
-        "predicted_recovery": 0.8044823619644792,
+        "predicted_recovery": 0.6674226071814442,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 12.683333333333334,
-            "supplier": "Mary Anne",
-            "supplied_m3": 2.9
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 9.65,
+            "supplier": 6.0,
+            "supplied_m3": 4.1
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
     },
     {
         "id": 20,
-        "predicted_recovery": 0.6551341233850002,
+        "predicted_recovery": 0.6325431944568494,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 12.75,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 3.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 10.85,
+            "supplier": 5.0,
+            "supplied_m3": 4.13
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 21,
-        "predicted_recovery": 0.6811846399452789,
+        "predicted_recovery": 0.6110587983130826,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 14.366666666666667,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 11.5,
+            "supplier": 0.0,
+            "supplied_m3": 5.05
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 22,
-        "predicted_recovery": 0.6310228725389752,
+        "predicted_recovery": 0.7727321445830955,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 14.483333333333333,
-            "supplier": "Mary",
-            "supplied_m3": 5.0
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 12.233333333333333,
+            "supplier": 3.0,
+            "supplied_m3": 3.16
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 23,
-        "predicted_recovery": 0.6797480771294457,
+        "predicted_recovery": 0.6333475719517745,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 15.583333333333334,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.0
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 13.416666666666666,
+            "supplier": 2.0,
+            "supplied_m3": 4.96
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 24,
-        "predicted_recovery": 0.7050157638775779,
+        "predicted_recovery": 0.5743925986055912,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 8.216666666666667,
-            "supplier": "Mary Therese",
-            "supplied_m3": 3.7
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 14.733333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 5.5
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 25,
-        "predicted_recovery": 0.7964617368566704,
+        "predicted_recovery": 0.6479656142036032,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 8.35,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.0
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 15.316666666666666,
+            "supplier": 4.0,
+            "supplied_m3": 4.81
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 26,
-        "predicted_recovery": 0.6323394887900935,
+        "predicted_recovery": 0.706916528587439,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 9.35,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 3.7
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.65,
+            "supplier": 5.0,
+            "supplied_m3": 3.64
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 27,
-        "predicted_recovery": 0.803939691740523,
+        "predicted_recovery": 0.7202232581661631,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 10.983333333333333,
-            "supplier": "Mary Anne",
-            "supplied_m3": 2.9
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 8.733333333333333,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
     },
     {
         "id": 28,
-        "predicted_recovery": 0.6282152924065622,
+        "predicted_recovery": 0.7424675264706608,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 11.566666666666666,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 4.3
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 10.316666666666666,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
     },
     {
         "id": 29,
-        "predicted_recovery": 0.6650497247831353,
+        "predicted_recovery": 0.7354083929152418,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 12.433333333333334,
-            "supplier": "Mary",
-            "supplied_m3": 4.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 10.516666666666667,
+            "supplier": 5.0,
+            "supplied_m3": 3.38
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 30,
-        "predicted_recovery": 0.7245701110306056,
+        "predicted_recovery": 0.6171486569120332,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 13.183333333333334,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 11.916666666666666,
+            "supplier": 6.0,
+            "supplied_m3": 3.9
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
     },
     {
         "id": 31,
-        "predicted_recovery": 0.7017364075580235,
+        "predicted_recovery": 0.6943960441818424,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 14.766666666666667,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 1.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 12.383333333333333,
+            "supplier": 4.0,
+            "supplied_m3": 4.81
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 32,
-        "predicted_recovery": 0.6070084671638377,
+        "predicted_recovery": 0.5992425820709167,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 15.316666666666666,
-            "supplier": "Mary Therese",
-            "supplied_m3": 4.3
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 15.95,
+            "supplier": 0.0,
+            "supplied_m3": 5.25
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 33,
-        "predicted_recovery": 0.8160396228589941,
+        "predicted_recovery": 0.6376898199605728,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 8.283333333333333,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 1.9
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 9.033333333333333,
+            "supplier": 6.0,
+            "supplied_m3": 3.85
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
     },
     {
         "id": 34,
-        "predicted_recovery": 0.7932188323087449,
+        "predicted_recovery": 0.7458568028385235,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 8.3,
-            "supplier": "Mary Therese",
-            "supplied_m3": 4.7
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 9.133333333333333,
+            "supplier": 5.0,
+            "supplied_m3": 4.5
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 35,
-        "predicted_recovery": 0.6503581544120304,
+        "predicted_recovery": 0.6474548096923703,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 9.4,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 5.5
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 11.933333333333334,
+            "supplier": 0.0,
+            "supplied_m3": 6.55
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 36,
-        "predicted_recovery": 0.7140875292436617,
+        "predicted_recovery": 0.69069490871284,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 9.783333333333333,
-            "supplier": "Mary",
-            "supplied_m3": 4.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 12.233333333333333,
+            "supplier": 4.0,
+            "supplied_m3": 5.05
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 37,
-        "predicted_recovery": 0.6248604932831864,
+        "predicted_recovery": 0.6588831609623765,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 11.516666666666667,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 4.2
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 15.966666666666667,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
     },
     {
         "id": 38,
-        "predicted_recovery": 0.7379046445976407,
+        "predicted_recovery": 0.7662054016479826,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 13.2,
-            "supplier": "Mary Anne",
-            "supplied_m3": 3.1
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.216666666666667,
+            "supplier": 2.0,
+            "supplied_m3": 5.05
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 39,
-        "predicted_recovery": 0.5890006830009007,
+        "predicted_recovery": 0.7323043858234984,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 13.216666666666667,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 4.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 8.4,
+            "supplier": 0.0,
+            "supplied_m3": 6.45
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
     },
     {
         "id": 40,
-        "predicted_recovery": 0.6397215804907774,
+        "predicted_recovery": 0.7502196859109986,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 14.3,
-            "supplier": "Mary Jane",
-            "supplied_m3": 5.2
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 9.816666666666666,
+            "supplier": 5.0,
+            "supplied_m3": 4.66
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 41,
-        "predicted_recovery": 0.6814296116011015,
+        "predicted_recovery": 0.7570819242631878,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 14.7,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.1
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 11.5,
+            "supplier": 3.0,
+            "supplied_m3": 2.83
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 42,
-        "predicted_recovery": 0.709890033962756,
+        "predicted_recovery": 0.6768528540210207,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 15.833333333333334,
-            "supplier": "Mary Anne",
-            "supplied_m3": 3.1
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 11.95,
+            "supplier": 0.0,
+            "supplied_m3": 6.05
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 43,
-        "predicted_recovery": 0.7137762939217828,
+        "predicted_recovery": 0.6383334147933274,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 8.566666666666666,
-            "supplier": "Mary Therese",
-            "supplied_m3": 3.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 13.516666666666667,
+            "supplier": 2.0,
+            "supplied_m3": 4.96
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 44,
-        "predicted_recovery": 0.667823558916005,
+        "predicted_recovery": 0.6850258942361374,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 8.75,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 5.8
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 14.533333333333333,
+            "supplier": 1.0,
+            "supplied_m3": 2.0
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
     },
     {
         "id": 45,
-        "predicted_recovery": 0.7187072810534159,
+        "predicted_recovery": 0.6142760177870835,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 10.283333333333333,
-            "supplier": "Mary Jane",
-            "supplied_m3": 5.3
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 15.383333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 6.1
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
     },
     {
         "id": 46,
-        "predicted_recovery": 0.7440957470052946,
+        "predicted_recovery": 0.6355608167784609,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 11.333333333333334,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 1.9
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 15.4,
+            "supplier": 2.0,
+            "supplied_m3": 5.04
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 47,
-        "predicted_recovery": 0.6757585786975708,
+        "predicted_recovery": 0.7218118465797122,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 13.083333333333334,
-            "supplier": "Mary Therese",
-            "supplied_m3": 4.6
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 8.45,
+            "supplier": 0.0,
+            "supplied_m3": 5.05
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
     },
     {
         "id": 48,
-        "predicted_recovery": 0.6015390636921397,
+        "predicted_recovery": 0.8238932749417165,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 13.216666666666667,
-            "supplier": "Dick Tracey",
-            "supplied_m3": 6.8
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.466666666666667,
+            "supplier": 5.0,
+            "supplied_m3": 4.56
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
     },
     {
         "id": 49,
-        "predicted_recovery": 0.6762792599447215,
+        "predicted_recovery": 0.6382565159490329,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 9.016666666666667,
-            "supplier": "Mary",
-            "supplied_m3": 5.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 11.416666666666666,
+            "supplier": 6.0,
+            "supplied_m3": 4.25
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
     },
     {
         "id": 50,
-        "predicted_recovery": 0.7527172645882342,
+        "predicted_recovery": 0.6171755626482575,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 9.266666666666667,
-            "supplier": "Harry Houdini",
-            "supplied_m3": 2.0
-        }
+            "facility": 1.0,
+            "time_start_hour_minute": 13.583333333333334,
+            "supplier": 6.0,
+            "supplied_m3": 4.05
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
     },
     {
         "id": 51,
-        "predicted_recovery": 0.6233302309117317,
+        "predicted_recovery": 0.6179265855404301,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 11.2,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 4.2
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 13.7,
+            "supplier": 5.0,
+            "supplied_m3": 4.06
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 52,
-        "predicted_recovery": 0.7154382374934442,
+        "predicted_recovery": 0.6336267651919315,
         "prediction_feature_values": {
-            "facility": "Bundaberg",
-            "time_start_hour_minute": 12.166666666666666,
-            "supplier": "Mary Jane",
-            "supplied_m3": 5.2
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 16.0,
+            "supplier": 2.0,
+            "supplied_m3": 4.99
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
     },
     {
         "id": 53,
-        "predicted_recovery": 0.5511335340841211,
+        "predicted_recovery": 0.7658106860766861,
         "prediction_feature_values": {
-            "facility": "Newcastle",
-            "time_start_hour_minute": 16.033333333333335,
-            "supplier": "Tom Hanks",
-            "supplied_m3": 3.8
-        }
+            "facility": 0.0,
+            "time_start_hour_minute": 8.183333333333334,
+            "supplier": 4.0,
+            "supplied_m3": 4.92
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 54,
+        "predicted_recovery": 0.6945861777327756,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.233333333333333,
+            "supplier": 6.0,
+            "supplied_m3": 4.05
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
+    },
+    {
+        "id": 55,
+        "predicted_recovery": 0.7377471471062936,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 10.0,
+            "supplier": 4.0,
+            "supplied_m3": 4.75
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 56,
+        "predicted_recovery": 0.6305754349182559,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 11.783333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 5.45
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
+    },
+    {
+        "id": 57,
+        "predicted_recovery": 0.6612098992702986,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 12.9,
+            "supplier": 2.0,
+            "supplied_m3": 5.09
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 58,
+        "predicted_recovery": 0.6031393064082647,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 13.95,
+            "supplier": 0.0,
+            "supplied_m3": 5.6
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
+    },
+    {
+        "id": 59,
+        "predicted_recovery": 0.8153197999357111,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 8.25,
+            "supplier": 5.0,
+            "supplied_m3": 4.38
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 60,
+        "predicted_recovery": 0.7694532938940819,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.383333333333333,
+            "supplier": 1.0,
+            "supplied_m3": 2.0
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
+    },
+    {
+        "id": 61,
+        "predicted_recovery": 0.6379140159432429,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 9.266666666666667,
+            "supplier": 0.0,
+            "supplied_m3": 5.45
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
+    },
+    {
+        "id": 62,
+        "predicted_recovery": 0.7241064035604613,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 9.883333333333333,
+            "supplier": 2.0,
+            "supplied_m3": 5.05
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 63,
+        "predicted_recovery": 0.6587815464600241,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 11.266666666666667,
+            "supplier": 0.0,
+            "supplied_m3": 5.1
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
+    },
+    {
+        "id": 64,
+        "predicted_recovery": 0.6174600974136656,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 13.433333333333334,
+            "supplier": 0.0,
+            "supplied_m3": 5.85
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
+    },
+    {
+        "id": 65,
+        "predicted_recovery": 0.7370573156118316,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 14.116666666666667,
+            "supplier": 3.0,
+            "supplied_m3": 2.81
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 66,
+        "predicted_recovery": 0.6567626456045383,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 15.6,
+            "supplier": 4.0,
+            "supplied_m3": 5.08
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 67,
+        "predicted_recovery": 0.7020064265686905,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.2,
+            "supplier": 6.0,
+            "supplied_m3": 4.0
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
+    },
+    {
+        "id": 68,
+        "predicted_recovery": 0.8173450442390823,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 8.366666666666667,
+            "supplier": 3.0,
+            "supplied_m3": 2.82
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 69,
+        "predicted_recovery": 0.820813928797103,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 9.916666666666666,
+            "supplier": 3.0,
+            "supplied_m3": 3.11
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 70,
+        "predicted_recovery": 0.6425532190462108,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 9.966666666666667,
+            "supplier": 6.0,
+            "supplied_m3": 3.75
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
+    },
+    {
+        "id": 71,
+        "predicted_recovery": 0.7120753221820749,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 11.533333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 6.05
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
+    },
+    {
+        "id": 72,
+        "predicted_recovery": 0.6642519609170069,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 11.7,
+            "supplier": 2.0,
+            "supplied_m3": 4.97
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 73,
+        "predicted_recovery": 0.6711545318405725,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 13.55,
+            "supplier": 2.0,
+            "supplied_m3": 5.1
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 74,
+        "predicted_recovery": 0.6053750001917884,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 13.633333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 5.6
+        },
+        "clusters": 5,
+        "confidence_center": 0.038461538461538464,
+        "confidence_lower": 4.0075310076598924e-05,
+        "confidence_upper": 0.18530593831248504
+    },
+    {
+        "id": 75,
+        "predicted_recovery": 0.5869805514484312,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 16.233333333333334,
+            "supplier": 5.0,
+            "supplied_m3": 3.73
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 76,
+        "predicted_recovery": 0.8392086453255236,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 8.533333333333333,
+            "supplier": 3.0,
+            "supplied_m3": 3.03
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 77,
+        "predicted_recovery": 0.7202232581661631,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.616666666666667,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
+    },
+    {
+        "id": 78,
+        "predicted_recovery": 0.6703635933479621,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 10.066666666666666,
+            "supplier": 6.0,
+            "supplied_m3": 3.85
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
+    },
+    {
+        "id": 79,
+        "predicted_recovery": 0.7416298449320844,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 11.383333333333333,
+            "supplier": 5.0,
+            "supplied_m3": 4.48
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 80,
+        "predicted_recovery": 0.765937505925428,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 12.016666666666667,
+            "supplier": 1.0,
+            "supplied_m3": 1.9
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
+    },
+    {
+        "id": 81,
+        "predicted_recovery": 0.7599682386221549,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 13.216666666666667,
+            "supplier": 3.0,
+            "supplied_m3": 3.01
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 82,
+        "predicted_recovery": 0.6335504572424369,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 14.066666666666666,
+            "supplier": 6.0,
+            "supplied_m3": 3.85
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
+    },
+    {
+        "id": 83,
+        "predicted_recovery": 0.687680409666235,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 15.066666666666666,
+            "supplier": 5.0,
+            "supplied_m3": 4.32
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 84,
+        "predicted_recovery": 0.7354396361918821,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 9.016666666666667,
+            "supplier": 1.0,
+            "supplied_m3": 1.95
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
+    },
+    {
+        "id": 85,
+        "predicted_recovery": 0.7143966176843572,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 9.216666666666667,
+            "supplier": 4.0,
+            "supplied_m3": 5.22
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 86,
+        "predicted_recovery": 0.7518404426452027,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 12.15,
+            "supplier": 1.0,
+            "supplied_m3": 2.0
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
+    },
+    {
+        "id": 87,
+        "predicted_recovery": 0.6291903605533635,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 13.116666666666667,
+            "supplier": 2.0,
+            "supplied_m3": 4.91
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 88,
+        "predicted_recovery": 0.6251200065691059,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 14.316666666666666,
+            "supplier": 6.0,
+            "supplied_m3": 4.15
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
+    },
+    {
+        "id": 89,
+        "predicted_recovery": 0.7420862771005716,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.4,
+            "supplier": 0.0,
+            "supplied_m3": 6.25
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
+    },
+    {
+        "id": 90,
+        "predicted_recovery": 0.8572060157925592,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 8.483333333333333,
+            "supplier": 3.0,
+            "supplied_m3": 2.95
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 91,
+        "predicted_recovery": 0.662657945722096,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 10.8,
+            "supplier": 5.0,
+            "supplied_m3": 3.87
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 92,
+        "predicted_recovery": 0.8002186982491712,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 11.95,
+            "supplier": 3.0,
+            "supplied_m3": 2.9
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 93,
+        "predicted_recovery": 0.7402302993198888,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 12.133333333333333,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
+    },
+    {
+        "id": 94,
+        "predicted_recovery": 0.6304571127395795,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 13.05,
+            "supplier": 4.0,
+            "supplied_m3": 4.95
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 95,
+        "predicted_recovery": 0.5890006830009007,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 13.183333333333334,
+            "supplier": 6.0,
+            "supplied_m3": 4.0
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
+    },
+    {
+        "id": 96,
+        "predicted_recovery": 0.6993727442524247,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 14.716666666666667,
+            "supplier": 5.0,
+            "supplied_m3": 4.54
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 97,
+        "predicted_recovery": 0.674816146830901,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 14.966666666666667,
+            "supplier": 1.0,
+            "supplied_m3": 2.0
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
+    },
+    {
+        "id": 98,
+        "predicted_recovery": 0.5806233958587795,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 16.166666666666668,
+            "supplier": 6.0,
+            "supplied_m3": 4.3
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
+    },
+    {
+        "id": 99,
+        "predicted_recovery": 0.803105583538053,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 8.383333333333333,
+            "supplier": 3.0,
+            "supplied_m3": 2.87
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 100,
+        "predicted_recovery": 0.780782199275626,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.416666666666666,
+            "supplier": 1.0,
+            "supplied_m3": 2.0
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
+    },
+    {
+        "id": 101,
+        "predicted_recovery": 0.8055808923490041,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 9.55,
+            "supplier": 3.0,
+            "supplied_m3": 2.87
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 102,
+        "predicted_recovery": 0.8031863918727614,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 10.133333333333333,
+            "supplier": 1.0,
+            "supplied_m3": 1.9
+        },
+        "clusters": 3,
+        "confidence_center": 0.25,
+        "confidence_lower": 0.04930192297659405,
+        "confidence_upper": 0.5438244331193475
+    },
+    {
+        "id": 103,
+        "predicted_recovery": 0.6980856491720523,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 11.233333333333333,
+            "supplier": 0.0,
+            "supplied_m3": 6.4
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
+    },
+    {
+        "id": 104,
+        "predicted_recovery": 0.6745463426625852,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 12.833333333333334,
+            "supplier": 4.0,
+            "supplied_m3": 4.72
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 105,
+        "predicted_recovery": 0.6699701248142295,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 14.416666666666666,
+            "supplier": 4.0,
+            "supplied_m3": 4.72
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 106,
+        "predicted_recovery": 0.6530159022356702,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 14.933333333333334,
+            "supplier": 1.0,
+            "supplied_m3": 2.05
+        },
+        "clusters": 6,
+        "confidence_center": 0.5625,
+        "confidence_lower": 0.23450124925209379,
+        "confidence_upper": 0.8611357808951098
+    },
+    {
+        "id": 107,
+        "predicted_recovery": 0.7168303533640937,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 8.433333333333334,
+            "supplier": 5.0,
+            "supplied_m3": 3.71
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 108,
+        "predicted_recovery": 0.6913129357614486,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 8.45,
+            "supplier": 0.0,
+            "supplied_m3": 5.45
+        },
+        "clusters": 2,
+        "confidence_center": 0.05,
+        "confidence_lower": 5.306405341849292e-05,
+        "confidence_upper": 0.23761009863290306
+    },
+    {
+        "id": 109,
+        "predicted_recovery": 0.7534533914537186,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 9.833333333333334,
+            "supplier": 5.0,
+            "supplied_m3": 4.64
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 110,
+        "predicted_recovery": 0.640644904521467,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 10.433333333333334,
+            "supplier": 6.0,
+            "supplied_m3": 4.2
+        },
+        "clusters": 7,
+        "confidence_center": 0.041666666666666664,
+        "confidence_lower": 4.363579814218972e-05,
+        "confidence_upper": 0.19999456902620802
+    },
+    {
+        "id": 111,
+        "predicted_recovery": 0.7791901859788338,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 11.45,
+            "supplier": 3.0,
+            "supplied_m3": 2.93
+        },
+        "clusters": 4,
+        "confidence_center": 0.016129032258064516,
+        "confidence_lower": 1.6231861223464374e-05,
+        "confidence_upper": 0.07967817381725999
+    },
+    {
+        "id": 112,
+        "predicted_recovery": 0.6634611374314882,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 12.416666666666666,
+            "supplier": 2.0,
+            "supplied_m3": 4.94
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 113,
+        "predicted_recovery": 0.6019824847767619,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 13.5,
+            "supplier": 6.0,
+            "supplied_m3": 4.05
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
+    },
+    {
+        "id": 114,
+        "predicted_recovery": 0.6925648360015281,
+        "prediction_feature_values": {
+            "facility": 0.0,
+            "time_start_hour_minute": 14.466666666666667,
+            "supplier": 5.0,
+            "supplied_m3": 4.59
+        },
+        "clusters": 0,
+        "confidence_center": 0.017241379310344827,
+        "confidence_lower": 1.7380922536885174e-05,
+        "confidence_upper": 0.08507120003233525
+    },
+    {
+        "id": 115,
+        "predicted_recovery": 0.559063146148791,
+        "prediction_feature_values": {
+            "facility": 1.0,
+            "time_start_hour_minute": 15.833333333333334,
+            "supplier": 6.0,
+            "supplied_m3": 4.15
+        },
+        "clusters": 1,
+        "confidence_center": 0.045454545454545456,
+        "confidence_lower": 4.789043315758196e-05,
+        "confidence_upper": 0.21719626750921056
     }
 ]

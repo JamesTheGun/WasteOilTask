@@ -61,7 +61,7 @@ def _get_deltas_for_abs(deltas_abs, critical_abs_delta):
     return deltas, critical_delta
 
 
-def confidence_model(
+def do_confidence_model(
     to_train_cluster: pd.DataFrame,
     to_get_confidences: pd.DataFrame,
     predicted_y: pd.Series,
@@ -171,6 +171,25 @@ def _do_beta_ci(k, n, a, b, beta_credible_level=0.95) -> ClusterConfidence:
     )
 
 
+def make_nan_confidence() -> ClusterConfidence:
+    return ClusterConfidence(
+        center=float("nan"), lower=float("nan"), upper=float("nan"), n=0, k=0
+    )
+
+
+def check_nan_confidence(cc: ClusterConfidence) -> bool:
+    return (
+        np.isnan(cc.center)
+        and np.isnan(cc.lower)
+        and np.isnan(cc.upper)
+        and cc.n == 0
+        and cc.k == 0
+    )
+
+
+OVERIDE_THINGO = True
+
+
 def get_cluster_confidence(
     delta_threshold: float,
     cluster_points: pd.Series,
@@ -180,13 +199,21 @@ def get_cluster_confidence(
     beta_credible_level: float = 0.95,
 ) -> ClusterConfidence:
     points = pd.Series(cluster_points).dropna()
-    n = int(points.shape[0])
-    if n <= 0:
-        return ClusterConfidence(
-            center=float("nan"), lower=float("nan"), upper=float("nan"), n=0, k=0
-        )
-
     k = int((points <= delta_threshold).sum())
+
+    if k <= 0 and not OVERIDE_THINGO:
+        print(
+            f"WARNING: No points within threshold {delta_threshold} in cluster, returning NaN conf."
+        )
+        return make_nan_confidence()
+
+    if k >= points.shape[0] and not OVERIDE_THINGO:
+        print(
+            f"WARNING: All points within threshold {delta_threshold} in cluster, returning NaN conf."
+        )
+        return make_nan_confidence()
+
+    n = int(points.shape[0])
 
     if ci_kind == "wilson":
         return _do_wilson_ci(k, n, alpha=alpha)
@@ -281,7 +308,7 @@ def _visualise_confidence(
     correctness_delta_pct_sd = correctness_delta_abs / sd
 
     for threshold in sd_thresholds:
-        cm, confs, features = confidence_model(
+        cm, confs, features = do_confidence_model(
             to_train_cluster=X_train,
             to_get_confidences=X_test,
             predicted_y=y_pred_test,
@@ -305,19 +332,90 @@ def _visualise_confidence(
         save_path = os.path.join(
             save_dir, f"confidence_lower_at_{threshold_label}sd.png"
         )
-        density_scatter(
-            plot_df,
-            x_col="confidence_lower",
-            y_col="correctness_delta_pct_sd",
-            colour_col="clusters",
-            title=f"Confidence Lower vs Error (threshold={threshold} SD) | {model_type}",
-            point_alpha=0.7,
-            point_size=25,
-            save_path=save_path,
+        plot_df = plot_df[plot_df["confidence_lower"].notna()]
+        if not plot_df.empty:
+            density_scatter(
+                plot_df,
+                x_col="confidence_lower",
+                y_col="correctness_delta_pct_sd",
+                colour_col="clusters",
+                title=f"Confidence Lower vs Error (threshold={threshold} SD) | {model_type}",
+                point_alpha=0.7,
+                point_size=25,
+                save_path=save_path,
+            )
+
+
+def get_confidence_results_given_model_output(
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    X_test: pd.DataFrame,
+    y_predicted_on_X_test: pd.Series,
+    true_y_on_X_test: pd.Series,
+    model_type: str,
+    visualise: bool = False,
+) -> pd.DataFrame:
+
+    SD_THRESHOLDS = [0.1, 0.3, 0.5, 0.75, 1.0]
+
+    threshold_confs: Dict[float, Dict[int, ClusterConfidence]] = {}
+    for t in SD_THRESHOLDS:
+        _, t_confs, _ = do_confidence_model(
+            to_train_cluster=X_train,
+            to_get_confidences=X_test,
+            predicted_y=y_predicted_on_X_test,
+            actual_y=true_y_on_X_test,
+            features=list(X_train.columns),
+            n_clusters=8,
+            critical_percentage_delta=t,
+            sd_reference_y=y_train,
+            ci_kind="beta",
+            beta_prior=(0.5, 0.5),
+            beta_credible_level=0.95,
+        )
+        if any(check_nan_confidence(cc) for cc in t_confs.values()):
+            for cluster_id, cc in t_confs.items():
+                if check_nan_confidence(cc):
+                    print(
+                        f"cluster {cluster_id} has nan confidence in model: {model_type}"
+                    )
+        threshold_confs[t] = t_confs
+
+    # for saving
+    cluster_model, cluster_confs, cluster_features = do_confidence_model(
+        to_train_cluster=X_train,
+        to_get_confidences=X_test,
+        predicted_y=y_predicted_on_X_test,
+        actual_y=true_y_on_X_test,
+        features=list(X_train.columns),
+        n_clusters=8,
+        critical_percentage_delta=0.75,
+        sd_reference_y=y_train,
+        ci_kind="beta",
+        beta_prior=(0.5, 0.5),
+        beta_credible_level=0.95,
+    )
+
+    clusters = cluster_model.predict(X_test[cluster_features])
+    conf_df = X_test.copy()
+    conf_df["clusters"] = clusters
+
+    if visualise:
+        _visualise_confidence(
+            X_train=X_train,
+            X_test=X_test,
+            y_train=y_train,
+            y_test=true_y_on_X_test,
+            y_pred_test=pd.Series(y_predicted_on_X_test, index=X_test.index),
+            model_type=model_type,
         )
 
+    return add_cluster_confidences(
+        conf_df, "clusters", cluster_confs, threshold_confs=threshold_confs
+    )
 
-def do_confidence(
+
+def get_confidence_results(
     X: pd.DataFrame,
     model_or_model_file_name: str | lightgbm.LGBMRegressor,
     model_type: str,
@@ -349,7 +447,7 @@ def do_confidence(
 
     threshold_confs: Dict[float, Dict[int, ClusterConfidence]] = {}
     for t in SD_THRESHOLDS:
-        t_cm, t_confs, _ = confidence_model(
+        _, t_confs, _ = do_confidence_model(
             to_train_cluster=X_train,
             to_get_confidences=X_test,
             predicted_y=pd.Series(y_pred_test, index=X_test.index),
@@ -362,9 +460,20 @@ def do_confidence(
             beta_prior=(0.5, 0.5),
             beta_credible_level=0.95,
         )
+        if any(check_nan_confidence(cc) for cc in t_confs.values()):
+            if isinstance(model_or_model_file_name, str):
+                model_name = model_or_model_file_name
+            else:
+                model_name = model_type
+            for cluster_id, cc in t_confs.items():
+                if check_nan_confidence(cc):
+                    print(
+                        f"cluster {cluster_id} has nan confidence in model: {model_name}"
+                    )
         threshold_confs[t] = t_confs
 
-    cluster_model, cluster_confs, cluster_features = confidence_model(
+    # for saving
+    cluster_model, cluster_confs, cluster_features = do_confidence_model(
         to_train_cluster=X_train,
         to_get_confidences=X_test,
         predicted_y=y_pred_test,
@@ -391,6 +500,7 @@ def do_confidence(
             y_pred_test=pd.Series(y_pred_test, index=X_test.index),
             model_type=model_type,
         )
+
     return add_cluster_confidences(
         conf_df, "clusters", cluster_confs, threshold_confs=threshold_confs
     )

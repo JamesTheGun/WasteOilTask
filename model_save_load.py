@@ -7,7 +7,7 @@ import pandas as pd
 
 from model_constants import DEFAULT_MODEL_NAME
 from model_utils import make_predictions_jsonable
-from confidence_model import do_confidence
+from confidence_model import get_confidence_results
 
 
 def _get_model_file_name(model_name):
@@ -20,7 +20,7 @@ def save_model(model, model_name=DEFAULT_MODEL_NAME):
     joblib.dump(model, filename)
 
 
-def load_model(model_name=DEFAULT_MODEL_NAME):
+def load_model(model_name=DEFAULT_MODEL_NAME) -> lgb.LGBMRegressor:
     filename = _get_model_file_name(model_name)
     if not os.path.exists(filename):
         raise FileNotFoundError(f"Model file not found: {filename}")
@@ -63,7 +63,9 @@ def make_and_save_predictions(
 ):
     predictions = load_and_predict(model_filename, X)
 
-    confidence_df = do_confidence(X, model_filename, model_type, visualise=False)
+    confidence_df = get_confidence_results(
+        X, model_filename, model_type, visualise=False
+    )
 
     predictions_dict = make_predictions_jsonable(
         X, predictions, X_not_encoded=X_not_encoded, confidence_df=confidence_df

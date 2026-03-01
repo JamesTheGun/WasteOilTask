@@ -8,7 +8,8 @@ def make_predictions_jsonable(
     X_not_encoded: pd.DataFrame = None,
     confidence_df: pd.DataFrame = None,
 ):
-    display = X_not_encoded if X_not_encoded is not None else X
+    X = X.reset_index(drop=True)
+    display = X_not_encoded.reset_index(drop=True) if X_not_encoded is not None else X
     features = display.columns.tolist()
     prediction_feature_values = [dict(zip(features, row)) for row in display.values]
     predictions_with_id = pd.DataFrame(
@@ -33,7 +34,7 @@ def make_predictions_jsonable(
     return predictions_with_id.to_dict(orient="records")
 
 
-def print_model_results(results, model_name=None):
+def print_model_results(results: dict[str, float], model_name: str = None):
     if not model_name:
         model_name = "MODEL NOT NAMED"
     print(f"Model: {model_name}")
