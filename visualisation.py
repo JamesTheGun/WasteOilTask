@@ -696,25 +696,6 @@ def _make_model_vis_dir(target_name: str) -> str:
     os.makedirs(save_dir, exist_ok=True)
     return save_dir
 
-
-def _visualise_confidence(
-    plot_df: pd.DataFrame,
-    save_path: str,
-    model_type: str,
-) -> None:
-
-    density_scatter(
-        plot_df,
-        x_col="confidence_lower",
-        y_col="correctness_delta_pct_sd",
-        colour_col="clusters",
-        title=f"Confidence Lower vs Error (threshold={threshold} SD) | {model_type}",
-        point_alpha=0.7,
-        point_size=25,
-        save_path=save_path,
-    )
-
-
 def visualize_model_predictions(
     y_true: np.ndarray,
     y_pred: np.ndarray,
