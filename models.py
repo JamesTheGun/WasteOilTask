@@ -178,16 +178,22 @@ def do_recovery_ratio_model_without_vol(
     model_filename: str = RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME,
     visualise_model: bool = False,
 ):
-    ratio_results, model, confidence_result = _train_lgbm_recovery_ratio_without_vol_model(visualise_model)
+    ratio_results, model, confidence_result = (
+        _train_lgbm_recovery_ratio_without_vol_model(visualise_model)
+    )
     print_model_results(ratio_results, model_name="Recovery Ratio Model")
     save_model(model, model_filename)
-    save_confidence_model(confidence_result, CONFIDENCE_MODEL_FILENAMES["ratio_without_supplied_volume"])
+    save_confidence_model(
+        confidence_result, CONFIDENCE_MODEL_FILENAMES["ratio_without_supplied_volume"]
+    )
 
 
 def do_recovery_volume_model(
     model_filename: str = VOLUME_MODEL_FILENAME, visualise_model: bool = False
 ):
-    volume_results, model, confidence_result = _train_lgbm_recovery_volume_model(visualise_model)
+    volume_results, model, confidence_result = _train_lgbm_recovery_volume_model(
+        visualise_model
+    )
     print_model_results(volume_results, model_name="Recovery Volume Model")
     save_model(model, model_filename)
     save_confidence_model(confidence_result, CONFIDENCE_MODEL_FILENAMES["volume"])
@@ -197,14 +203,18 @@ def do_recovery_ratio_model_with_supplied_volume(
     model_filename: str = RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
     visualise_model: bool = False,
 ):
-    ratio_results, model, confidence_result = _train_ratio_with_vol_lgbm_recovery_ratio_model(
-        visualise_model, type="ratio_with_supplied_volume"
+    ratio_results, model, confidence_result = (
+        _train_ratio_with_vol_lgbm_recovery_ratio_model(
+            visualise_model, type="ratio_with_supplied_volume"
+        )
     )
     print_model_results(
         ratio_results, model_name="Recovery Ratio Model with Supplied Volume"
     )
     save_model(model, model_filename)
-    save_confidence_model(confidence_result, CONFIDENCE_MODEL_FILENAMES["ratio_with_supplied_volume"])
+    save_confidence_model(
+        confidence_result, CONFIDENCE_MODEL_FILENAMES["ratio_with_supplied_volume"]
+    )
 
 
 if __name__ == "__main__":
@@ -227,7 +237,9 @@ if __name__ == "__main__":
         model_filename=RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_RATIO_MODEL_FILENAME,
         X_not_encoded=X_ratio_not_encoded,
-        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES["ratio_without_supplied_volume"],
+        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES[
+            "ratio_without_supplied_volume"
+        ],
     )
 
     X_volume, X_volume_not_encoded = get_schedule_model_features(m_type="volume")
@@ -249,7 +261,9 @@ if __name__ == "__main__":
         model_filename=RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
         X_not_encoded=X_rsv_not_encoded,
-        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES["ratio_with_supplied_volume"],
+        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES[
+            "ratio_with_supplied_volume"
+        ],
     )
     do_implied_model(
         visualise_model=True, base_model_type="ratio_without_supplied_volume"

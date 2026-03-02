@@ -130,9 +130,15 @@ def do_implied_model(
     else:
         raise ValueError(f"Invalid base_model_type: {base_model_type}")
 
-    X_train, X_test, y_train, y_test, not_selected_train, not_selected_test, X_test_not_encoded = (
-        deterministic_encoded_train_test_split(base_model_type)
-    )
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+        not_selected_train,
+        not_selected_test,
+        X_test_not_encoded,
+    ) = deterministic_encoded_train_test_split(base_model_type)
 
     y_true_test_impl, y_pred_test_impl = get_implied_results_from_base_model(
         base_model, base_model_type, X_test, y_test, not_selected_test
