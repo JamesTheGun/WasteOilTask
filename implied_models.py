@@ -1,83 +1,21 @@
 import numpy as np
 import pandas as pd
-from typing import Any, Literal, Tuple
+from typing import Any, Literal
 
 from visualisation import visualize_model_predictions
-from data_managment import (
-    deterministic_encoded_train_test_split,
-    get_schedule_model_features,
-    load_train_test_sets_target_recovery_ratio_with_supplied_volume,
-    load_train_test_sets_target_recovery_volume,
-    load_train_test_sets_target_recovery_ratio_without_supplied_volume,
-    train_test_time_series_split,
-    load_encoder,
-    encode_with_encoder,
-)
+from data_managment import deterministic_encoded_train_test_split
 from model_constants import (
     MODEL_TYPE_DISPLAY_NAMES,
     VOLUME_MODEL_FILENAME,
     RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
     RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME,
-    RESULTS_VOLUME_MODEL_FILENAME,
-    RESULTS_RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
-    RESULTS_RATIO_MODEL_FILENAME,
     IMPLIED_RECOVERY_RATIO_PREDICTIONS_FILENAME,
-    IMPLIED_RECOVERY_VOLUME_PREDICTIONS_FILENAME,
 )
-
-from model_save_load import (
-    load_model,
-    load_and_predict,
-    retrieve_predictions,
-    save_predictions,
-)
+from model_save_load import load_model, save_predictions
 from model_utils import make_predictions_jsonable, print_model_results
-from data_managment import deterministic_encoded_train_test_split
 from confidence_model import make_confidence_model
 from models import _get_results
 from lightgbm import LGBMRegressor
-
-
-def do_implied_ratio_model(
-    visualise_model=False,
-):
-    try:
-        model = load_model(VOLUME_MODEL_FILENAME)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"Implied ratio model requires the volume model. "
-            f"Run do_recovery_volume_model() first to save {VOLUME_MODEL_FILENAME}."
-        )
-
-    do_implied_model(
-        visualise_model, model_type="ratio_without_supplied_volume", model=model
-    )
-
-
-def do_implied_volume_model_with_supplied_volume(
-    visualise_model=False,
-):
-    try:
-        model = load_model(RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"Implied volume model requires the ratio with supplied volume model. "
-            f"Run do_recovery_ratio_with_supplied_volume_model() first to save {RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME}."
-        )
-    do_implied_model(visualise_model, model_type="volume", model=model)
-
-
-def do_implied_volume_model_without_supplied_volume(
-    visualise_model=False,
-):
-    try:
-        model = load_model(RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"Implied volume model requires the ratio without supplied volume model. "
-            f"Run do_recovery_ratio_without_supplied_volume_model() first to save {RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME}."
-        )
-    do_implied_model(visualise_model, model_type="volume", model=model)
 
 
 def get_implied_results_from_base_model(

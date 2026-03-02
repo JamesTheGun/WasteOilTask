@@ -201,16 +201,6 @@ def make_nan_confidence() -> ClusterConfidence:
     )
 
 
-def check_nan_confidence(cc: ClusterConfidence) -> bool:
-    return (
-        np.isnan(cc.center)
-        and np.isnan(cc.lower)
-        and np.isnan(cc.upper)
-        and cc.n == 0
-        and cc.k == 0
-    )
-
-
 OVERIDE_THINGO = True
 
 
@@ -257,43 +247,6 @@ def get_cluster_confidence(
         )
 
     raise ValueError(f"Unknown ci_kind: {ci_kind}")
-
-
-def add_cluster_confidences(
-    data: pd.DataFrame,
-    cluster_col_name: str,
-    clust_confidences: Dict[int, ClusterConfidence],
-    threshold_confs: Optional[Dict[float, Dict[int, ClusterConfidence]]] = None,
-) -> pd.DataFrame:
-    out = data.copy()
-
-    def _get(cluster: int, field: str, confs: Dict[int, ClusterConfidence]) -> float:
-        cc = confs.get(int(cluster))
-        return getattr(cc, field) if cc is not None else float("nan")
-
-    out["confidence_lower"] = out[cluster_col_name].apply(
-        lambda c: _get(c, "lower", clust_confidences)
-    )
-    out["confidence_upper"] = out[cluster_col_name].apply(
-        lambda c: _get(c, "upper", clust_confidences)
-    )
-    out["confidence_center"] = out[cluster_col_name].apply(
-        lambda c: _get(c, "center", clust_confidences)
-    )
-    out["confidence_n"] = out[cluster_col_name].apply(
-        lambda c: _get(c, "n", clust_confidences)
-    )
-    out["confidence_k"] = out[cluster_col_name].apply(
-        lambda c: _get(c, "k", clust_confidences)
-    )
-
-    if threshold_confs is not None:
-        for threshold, confs in threshold_confs.items():
-            label = str(threshold).replace(".", "p")
-            col = f"confidence_lower_within_{label}_sd"
-            out[col] = out[cluster_col_name].apply(lambda c: _get(c, "lower", confs))
-
-    return out
 
 
 def _beta_ppf(q: float, a: float, b: float) -> float:

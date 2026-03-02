@@ -91,11 +91,6 @@ def train_test_time_series_split(
     return X_train, X_test, y_train, y_test, not_selected_train, not_selected_test
 
 
-def encode_features(model_features: pd.DataFrame) -> pd.DataFrame:
-    encoder = fit_encoder(model_features)
-    return encode_with_encoder(model_features, encoder)
-
-
 def deterministic_encoded_train_test_split(
     split_type: Literal[
         "volume",
