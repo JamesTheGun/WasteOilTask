@@ -6,7 +6,6 @@ from typing import Tuple, List, Dict, Any, Optional
 
 
 def cliffs_delta(x: np.ndarray, y: np.ndarray) -> float:
-    """Calculate Cliff's delta effect size for two groups."""
     n1, n2 = len(x), len(y)
     if n1 == 0 or n2 == 0:
         return np.nan
@@ -19,7 +18,6 @@ def cliffs_delta(x: np.ndarray, y: np.ndarray) -> float:
 
 
 def cramers_v(contingency_table: pd.DataFrame) -> float:
-    """Calculate Cramér's V effect size for categorical association."""
     chi2 = stats.chi2_contingency(contingency_table)[0]
     n = contingency_table.sum().sum()
     min_dim = min(contingency_table.shape) - 1
@@ -31,7 +29,6 @@ def cramers_v(contingency_table: pd.DataFrame) -> float:
 
 
 def compare_numeric(group_a: pd.Series, group_b: pd.Series) -> Dict[str, Any]:
-    """Compare two groups on a numeric column."""
     a_clean = group_a.dropna()
     b_clean = group_b.dropna()
 
@@ -53,14 +50,12 @@ def compare_numeric(group_a: pd.Series, group_b: pd.Series) -> Dict[str, Any]:
 
 
 def compare_categorical(group_a: pd.Series, group_b: pd.Series) -> Dict[str, Any]:
-    """Compare two groups on a categorical column."""
     a_clean = group_a.dropna()
     b_clean = group_b.dropna()
 
     if len(a_clean) < 5 or len(b_clean) < 5:
         return {"test": "insufficient_data", "p_value": np.nan, "effect_size": np.nan}
 
-    # Build contingency table
     combined = pd.DataFrame(
         {
             "value": pd.concat([a_clean, b_clean]),
@@ -69,7 +64,6 @@ def compare_categorical(group_a: pd.Series, group_b: pd.Series) -> Dict[str, Any
     )
     contingency = pd.crosstab(combined["value"], combined["group"])
 
-    # Remove zero rows/cols
     contingency = contingency.loc[(contingency > 0).any(axis=1)]
     contingency = contingency.loc[:, (contingency > 0).any(axis=0)]
 
@@ -98,18 +92,6 @@ def analyze_condition_impact(
     condition_value: Any,
     exclude_cols: Optional[List[str]] = None,
 ) -> pd.DataFrame:
-    """
-    Analyze how a condition affects all other columns.
-
-    Parameters:
-        df: DataFrame to analyze
-        condition_col: Column containing the condition
-        condition_value: Value to compare (this group vs all others)
-        exclude_cols: Columns to skip
-
-    Returns:
-        DataFrame with statistical comparison results for each column
-    """
     exclude_cols = exclude_cols or []
     exclude_cols.append(condition_col)
 
@@ -150,9 +132,6 @@ def compare_two_conditions(
     value_b: Any,
     exclude_cols: Optional[List[str]] = None,
 ) -> pd.DataFrame:
-    """
-    Compare two specific condition values against each other.
-    """
     exclude_cols = exclude_cols or []
     exclude_cols.append(condition_col)
 
@@ -205,13 +184,6 @@ def compare_all_cols_to_target_visualise(data: pd.DataFrame, target_col: str):
 
 
 def compare_two_columns(df: pd.DataFrame, col_a: str, col_b: str) -> Dict[str, Any]:
-    """
-    Statistically compare two columns, auto-detecting types.
-
-    - Numeric vs Numeric:   Spearman correlation + p-value
-    - Categorical vs Categorical: Chi-square + Cramér's V
-    - Numeric vs Categorical:     Kruskal-Wallis + eta-squared
-    """
     a_clean = df[col_a].dropna()
     b_clean = df[col_b].dropna()
     common_index = a_clean.index.intersection(b_clean.index)
@@ -266,7 +238,6 @@ def compare_two_columns(df: pd.DataFrame, col_a: str, col_b: str) -> Dict[str, A
                 "effect_size": np.nan,
             }
         stat, p_value = stats.kruskal(*groups)
-        # Eta-squared effect size
         n = len(numeric_col)
         k = len(groups)
         eta_sq = (stat - k + 1) / (n - k) if n > k else np.nan
@@ -281,10 +252,6 @@ def compare_two_columns(df: pd.DataFrame, col_a: str, col_b: str) -> Dict[str, A
 
 
 def print_impact_summary(results: pd.DataFrame | dict, alpha: float = None) -> None:
-    """Print a readable summary of impact analysis results.
-    Accepts either a dict (from compare_two_columns) or a DataFrame
-    (from analyze_condition_impact / compare_two_conditions).
-    """
     if isinstance(results, dict):
         results = pd.DataFrame([results])
 
@@ -313,10 +280,6 @@ def print_impact_summary(results: pd.DataFrame | dict, alpha: float = None) -> N
 
 
 def visualise_impact_summary(results, alpha: float = None) -> None:
-    """Bar chart of effect sizes from impact analysis results.
-    Bars are coloured by significance (green = significant, grey = not).
-    Accepts the same inputs as print_impact_summary.
-    """
     if isinstance(results, dict):
         results = pd.DataFrame([results])
 
@@ -339,7 +302,6 @@ def visualise_impact_summary(results, alpha: float = None) -> None:
     fig, ax = plt.subplots(figsize=(8, max(4, len(df) * 0.4)))
     bars = ax.barh(labels, effects, color=colours)
 
-    # Significance threshold line
     ax.axvline(0.3, color="orange", linestyle="--", linewidth=1, label="small (0.3)")
     ax.axvline(0.5, color="red", linestyle="--", linewidth=1, label="medium (0.5)")
 
@@ -347,7 +309,6 @@ def visualise_impact_summary(results, alpha: float = None) -> None:
     ax.set_title("Impact Summary" + (f" (α={alpha})" if alpha else ""))
     ax.legend(fontsize=8)
 
-    # Annotate p-values
     for i, (effect, p) in enumerate(zip(effects, p_values)):
         ax.text(effect + 0.005, i, f"p={p:.3f}", va="center", fontsize=8)
 

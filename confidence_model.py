@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import Dict, Iterable, Literal, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Literal, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -12,6 +12,7 @@ from sklearn.preprocessing import StandardScaler
 
 import statsmodels.stats.proportion as smp
 import lightgbm
+from visualisation import _make_model_vis_dir, scatter_confidence
 from model_constants import MODEL_TYPE_DISPLAY_NAMES
 
 CIKind = Literal["wilson", "beta"]
@@ -20,19 +21,98 @@ BetaPrior = Tuple[float, float]
 
 @dataclass(frozen=True)
 class ClusterConfidence:
-    """
-    Represents cluster-level probability that |y - yhat| <= threshold.
-    center: point estimate of probability (either p_hat or posterior mean)
-    lower/upper: interval bounds (Wilson CI or Beta credible interval)
-    n: number of points used to estimate confidence in this cluster
-    k: number of "successes" (|residual| <= threshold)
-    """
-
     center: float
     lower: float
     upper: float
     n: int
     k: int
+
+
+@dataclass
+class ConfidenceResult:
+    results: Dict[float, pd.DataFrame]
+    primary_threshold: float
+    threshold_type: Literal["pct", "abs"]
+    cluster_model: object
+    cluster_confidences_by_threshold: Dict[float, Dict[int, "ClusterConfidence"]]
+    features: List[str]
+
+    @property
+    def thresholds(self) -> List[float]:
+        return list(self.results.keys())
+
+    @property
+    def primary_df(self) -> pd.DataFrame:
+        return self.results[self.primary_threshold]
+
+    @property
+    def clusters(self) -> pd.Series:
+        return self.primary_df["cluster"]
+
+    @property
+    def confidence_lower(self) -> pd.Series:
+        return self.primary_df["confidence_lower"]
+
+    @property
+    def confidence_center(self) -> pd.Series:
+        return self.primary_df["confidence_center"]
+
+    @property
+    def confidence_upper(self) -> pd.Series:
+        return self.primary_df["confidence_upper"]
+
+    @property
+    def threshold_pct_sd(self) -> Optional[float]:
+        return self.primary_threshold if self.threshold_type == "pct" else None
+
+    @property
+    def threshold_abs(self) -> Optional[float]:
+        return self.primary_threshold if self.threshold_type == "abs" else None
+
+    def for_threshold(self, t: float) -> pd.DataFrame:
+        return self.results[t]
+
+    def apply_to(
+        self, X: pd.DataFrame, threshold: float = None
+    ) -> "ConfidenceAssignment":
+        t = threshold if threshold is not None else self.primary_threshold
+        confs = self.cluster_confidences_by_threshold[t]
+        clusters = self.cluster_model.predict(X[self.features])
+        df = pd.DataFrame(
+            {
+                "cluster": [int(c) for c in clusters],
+                "confidence_center": [float(confs[int(c)].center) for c in clusters],
+                "confidence_lower": [float(confs[int(c)].lower) for c in clusters],
+                "confidence_upper": [float(confs[int(c)].upper) for c in clusters],
+            },
+            index=X.index,
+        )
+        tpct = t if self.threshold_type == "pct" else None
+        tabs = t if self.threshold_type == "abs" else None
+        return ConfidenceAssignment(df, threshold_pct_sd=tpct, threshold_abs=tabs)
+
+
+@dataclass
+class ConfidenceAssignment:
+    _df: pd.DataFrame
+    threshold_pct_sd: Optional[float]
+    threshold_abs: Optional[float]
+
+    @property
+    def clusters(self) -> pd.Series:
+        return self._df["cluster"]
+
+    @property
+    def confidence_center(self) -> pd.Series:
+        return self._df["confidence_center"]
+
+    @property
+    def confidence_lower(self) -> pd.Series:
+        return self._df["confidence_lower"]
+
+    @property
+    def confidence_upper(self) -> pd.Series:
+        return self._df["confidence_upper"]
 
 
 def _validate_params(critical_percentage_delta, critical_abs_delta):
@@ -42,17 +122,12 @@ def _validate_params(critical_percentage_delta, critical_abs_delta):
         )
 
 
-def _get_deltas_for_percentage(
-    deltas_abs, sd_reference_y, critical_percentage_delta, actual_y
-):
-    if sd_reference_y is None:
-        sd_reference_y = actual_y
+def _get_deltas_for_percentage(deltas_abs, sd_reference_y):
     sd = float(pd.Series(sd_reference_y).std())
     if sd <= 0 or not np.isfinite(sd):
         raise ValueError(f"Invalid sd_reference_y std: {sd}")
     deltas = deltas_abs / sd
-    critical_delta = float(critical_percentage_delta)
-    return deltas, critical_delta
+    return deltas
 
 
 def _get_deltas_for_abs(deltas_abs, critical_abs_delta):
@@ -61,49 +136,24 @@ def _get_deltas_for_abs(deltas_abs, critical_abs_delta):
     return deltas, critical_delta
 
 
-def do_confidence_model(
+def make_cluster_model(
     to_train_cluster: pd.DataFrame,
     to_get_confidences: pd.DataFrame,
-    predicted_y: pd.Series,
-    actual_y: pd.Series,
     *,
     features: Sequence[str],
     n_clusters: int,
     critical_percentage_delta: float | None = None,
     critical_abs_delta: float | None = None,
-    sd_reference_y: Optional[pd.Series] = None,
-    ci_kind: CIKind = "wilson",
-    alpha: float = 0.05,
-    beta_prior: BetaPrior = (0.5, 0.5),
-    beta_credible_level: float = 0.95,
     random_state: int = 1,
     n_init: int | str = "auto",
-) -> tuple[Pipeline, Dict[int, ClusterConfidence], list[str]]:
+) -> tuple[Pipeline, list[str]]:
 
     _validate_params(
         critical_percentage_delta=critical_percentage_delta,
         critical_abs_delta=critical_abs_delta,
     )
 
-    X_conf = to_get_confidences.copy()
     X_train = to_train_cluster.copy()
-
-    predicted_y = pd.Series(predicted_y, index=actual_y.index)
-    actual_y = pd.Series(actual_y, index=actual_y.index)
-
-    deltas_abs = (actual_y - predicted_y).abs()
-    if critical_percentage_delta is not None:
-        deltas, critical_delta = _get_deltas_for_percentage(
-            deltas_abs=deltas_abs,
-            sd_reference_y=sd_reference_y,
-            critical_percentage_delta=critical_percentage_delta,
-            actual_y=actual_y,
-        )
-    else:
-        deltas, critical_delta = _get_deltas_for_abs(
-            deltas_abs=deltas_abs,
-            critical_abs_delta=critical_abs_delta,
-        )
 
     cluster_model: Pipeline = Pipeline(
         steps=[
@@ -114,35 +164,9 @@ def do_confidence_model(
             ),
         ]
     )
-    cluster_model.fit(X_train[list(features)])
+    cluster_model.fit(X_train[features])
 
-    predicted_clusters = cluster_model.predict(X_conf[list(features)])
-
-    clusters_and_deltas = pd.DataFrame(
-        {
-            "cluster": predicted_clusters,
-            "delta": pd.Series(deltas.values, index=X_conf.index),
-        },
-        index=X_conf.index,
-    )
-
-    cluster_confs: Dict[int, ClusterConfidence] = {}
-    for cluster_id in np.unique(predicted_clusters):
-        cluster_points = clusters_and_deltas.loc[
-            clusters_and_deltas["cluster"] == cluster_id, "delta"
-        ]
-
-        conf = get_cluster_confidence(
-            delta_threshold=critical_delta,
-            cluster_points=cluster_points,
-            ci_kind=ci_kind,
-            alpha=alpha,
-            beta_prior=beta_prior,
-            beta_credible_level=beta_credible_level,
-        )
-        cluster_confs[int(cluster_id)] = conf
-
-    return cluster_model, cluster_confs, list(features)
+    return cluster_model, features
 
 
 def _do_wilson_ci(k, n, alpha=0.05) -> ClusterConfidence:
@@ -192,13 +216,13 @@ OVERIDE_THINGO = True
 
 def get_cluster_confidence(
     delta_threshold: float,
-    cluster_points: pd.Series,
+    cluster_deltas: pd.Series,
     ci_kind: CIKind = "wilson",
     alpha: float = 0.05,
     beta_prior: BetaPrior = (0.5, 0.5),
     beta_credible_level: float = 0.95,
 ) -> ClusterConfidence:
-    points = pd.Series(cluster_points).dropna()
+    points = pd.Series(cluster_deltas).dropna()
     k = int((points <= delta_threshold).sum())
 
     if k <= 0 and not OVERIDE_THINGO:
@@ -214,6 +238,11 @@ def get_cluster_confidence(
         return make_nan_confidence()
 
     n = int(points.shape[0])
+    if n <= 0:
+        print(
+            f"WARNING: No points in cluster to calculate confidence, returning NaN conf."
+        )
+        return make_nan_confidence()
 
     if ci_kind == "wilson":
         return _do_wilson_ci(k, n, alpha=alpha)
@@ -236,11 +265,6 @@ def add_cluster_confidences(
     clust_confidences: Dict[int, ClusterConfidence],
     threshold_confs: Optional[Dict[float, Dict[int, ClusterConfidence]]] = None,
 ) -> pd.DataFrame:
-    """
-    Adds confidence_center/lower/upper/n/k columns by mapping cluster id -> confidence stats.
-    If threshold_confs is provided (mapping SD threshold -> cluster_confs), also adds
-    confidence_lower_within_{threshold}_sd columns for each threshold.
-    """
     out = data.copy()
 
     def _get(cluster: int, field: str, confs: Dict[int, ClusterConfidence]) -> float:
@@ -283,224 +307,165 @@ def _beta_ppf(q: float, a: float, b: float) -> float:
         return float(np.quantile(samples, q))
 
 
-def _visualise_confidence(
+def confirm_good_for_threshold_type(
+    threshold_type: Literal["abs", "pct"],
+    correctness_delta_thresholds_pct: Optional[list] = None,
+    correctness_delta_thresholds_abs: Optional[list] = None,
+):
+    if threshold_type == "pct":
+        if correctness_delta_thresholds_pct is None:
+            raise ValueError(
+                "For pct threshold_type, provide correctness_delta_thresholds_pct."
+            )
+    elif threshold_type == "abs":
+        if correctness_delta_thresholds_abs is None:
+            raise ValueError(
+                "For abs threshold_type, provide correctness_delta_thresholds_abs."
+            )
+    else:
+        raise ValueError(f"Invalid threshold_type: {threshold_type}")
+
+
+def make_deltas_for_type(
+    type: Literal["abs", "pct"],
+    y_true: pd.Series,
+    y_pred,
+    y_for_sd: Optional[pd.Series] = None,
+):
+    if y_for_sd is None:
+        y_for_sd = y_true
+    deltas_abs = (y_true - y_pred).abs()
+    if type == "pct":
+        return _get_deltas_for_percentage(deltas_abs, y_for_sd)
+    elif type == "abs":
+        return _get_deltas_for_abs(deltas_abs)
+
+
+def make_confidence_model(
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+    y_train: pd.Series,
+    y_test: pd.Series,
+    y_test_pred: pd.Series,
+    model_type: str,
+    threshold_type: Literal["abs", "pct"],
+    correctness_delta_thresholds_pct: Optional[list] = [0.1, 0.3, 0.5, 0.75, 1.0],
+    correctness_delta_thresholds_abs: Optional[list] = None,
+    visualise_model: bool = True,
+) -> ConfidenceResult:
+    confirm_good_for_threshold_type(
+        threshold_type,
+        correctness_delta_thresholds_pct=correctness_delta_thresholds_pct,
+        correctness_delta_thresholds_abs=correctness_delta_thresholds_abs,
+    )
+
+    results = _generate_results(
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+        y_test_pred,
+        threshold_type,
+        correctness_delta_thresholds_pct=correctness_delta_thresholds_pct,
+        correctness_delta_thresholds_abs=correctness_delta_thresholds_abs,
+    )
+
+    if results and visualise_model:
+        delta_test = make_deltas_for_type(
+            type=threshold_type,
+            y_true=y_test,
+            y_pred=y_test_pred,
+            y_for_sd=y_train,
+        )
+        for threshold in results.thresholds:
+            scatter_confidence(
+                delta_test,
+                results,
+                colour_col="cluster",
+                model_type=model_type,
+                threshold=threshold,
+            )
+
+    return results
+
+
+def _generate_results(
     X_train: pd.DataFrame,
     X_test: pd.DataFrame,
     y_train: pd.Series,
     y_test: pd.Series,
     y_pred_test: pd.Series,
-    model_type: str,
-) -> None:
-    from visualisation import density_scatter
+    threshold_type: Literal["abs", "pct"],
+    correctness_delta_thresholds_pct: Optional[list] = [0.1, 0.3, 0.5, 0.75, 1.0],
+    correctness_delta_thresholds_abs: Optional[list] = None,
+) -> ConfidenceResult:
 
-    sd_thresholds = [0.1, 0.3, 0.5, 0.75, 1.0]
-    save_dir = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "data_exploration_visualisations",
-        "models",
-        f"recovery_{MODEL_TYPE_DISPLAY_NAMES.get(model_type, model_type)}",
-        "confidence",
+    delta_test = make_deltas_for_type(
+        type=threshold_type, y_true=y_test, y_pred=y_pred_test, y_for_sd=y_train
     )
-    os.makedirs(save_dir, exist_ok=True)
 
-    sd = float(y_train.std())
-    correctness_delta_abs = (y_test - y_pred_test).abs()
-    correctness_delta_pct_sd = correctness_delta_abs / sd
+    df_with_delta_test = X_test.copy()
+    df_with_delta_test["deltas"] = delta_test.values
 
-    for threshold in sd_thresholds:
-        cm, confs, features = do_confidence_model(
-            to_train_cluster=X_train,
-            to_get_confidences=X_test,
-            predicted_y=y_pred_test,
-            actual_y=y_test,
-            features=list(X_train.columns),
-            n_clusters=8,
-            critical_percentage_delta=threshold,
-            sd_reference_y=y_train,
-            ci_kind="beta",
-            beta_prior=(0.5, 0.5),
-            beta_credible_level=0.95,
-        )
+    cluster_model = None
+    features = None
+    predicted_clusters = None
+    thresholds = (
+        correctness_delta_thresholds_pct
+        if threshold_type == "pct"
+        else correctness_delta_thresholds_abs
+    )
 
-        clusters = cm.predict(X_test[features])
-        plot_df = X_test.copy()
-        plot_df["clusters"] = clusters
-        plot_df = add_cluster_confidences(plot_df, "clusters", confs)
-        plot_df["correctness_delta_pct_sd"] = correctness_delta_pct_sd.values
+    results_at_thresholds = {}
+    cluster_confidences_by_threshold = {}
 
-        threshold_label = str(threshold).replace(".", "p")
-        save_path = os.path.join(
-            save_dir, f"confidence_lower_at_{threshold_label}sd.png"
-        )
-        plot_df = plot_df[plot_df["confidence_lower"].notna()]
-        if not plot_df.empty:
-            density_scatter(
-                plot_df,
-                x_col="confidence_lower",
-                y_col="correctness_delta_pct_sd",
-                colour_col="clusters",
-                title=f"Confidence Lower vs Error (threshold={threshold} SD) | {model_type}",
-                point_alpha=0.7,
-                point_size=25,
-                save_path=save_path,
+    for theshold in thresholds:
+        if predicted_clusters is None:
+            cluster_model, features = make_cluster_model(
+                X_train,
+                X_test,
+                features=X_train.columns.tolist(),
+                n_clusters=5,
+                critical_abs_delta=theshold,
             )
+            predicted_clusters = cluster_model.predict(X_test[features])
 
+        cluster_confidences = {}
+        for cluster in np.unique(predicted_clusters):
+            cluster_deltas = df_with_delta_test[predicted_clusters == cluster]["deltas"]
+            confidence = get_cluster_confidence(
+                theshold,
+                cluster_deltas,
+                ci_kind="wilson",
+                alpha=0.05,
+                beta_prior=(0.5, 0.5),
+                beta_credible_level=0.95,
+            )
+            cluster_confidences[int(cluster)] = confidence
 
-def get_confidence_results_given_model_output(
-    X_train: pd.DataFrame,
-    y_train: pd.Series,
-    X_test: pd.DataFrame,
-    y_predicted_on_X_test: pd.Series,
-    true_y_on_X_test: pd.Series,
-    model_type: str,
-    visualise: bool = False,
-) -> pd.DataFrame:
+        cluster_confidences_by_threshold[theshold] = cluster_confidences
 
-    SD_THRESHOLDS = [0.1, 0.3, 0.5, 0.75, 1.0]
-
-    threshold_confs: Dict[float, Dict[int, ClusterConfidence]] = {}
-    for t in SD_THRESHOLDS:
-        _, t_confs, _ = do_confidence_model(
-            to_train_cluster=X_train,
-            to_get_confidences=X_test,
-            predicted_y=y_predicted_on_X_test,
-            actual_y=true_y_on_X_test,
-            features=list(X_train.columns),
-            n_clusters=8,
-            critical_percentage_delta=t,
-            sd_reference_y=y_train,
-            ci_kind="beta",
-            beta_prior=(0.5, 0.5),
-            beta_credible_level=0.95,
+        results_dict = pd.DataFrame(
+            {
+                "cluster": predicted_clusters,
+                "confidence_upper": [
+                    cluster_confidences[int(c)].upper for c in predicted_clusters
+                ],
+                "confidence_center": [
+                    cluster_confidences[int(c)].center for c in predicted_clusters
+                ],
+                "confidence_lower": [
+                    cluster_confidences[int(c)].lower for c in predicted_clusters
+                ],
+            }
         )
-        if any(check_nan_confidence(cc) for cc in t_confs.values()):
-            for cluster_id, cc in t_confs.items():
-                if check_nan_confidence(cc):
-                    print(
-                        f"cluster {cluster_id} has nan confidence in model: {model_type}"
-                    )
-        threshold_confs[t] = t_confs
+        results_at_thresholds[theshold] = results_dict
 
-    # for saving
-    cluster_model, cluster_confs, cluster_features = do_confidence_model(
-        to_train_cluster=X_train,
-        to_get_confidences=X_test,
-        predicted_y=y_predicted_on_X_test,
-        actual_y=true_y_on_X_test,
-        features=list(X_train.columns),
-        n_clusters=8,
-        critical_percentage_delta=0.75,
-        sd_reference_y=y_train,
-        ci_kind="beta",
-        beta_prior=(0.5, 0.5),
-        beta_credible_level=0.95,
-    )
-
-    clusters = cluster_model.predict(X_test[cluster_features])
-    conf_df = X_test.copy()
-    conf_df["clusters"] = clusters
-
-    if visualise:
-        _visualise_confidence(
-            X_train=X_train,
-            X_test=X_test,
-            y_train=y_train,
-            y_test=true_y_on_X_test,
-            y_pred_test=pd.Series(y_predicted_on_X_test, index=X_test.index),
-            model_type=model_type,
-        )
-
-    return add_cluster_confidences(
-        conf_df, "clusters", cluster_confs, threshold_confs=threshold_confs
-    )
-
-
-def get_confidence_results(
-    X: pd.DataFrame,
-    model_or_model_file_name: str | lightgbm.LGBMRegressor,
-    model_type: str,
-    visualise: bool = False,
-) -> pd.DataFrame:
-    """
-    Fit a confidence model on the train/test split for ``model_type`` and
-    apply it to ``X``, returning a DataFrame with cluster and confidence columns.
-    """
-    from data_managment import deterministic_encoded_train_test_split
-    from model_save_load import load_and_predict
-
-    X_train, X_test, y_train, y_test, _, _ = deterministic_encoded_train_test_split(
-        model_type
-    )
-
-    if isinstance(model_or_model_file_name, str):
-        model_name = model_or_model_file_name
-        y_pred_test = load_and_predict(model_name, X_test)
-    elif isinstance(model_or_model_file_name, lightgbm.LGBMRegressor):
-        model = model_or_model_file_name
-        y_pred_test = model.predict(X_test)
-    else:
-        raise ValueError(
-            "model_or_model_name must be either a model filename (str) or a fitted LGBMRegressor instance."
-        )
-
-    SD_THRESHOLDS = [0.1, 0.3, 0.5, 0.75, 1.0]
-
-    threshold_confs: Dict[float, Dict[int, ClusterConfidence]] = {}
-    for t in SD_THRESHOLDS:
-        _, t_confs, _ = do_confidence_model(
-            to_train_cluster=X_train,
-            to_get_confidences=X_test,
-            predicted_y=pd.Series(y_pred_test, index=X_test.index),
-            actual_y=y_test,
-            features=list(X_train.columns),
-            n_clusters=8,
-            critical_percentage_delta=t,
-            sd_reference_y=y_train,
-            ci_kind="beta",
-            beta_prior=(0.5, 0.5),
-            beta_credible_level=0.95,
-        )
-        if any(check_nan_confidence(cc) for cc in t_confs.values()):
-            if isinstance(model_or_model_file_name, str):
-                model_name = model_or_model_file_name
-            else:
-                model_name = model_type
-            for cluster_id, cc in t_confs.items():
-                if check_nan_confidence(cc):
-                    print(
-                        f"cluster {cluster_id} has nan confidence in model: {model_name}"
-                    )
-        threshold_confs[t] = t_confs
-
-    # for saving
-    cluster_model, cluster_confs, cluster_features = do_confidence_model(
-        to_train_cluster=X_train,
-        to_get_confidences=X_test,
-        predicted_y=y_pred_test,
-        actual_y=y_test,
-        features=list(X_train.columns),
-        n_clusters=8,
-        critical_percentage_delta=0.75,
-        sd_reference_y=y_train,
-        ci_kind="beta",
-        beta_prior=(0.5, 0.5),
-        beta_credible_level=0.95,
-    )
-
-    clusters = cluster_model.predict(X[cluster_features])
-    conf_df = X.copy()
-    conf_df["clusters"] = clusters
-
-    if visualise:
-        _visualise_confidence(
-            X_train=X_train,
-            X_test=X_test,
-            y_train=y_train,
-            y_test=y_test,
-            y_pred_test=pd.Series(y_pred_test, index=X_test.index),
-            model_type=model_type,
-        )
-
-    return add_cluster_confidences(
-        conf_df, "clusters", cluster_confs, threshold_confs=threshold_confs
+    return ConfidenceResult(
+        results=results_at_thresholds,
+        primary_threshold=thresholds[0],
+        threshold_type=threshold_type,
+        cluster_model=cluster_model,
+        cluster_confidences_by_threshold=cluster_confidences_by_threshold,
+        features=features,
     )

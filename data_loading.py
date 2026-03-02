@@ -28,17 +28,6 @@ ALL_SUPPLIERS = [
 
 
 def _resolve_supplier(record: dict) -> str | None:
-    """
-    Extract a consistent full supplier name from a raw record.
-
-    Newcastle records carry a ``supplierCode`` field with short codes
-    (dic, har, tom).  Bundaberg records carry a ``supplier`` field with
-    full names.  Some OCTOBER Newcastle records have ``supplier: "N/A"``
-    instead of a code — these are resolved via ``supplierCode`` when
-    available.
-
-    Returns the full supplier name, or None if neither field is present.
-    """
     code = record.get("supplierCode")
     if code and code in SUPPLIER_CODE_TO_NAME:
         return SUPPLIER_CODE_TO_NAME[code]
@@ -89,17 +78,6 @@ def _parse_bundaberg_record(record: dict) -> dict:
 
 
 def standardise_month_jsons(months: list[str] | None = None) -> None:
-    """
-    Read each month JSON, resolve schema differences between Newcastle and
-    Bundaberg records, and write a new file with the '_standardised' suffix.
-
-    Unified output schema (snake_case):
-        facility, date, time_start, time_end, process_time_mins,
-        supplier, supplied_m3, recovered_m3
-
-    Args:
-        months: Month names to process. Defaults to all available months.
-    """
     if months is None:
         months = MONTH_FILES
 
@@ -113,7 +91,6 @@ def standardise_month_jsons(months: list[str] | None = None) -> None:
 
         standardised = []
         for record in records:
-            # Bundaberg records have processTime and no separate date field
             if "processTime" in record:
                 standardised.append(_parse_bundaberg_record(record))
             else:
@@ -126,18 +103,6 @@ def standardise_month_jsons(months: list[str] | None = None) -> None:
 
 
 def load_month_data(months: list[str] | None = None) -> pd.DataFrame:
-    """
-    Load standardised monthly JSON files into a combined DataFrame.
-    Run standardise_month_jsons() first if the '_standardised' files don't exist.
-
-    Args:
-        months: Month names to load. Defaults to all available months.
-
-    Returns:
-        DataFrame with columns:
-            facility, date, time_start, time_end, process_time_mins,
-            supplier, supplied_m3, recovered_m3, month
-    """
     if months is None:
         months = MONTH_FILES
 
@@ -166,18 +131,6 @@ def load_month_data(months: list[str] | None = None) -> pd.DataFrame:
 
 
 def generate_derived_features(data: pd.DataFrame) -> pd.DataFrame:
-    """
-    Generate derived features from the standardised dataset.
-
-    Args:
-        data: DataFrame from load_month_data()
-
-    Returns:
-        DataFrame with additional derived features:
-            recovery_ratio (recovered_m3 / supplied_m3),
-            time_start_hour_minute (hour + minute/60, removes day/month),
-
-    """
     df = data.copy()
 
     if "recovered_m3" in df.columns and "supplied_m3" in df.columns:
@@ -192,29 +145,11 @@ def generate_derived_features(data: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_data_with_derived_features(months: list[str] | None = None) -> pd.DataFrame:
-    """
-    Load combined month data and generate derived features in one step.
-
-    Args:
-        months: Month names to load. Defaults to all available months.
-
-    Returns:
-        DataFrame with standardised and derived features.
-    """
     data = load_month_data(months)
     return generate_derived_features(data)
 
 
 def load_scheduled_data() -> pd.DataFrame:
-    """
-    Load scheduled delivery data from SCHEDUALS.json and parse into DataFrame.
-    Adds time_start_hour_minute column for consistency with model features.
-
-    Returns:
-        DataFrame with columns:
-            facility, date, time (parsed to hour+minute), supplier, supplied_m3 (volumeM3),
-            time_start_hour_minute
-    """
     filepath = os.path.join(DATA_DIR, "SCHEDUALS.json")
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"Scheduled file not found: {filepath}")

@@ -1,24 +1,23 @@
+from __future__ import annotations
+
 import matplotlib.pyplot as plt
 import numpy as np
 import lightgbm as lgb
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import gaussian_kde
-from typing import List, Optional, Tuple, Any
+from typing import TYPE_CHECKING, List, Optional, Tuple, Any
 import pandas as pd
+import os
+
+from model_constants import MODEL_TYPE_DISPLAY_NAMES
+
+if TYPE_CHECKING:
+    from confidence_model import ConfidenceResult
 
 
 def generate_plots(
     data: pd.DataFrame, targets: Optional[List[str]] = None, alpha: float = 0.8
 ) -> None:
-    """
-    Generate histogram or bar plots for each feature in the dataset.
-
-    Args:
-        data:    DataFrame containing the data
-        targets: Optional list of column names to plot. Plots all columns if None.
-        alpha:   Opacity of the bars/histogram (0.0 transparent, 1.0 opaque). Default 0.8.
-    """
-
     cols = targets if targets is not None else data.columns.tolist()
 
     for col in cols:
@@ -57,17 +56,6 @@ def base_scatter_builder(
     colour_col: str,
     figsize: Tuple[float, float] = (9, 6),
 ) -> Tuple[pd.DataFrame, plt.Figure, plt.Axes]:
-    """Initialise a scatter plot and return core objects.
-
-    This helper performs the common pre-processing used by the various
-    scatter-based visualisations defined in this module.  It:
-
-    * selects and drops NA rows for the three columns
-    * creates a ``matplotlib`` ``fig``/``ax`` pair with a sensible size
-
-    Returns ``(df, fig, ax)`` where ``df`` is the filtered DataFrame.
-    """
-
     df = data[[x_col, y_col, colour_col]].dropna().copy()
     fig, ax = plt.subplots(figsize=figsize)
     return df, fig, ax
@@ -82,14 +70,6 @@ def _finalise_scatter_axes(
     title: str,
     dark: bool = True,
 ) -> None:
-    """Apply labels/ticks/title to a scatter axis.
-
-    The logic handles categorical x/y axes by substituting numeric ticks with
-    the original category strings, using ``df_numeric`` for location values.
-    ``title`` should already include any extra information (e.g. KDE bandwidth).
-    When ``dark=True`` labels and title are rendered in white.
-    """
-
     text_colour = "white" if dark else "black"
 
     if df[x_col].dtype == "object" or str(df[x_col].dtype) == "category":
@@ -119,20 +99,6 @@ def _plot_coloured_data(
     alpha: float = 0.7,
     dark: bool = True,
 ) -> None:
-    """Draw scatter points on ``ax`` coloured by ``colour_col`` in ``df``.
-
-    Handles both categorical and numeric colour columns.  If the column is
-    categorical, each category gets a distinct colour and a legend is created;
-    otherwise a continuous colourmap is used and a colourbar is attached to
-    ``ax``.
-
-    When ``dark=True`` (the default) the axes and parent figure backgrounds
-    are set to a dark colour and brighter palettes / white text are used so
-    that points remain clearly visible.
-
-    Parameters mirror those used in ``scatter_coloured`` and ``density_scatter``.
-    """
-
     if dark:
         bg = "black"
         ax.set_facecolor(bg)
@@ -140,8 +106,8 @@ def _plot_coloured_data(
         ax.tick_params(colors="white")
         for spine in ax.spines.values():
             spine.set_edgecolor("#555555")
-        cat_palette = "Set2"  # bright pastels that pop on dark bg
-        seq_palette = "plasma"  # vivid sequential map
+        cat_palette = "Set2"
+        seq_palette = "plasma"
         legend_kw = dict(
             facecolor="#2a2a2a",
             edgecolor="#555555",
@@ -200,18 +166,6 @@ def scatter_coloured(
     alpha: float = 0.7,
     point_size: int = 20,
 ) -> None:
-    """
-    Create a colour-coded scatter plot across three dimensions.
-
-    Args:
-        data:        DataFrame containing the data
-        x_col:       Column name for the x-axis
-        y_col:       Column name for the y-axis
-        colour_col:  Column name used to colour the points
-        alpha:       Opacity of the points. Default 0.7.
-        point_size:  Size of scatter points. Default 20.
-    """
-
     df, fig, ax = base_scatter_builder(data, x_col, y_col, colour_col)
 
     _plot_coloured_data(
@@ -235,107 +189,97 @@ def scatter_coloured(
 
 
 def scatter_confidence(
-    data: pd.DataFrame,
-    x_col: str,
-    y_col: str,
+    true_delta: pd.Series,
+    results: ConfidenceResult,
     colour_col: str,
-    confidence_col: str,
-    true_col: Optional[str] = None,
-    pred_col: Optional[str] = None,
+    model_type: str,
+    threshold: Optional[float] = None,
     point_scale: float = 100,
 ) -> None:
-    """Confidence scatter plot with size and outline semantics.
+    t = threshold if threshold is not None else results.primary_threshold
+    _df = results.for_threshold(t) if threshold is not None else results.primary_df
 
-    * **point size** – proportional to ``confidence_col``; higher confidence =
-      larger marker.
-    * **outline colour/width** – when ``true_col`` and ``pred_col`` are given,
-      mismatched points will receive a **red outline** (thicker than the
-      default) to highlight incorrect predictions.
+    conf = _df["confidence_center"].astype(float).reset_index(drop=True)
+    delta = pd.Series(true_delta.values, index=range(len(true_delta)))
+    colour_data = _df[colour_col].reset_index(drop=True)
 
-    ``colour_col`` still controls point colour exactly as in
-    :func:`scatter_coloured`.  ``confidence_col`` must be numeric and is
-    normalised before scaling by ``point_scale``.
-    """
-
-    cols = [x_col, y_col, colour_col, confidence_col]
-    if true_col:
-        cols.append(true_col)
-    if pred_col:
-        cols.append(pred_col)
-
-    df = data[cols].dropna().copy()
-
-    conf = df[confidence_col].astype(float)
     norm = (conf - conf.min()) / (conf.max() - conf.min() + 1e-9)
     sizes = norm * point_scale + point_scale * 0.1
 
-    wrong_mask = None
-    if true_col and pred_col:
-        wrong_mask = df[true_col] != df[pred_col]
-        delta = (df[true_col].astype(float) - df[pred_col].astype(float)).abs()
-        dnorm = (delta - delta.min()) / (delta.max() - delta.min() + 1e-9)
-        cmap = plt.get_cmap("Reds")
-
     fig, ax = plt.subplots(figsize=(9, 6))
+    ax.set_facecolor("black")
+    fig.patch.set_facecolor("black")
+    ax.tick_params(colors="white")
+    for spine in ax.spines.values():
+        spine.set_edgecolor("#555555")
+    ax.grid(True, linestyle="--", alpha=0.3, color="#555555")
 
-    if df[colour_col].dtype == "object" or str(df[colour_col].dtype) == "category":
-        categories = sorted(df[colour_col].unique())
-        cmap = plt.get_cmap("tab10", len(categories))
+    if colour_data.dtype == "object" or str(colour_data.dtype) == "category":
+        categories = sorted(colour_data.unique())
+        cat_cmap = plt.get_cmap("Set2", max(len(categories), 3))
         for i, cat in enumerate(categories):
-            mask = df[colour_col] == cat
-            if wrong_mask is not None:
-                edgecolors = []
-                for idx, m in df[mask].iterrows():
-                    if wrong_mask.loc[idx]:
-                        edgecolors.append(cmap(dnorm.loc[idx]))
-                    else:
-                        edgecolors.append("white")
-            else:
-                edgecolors = "none"
+            mask = colour_data == cat
             ax.scatter(
-                df.loc[mask, x_col],
-                df.loc[mask, y_col],
+                conf[mask],
+                delta[mask],
                 label=str(cat),
-                color=cmap(i),
-                alpha=0.7,
+                color=cat_cmap(i),
+                alpha=0.75,
                 s=sizes[mask],
-                edgecolors=edgecolors,
-                linewidths=1.5,
+                linewidths=0,
             )
-        ax.legend(
-            title=colour_col, bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8
+        leg = ax.legend(
+            title=colour_col,
+            bbox_to_anchor=(1.01, 1),
+            loc="upper left",
+            fontsize=8,
+            facecolor="#2a2a2a",
+            edgecolor="#555555",
+            labelcolor="white",
         )
+        if leg is not None:
+            leg.get_title().set_color("white")
     else:
-        if wrong_mask is not None:
-            edgecolors = []
-            for idx, m in df.iterrows():
-                if wrong_mask.loc[idx]:
-                    edgecolors.append(cmap(dnorm.loc[idx]))
-                else:
-                    edgecolors.append("white")
-        else:
-            edgecolors = "none"
         sc = ax.scatter(
-            df[x_col],
-            df[y_col],
-            c=df[colour_col],
-            cmap="viridis",
-            alpha=0.7,
+            conf,
+            delta,
+            c=colour_data,
+            cmap="plasma",
+            alpha=0.75,
             s=sizes,
-            edgecolors=edgecolors,
-            linewidths=1.5,
+            linewidths=0,
         )
-        plt.colorbar(sc, ax=ax, label=colour_col)
+        cbar = plt.colorbar(sc, ax=ax)
+        cbar.set_label(colour_col, color="white")
+        plt.setp(cbar.ax.yaxis.get_ticklabels(), color="white")
 
-    _finalise_scatter_axes(
-        ax,
-        df,
-        df,
-        x_col,
-        y_col,
-        title=f"{x_col} vs {y_col}  |  colour: {colour_col}  |  confidence: {confidence_col}",
+    ax.axhline(
+        t,
+        color="#ff4444",
+        linewidth=1.5,
+        linestyle="--",
+        label=f"threshold = {t}",
+        zorder=3,
+    )
+
+    ax.set_xlabel("Confidence (center)", fontsize=10, color="white")
+    ax.set_ylabel("Prediction delta", fontsize=10, color="white")
+    display_name = MODEL_TYPE_DISPLAY_NAMES.get(model_type, model_type)
+    ax.set_title(
+        f"Confidence vs Delta  |  threshold={t}  |  {display_name}",
+        fontsize=11,
+        color="white",
     )
     plt.tight_layout()
+
+    model_dir = _make_model_vis_dir(display_name)
+    save_dir = os.path.join(model_dir, "confidence_visualisations")
+    os.makedirs(save_dir, exist_ok=True)
+    plt.savefig(
+        os.path.join(save_dir, f"confidence_vs_delta_t{t}.png"),
+        dpi=150,
+        bbox_inches="tight",
+    )
     plt.close(fig)
 
 
@@ -346,12 +290,6 @@ def confidence_histogram(
     pred_col: str,
     bins: int = 20,
 ) -> None:
-    """Histogram of confidence scores coloured by correctness.
-
-    Arguments mirror :func:`scatter_confidence` but only ``confidence_col`` is
-    required.  Bars show the count of points within each confidence bin; green
-    for correct predictions, red for incorrect.
-    """
     df = data[[confidence_col, true_col, pred_col]].dropna().copy()
     df["correct"] = df[true_col] == df[pred_col]
 
@@ -407,25 +345,6 @@ def density_scatter(
     title: str = None,
     save_path: Optional[str] = None,
 ) -> None:
-    """
-    Scatter plot with a KDE density heatmap rendered behind the points,
-    colour-coded by a third column.
-
-    Args:
-        data:        DataFrame containing the data
-        x_col:       Column name for the x-axis
-        y_col:       Column name for the y-axis
-        colour_col:  Column name used to colour the points
-        bw:            KDE bandwidth (smaller = tighter fit). If None, computed from data range.
-        point_size:    Size of scatter points. Default 15.
-        point_alpha:   Opacity of scatter points. Default 0.7.
-        kde_vis_alpha: Opacity of the KDE density contour fill. Default 0.5.
-        pad:           Padding around the data extent. If None, computed from data range.
-        dark:          Use dark theme for background and text. Default True.
-        title:         Optional title for the plot. Default generates one from column names.
-        save_path:     If provided, save the figure to this path instead of displaying it.
-    """
-
     df, fig, ax = base_scatter_builder(data, x_col, y_col, colour_col)
     df_numeric = df.copy()
 
@@ -490,8 +409,6 @@ def density_scatter(
     plt.tight_layout()
 
     if save_path is not None:
-        import os
-
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         plt.savefig(save_path, dpi=150, bbox_inches="tight")
         plt.close(fig)
@@ -501,7 +418,6 @@ def density_scatter(
 
 
 def _encode_for_model(series):
-    """Encode a column to float for use in LightGBM. Returns (encoded array, label_encoder or None)."""
     if series.dtype == "object" or str(series.dtype) == "category":
         le = LabelEncoder()
         encoded = le.fit_transform(series.astype(str)).astype(float)
@@ -518,18 +434,6 @@ def plot_lgbm_model(
     target_col: str,
     title: Optional[str] = None,
 ) -> Any:
-    """
-    Train a simple LightGBM model predicting target_col from feature_cols,
-    then plot feature importances and predicted vs actual.
-
-    Args:
-        data:         DataFrame
-        feature_cols: List of feature column names (can be >2)
-        target_col:   Target column to predict
-
-    Returns:
-        Trained LightGBM model
-    """
     assert type(feature_cols) == list and all(
         isinstance(c, str) for c in feature_cols
     ), "feature_cols must be a list of strings"
@@ -646,16 +550,7 @@ def display_simple_model_with_lgbm_and_density_scatter(
     bw: float = 0.3,
     alpha: float = 0.5,
 ) -> None:
-    """Train a simple LightGBM model and display a density scatter plot for two features against a target.
 
-    Args:
-        data (pd.DataFrame): DataFrame containing the features and target columns.
-        feat_1 (str): First feature column name, used as model input and scatter x-axis.
-        target (str): Target column name to predict.
-        feat_2 (str): Second feature column name, used as model input and scatter colour.
-        bw (float, optional): KDE bandwidth for the density scatter. Defaults to 0.3.
-        alpha (float, optional): Opacity of scatter points. Defaults to 0.5.
-    """
     print(f"--- LightGBM: {feat_1}, {feat_2}  →  {target} ---")
 
     plot_lgbm_model(
@@ -679,23 +574,6 @@ def plot_model_results(
     figsize: tuple = (10, 8),
     kde_bw: float = 0.3,
 ):
-    """
-    Visualise model results: true vs predicted, coloured by most important feature.
-    Includes KDE density heatmap, statistics, and saves as image.
-
-    Args:
-        y_true:             Array of true target values
-        y_pred:             Array of predicted values
-        feature_importance: Dict of {feature_name: importance_score}
-        feature_values:     Dict of {feature_name: array of values} (same length as y_true)
-        target_name:        Name of target column for labels
-        save_path:          Path to save image. If None, uses f"model_results_{target_name}.png"
-        figsize:            Figure size tuple. Default (10, 8).
-        kde_bw:             KDE bandwidth. Default 0.3.
-
-    Returns:
-        Path to saved image
-    """
     from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
     y_true = np.array(y_true).astype(float)
@@ -807,6 +685,36 @@ def plot_model_results(
     return save_path
 
 
+def _make_model_vis_dir(target_name: str) -> str:
+
+    save_dir = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "data_exploration_visualisations",
+        "models",
+        f"recovery_{target_name}",
+    )
+    os.makedirs(save_dir, exist_ok=True)
+    return save_dir
+
+
+def _visualise_confidence(
+    plot_df: pd.DataFrame,
+    save_path: str,
+    model_type: str,
+) -> None:
+
+    density_scatter(
+        plot_df,
+        x_col="confidence_lower",
+        y_col="correctness_delta_pct_sd",
+        colour_col="clusters",
+        title=f"Confidence Lower vs Error (threshold={threshold} SD) | {model_type}",
+        point_alpha=0.7,
+        point_size=25,
+        save_path=save_path,
+    )
+
+
 def visualize_model_predictions(
     y_true: np.ndarray,
     y_pred: np.ndarray,
@@ -816,32 +724,10 @@ def visualize_model_predictions(
     model: Any = None,
     image_filename: str = "model_results.png",
 ) -> str:
-    """
-    Visualise actual vs predicted, coloured by most important feature.
-    Optionally includes SHAP summary plot if model is provided.
-
-    Args:
-        y_true:             Actual target values
-        y_pred:             Predicted values
-        feature_importance: Dict of {feature_name: importance_score}
-        X_features:         Feature DataFrame for colouring
-        target_name:        Name for labels (e.g. "recovery_ratio")
-        model:              Trained model for SHAP analysis (optional)
-        image_filename:     Output filename in data_exploration_visualisations/models/{target_name}/
-
-    Returns:
-        Path to saved image
-    """
-    import os
-
     feature_values = {col: X_features[col].values for col in X_features.columns}
 
-    save_dir = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "data_exploration_visualisations",
-        "models",
-        target_name,
-    )
+    save_dir = _make_model_vis_dir(target_name)
+
     os.makedirs(save_dir, exist_ok=True)
 
     save_path = os.path.join(save_dir, image_filename)

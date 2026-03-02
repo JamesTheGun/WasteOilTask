@@ -4,7 +4,7 @@ import numpy as np
 from typing import Any, List, Tuple, Literal
 import pandas as pd
 
-from confidence_model import get_confidence_results
+from confidence_model import make_confidence_model
 from visualisation import visualize_model_predictions
 from data_managment import (
     get_schedule_model_features,
@@ -13,15 +13,17 @@ from data_managment import (
 from model_constants import (
     RATIO_MODELS,
     MODEL_TYPE_DISPLAY_NAMES,
-    RATIO_WITHOUT_VOL_MODEL_FILENAME,
+    RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME,
     VOLUME_MODEL_FILENAME,
     RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
     RESULTS_RATIO_MODEL_FILENAME,
     RESULTS_VOLUME_MODEL_FILENAME,
     RESULTS_RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
+    CONFIDENCE_MODEL_FILENAMES,
 )
 from model_save_load import (
     save_model,
+    save_confidence_model,
     make_and_save_predictions,
 )
 from model_utils import print_model_results
@@ -29,7 +31,7 @@ from model_utils import print_model_results
 
 def _train_lgbm_recovery_volume_model(
     visualise_model: bool,
-) -> Tuple[dict, lgb.LGBMRegressor]:
+) -> Tuple[dict, lgb.LGBMRegressor, Any]:
     return _train_ratio_with_vol_lgbm_recovery_ratio_model(
         visualise_model, type="volume"
     )
@@ -37,23 +39,27 @@ def _train_lgbm_recovery_volume_model(
 
 def _train_lgbm_recovery_ratio_without_vol_model(
     visualise_model: bool,
-) -> Tuple[dict, lgb.LGBMRegressor]:
+) -> Tuple[dict, lgb.LGBMRegressor, Any]:
     return _train_ratio_with_vol_lgbm_recovery_ratio_model(
-        visualise_model, type="ratio"
+        visualise_model, type="ratio_without_supplied_volume"
     )
 
 
 def _get_results(
     y_test,
     y_test_pred,
-    type: Literal["ratio", "volume", "ratio_with_supplied_volume"],
+    type: Literal[
+        "ratio_without_supplied_volume",
+        "volume",
+        "ratio_with_supplied_volume",
+        "volume_without_supplied_volume",
+    ],
     model=None,
     feature_names: List[str] = None,
     y_train=None,
     y_train_pred=None,
     supplied_m3=None,
 ):
-    """Calculate model results. Train scores are optional."""
     results = {
         "test_r2": r2_score(y_test, y_test_pred),
         "test_mae": mean_absolute_error(y_test, y_test_pred),
@@ -94,15 +100,18 @@ def _get_results(
 
 def _train_ratio_with_vol_lgbm_recovery_ratio_model(
     visualise_model: bool,
-    type: Literal["ratio", "volume", "ratio_with_supplied_volume"],
+    type: Literal[
+        "ratio_without_supplied_volume",
+        "volume",
+        "ratio_with_supplied_volume",
+        "volume_without_supplied_volume",
+    ],
 ) -> Tuple[dict, lgb.LGBMRegressor]:
 
-    X_train, X_test, y_train, y_test, not_selected_train, not_selected_test = (
+    X_train, X_test, y_train, y_test, not_selected_train, not_selected_test, _ = (
         deterministic_encoded_train_test_split(type)
     )
 
-    # Split training data further into train/val for early stopping
-    # (using the last 20% of training data as validation)
     val_split = int(len(X_train) * 0.8)
     X_val = X_train.iloc[val_split:]
     y_val = y_train.iloc[val_split:]
@@ -138,70 +147,87 @@ def _train_ratio_with_vol_lgbm_recovery_ratio_model(
     )
 
     if visualise_model:
-        display_type = MODEL_TYPE_DISPLAY_NAMES.get(type, type)
+        display_type = MODEL_TYPE_DISPLAY_NAMES[type]
         visualize_model_predictions(
             y_true=y_test,
             y_pred=y_test_pred,
             feature_importance=results["feature_importance"],
             X_features=X_test,
-            target_name=f"recovery_{display_type}",
+            target_name=f"{display_type}",
             model=model,
             image_filename=f"recovery_{display_type}_model.png",
         )
 
-    get_confidence_results(X_test, model, type, visualise=visualise_model)
+    confidence_result = make_confidence_model(
+        X_train=X_train,
+        X_test=X_test,
+        y_train=y_train,
+        y_test=y_test,
+        y_test_pred=y_test_pred,
+        model_type=type,
+        threshold_type="pct",
+        correctness_delta_thresholds_pct=[0.1, 0.3, 0.5, 0.75, 1.0],
+        correctness_delta_thresholds_abs=None,
+        visualise_model=visualise_model,
+    )
 
-    return results, model
+    return results, model, confidence_result
 
 
 def do_recovery_ratio_model_without_vol(
-    model_filename: str = RATIO_WITHOUT_VOL_MODEL_FILENAME,
+    model_filename: str = RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME,
     visualise_model: bool = False,
 ):
-    ratio_results, model = _train_lgbm_recovery_ratio_without_vol_model(visualise_model)
+    ratio_results, model, confidence_result = _train_lgbm_recovery_ratio_without_vol_model(visualise_model)
     print_model_results(ratio_results, model_name="Recovery Ratio Model")
     save_model(model, model_filename)
+    save_confidence_model(confidence_result, CONFIDENCE_MODEL_FILENAMES["ratio_without_supplied_volume"])
 
 
 def do_recovery_volume_model(
     model_filename: str = VOLUME_MODEL_FILENAME, visualise_model: bool = False
 ):
-    volume_results, model = _train_lgbm_recovery_volume_model(visualise_model)
+    volume_results, model, confidence_result = _train_lgbm_recovery_volume_model(visualise_model)
     print_model_results(volume_results, model_name="Recovery Volume Model")
     save_model(model, model_filename)
+    save_confidence_model(confidence_result, CONFIDENCE_MODEL_FILENAMES["volume"])
 
 
 def do_recovery_ratio_model_with_supplied_volume(
     model_filename: str = RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
     visualise_model: bool = False,
 ):
-    ratio_results, model = _train_ratio_with_vol_lgbm_recovery_ratio_model(
+    ratio_results, model, confidence_result = _train_ratio_with_vol_lgbm_recovery_ratio_model(
         visualise_model, type="ratio_with_supplied_volume"
     )
     print_model_results(
         ratio_results, model_name="Recovery Ratio Model with Supplied Volume"
     )
     save_model(model, model_filename)
+    save_confidence_model(confidence_result, CONFIDENCE_MODEL_FILENAMES["ratio_with_supplied_volume"])
 
 
 if __name__ == "__main__":
-    from implied_models import do_implied_ratio_model, do_implied_volume_model
+    from implied_models import do_implied_model
 
     do_recovery_ratio_model_without_vol(
-        RATIO_WITHOUT_VOL_MODEL_FILENAME, visualise_model=True
+        RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME, visualise_model=True
     )
     do_recovery_volume_model(VOLUME_MODEL_FILENAME, visualise_model=True)
     do_recovery_ratio_model_with_supplied_volume(
         RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME, visualise_model=True
     )
 
-    X_ratio, X_ratio_not_encoded = get_schedule_model_features(m_type="ratio")
+    X_ratio, X_ratio_not_encoded = get_schedule_model_features(
+        m_type="ratio_without_supplied_volume"
+    )
     make_and_save_predictions(
         X_ratio,
-        "ratio",
-        model_filename=RATIO_WITHOUT_VOL_MODEL_FILENAME,
+        "ratio_without_supplied_volume",
+        model_filename=RATIO_WITHOUT_SUPPLIED_VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_RATIO_MODEL_FILENAME,
         X_not_encoded=X_ratio_not_encoded,
+        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES["ratio_without_supplied_volume"],
     )
 
     X_volume, X_volume_not_encoded = get_schedule_model_features(m_type="volume")
@@ -211,6 +237,7 @@ if __name__ == "__main__":
         model_filename=VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_VOLUME_MODEL_FILENAME,
         X_not_encoded=X_volume_not_encoded,
+        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES["volume"],
     )
 
     X_rsv, X_rsv_not_encoded = get_schedule_model_features(
@@ -222,7 +249,10 @@ if __name__ == "__main__":
         model_filename=RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
         predictions_filename=RESULTS_RATIO_WITH_SUPPLIED_VOLUME_MODEL_FILENAME,
         X_not_encoded=X_rsv_not_encoded,
+        confidence_model_filename=CONFIDENCE_MODEL_FILENAMES["ratio_with_supplied_volume"],
     )
-
-    do_implied_ratio_model(visualise_model=True)
-    do_implied_volume_model(visualise_model=True)
+    do_implied_model(
+        visualise_model=True, base_model_type="ratio_without_supplied_volume"
+    )
+    do_implied_model(visualise_model=True, base_model_type="volume")
+    do_implied_model(visualise_model=True, base_model_type="ratio_with_supplied_volume")

@@ -1,35 +1,56 @@
 import numpy as np
 import pandas as pd
+from confidence_model import ConfidenceResult
+
+
+def _to_native(val):
+    if isinstance(val, (np.integer,)):
+        return int(val)
+    if isinstance(val, (np.floating,)):
+        return float(val)
+    if isinstance(val, (np.bool_,)):
+        return bool(val)
+    return val
 
 
 def make_predictions_jsonable(
     X: pd.DataFrame,
     predictions: np.ndarray,
     X_not_encoded: pd.DataFrame = None,
-    confidence_df: pd.DataFrame = None,
+    confidence_dict: ConfidenceResult = None,
 ):
     X = X.reset_index(drop=True)
     display = X_not_encoded.reset_index(drop=True) if X_not_encoded is not None else X
     features = display.columns.tolist()
-    prediction_feature_values = [dict(zip(features, row)) for row in display.values]
+    prediction_feature_values = [
+        {k: _to_native(v) for k, v in zip(features, row)} for row in display.values
+    ]
     predictions_with_id = pd.DataFrame(
         {
-            "id": X.index,
-            "predicted_recovery": predictions,
+            "id": [int(i) for i in X.index],
+            "predicted_recovery": [float(p) for p in predictions],
             "prediction_feature_values": prediction_feature_values,
         }
     )
 
-    if confidence_df is not None:
-        conf_cols = [
-            "clusters",
-            "confidence_center",
-            "confidence_lower",
-            "confidence_upper",
+    if confidence_dict is not None:
+        clusters = list(confidence_dict.clusters.values)
+        lowers = list(confidence_dict.confidence_lower.values)
+        centers = list(confidence_dict.confidence_center.values)
+        uppers = list(confidence_dict.confidence_upper.values)
+        tpct = confidence_dict.threshold_pct_sd
+        tabs = confidence_dict.threshold_abs
+        predictions_with_id["confidence"] = [
+            {
+                "cluster": int(clusters[i]),
+                "lower": float(lowers[i]),
+                "center": float(centers[i]),
+                "upper": float(uppers[i]),
+                "threshold_pct_sd": float(tpct) if tpct is not None else None,
+                "threshold_abs": float(tabs) if tabs is not None else None,
+            }
+            for i in range(len(clusters))
         ]
-        for col in conf_cols:
-            if col in confidence_df.columns:
-                predictions_with_id[col] = confidence_df[col].values
 
     return predictions_with_id.to_dict(orient="records")
 
