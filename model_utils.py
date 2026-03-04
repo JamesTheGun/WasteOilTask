@@ -17,7 +17,7 @@ def make_predictions_jsonable(
     X: pd.DataFrame,
     predictions: np.ndarray,
     X_not_encoded: pd.DataFrame = None,
-    confidence_dict: ConfidenceResult = None,
+    confidence_result: ConfidenceResult = None,
 ):
     X = X.reset_index(drop=True)
     display = X_not_encoded.reset_index(drop=True) if X_not_encoded is not None else X
@@ -33,13 +33,13 @@ def make_predictions_jsonable(
         }
     )
 
-    if confidence_dict is not None:
-        clusters = list(confidence_dict.clusters.values)
-        lowers = list(confidence_dict.confidence_lower.values)
-        centers = list(confidence_dict.confidence_center.values)
-        uppers = list(confidence_dict.confidence_upper.values)
-        tpct = confidence_dict.threshold_pct_sd
-        tabs = confidence_dict.threshold_abs
+    if confidence_result is not None:
+        clusters = list(confidence_result.clusters.values)
+        lowers = list(confidence_result.confidence_lower.values)
+        centers = list(confidence_result.confidence_center.values)
+        uppers = list(confidence_result.confidence_upper.values)
+        tpct = confidence_result.threshold_pct_sd
+        tabs = confidence_result.threshold_abs
         predictions_with_id["confidence"] = [
             {
                 "cluster": int(clusters[i]),

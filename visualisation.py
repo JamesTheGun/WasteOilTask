@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.stats import gaussian_kde
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 from model_constants import MODEL_TYPE_DISPLAY_NAMES
 
@@ -16,14 +18,16 @@ if TYPE_CHECKING:
 
 def scatter_confidence(
     true_delta: pd.Series,
-    results: ConfidenceResult,
+    results: "ConfidenceResult",
+    X: pd.DataFrame,
     colour_col: str,
     model_type: str,
     threshold: Optional[float] = None,
     point_scale: float = 100,
 ) -> None:
     t = threshold if threshold is not None else results.primary_threshold
-    _df = results.for_threshold(t) if threshold is not None else results.primary_df
+    assignment = results.apply_to(X, threshold=t)
+    _df = assignment._df
 
     conf = _df["confidence_center"].astype(float).reset_index(drop=True)
     delta = pd.Series(true_delta.values, index=range(len(true_delta)))
@@ -40,22 +44,27 @@ def scatter_confidence(
         spine.set_edgecolor("#555555")
     ax.grid(True, linestyle="--", alpha=0.3, color="#555555")
 
-    if colour_data.dtype == "object" or str(colour_data.dtype) == "category":
+    if colour_data.dtype == "object" or str(colour_data.dtype) == "category" or colour_data.nunique() <= 20:
         categories = sorted(colour_data.unique())
         cat_cmap = plt.get_cmap("Set2", max(len(categories), 3))
+        cluster_mean_conf = {
+            cat: float(conf[colour_data == cat].mean())
+            for cat in categories
+        }
         for i, cat in enumerate(categories):
             mask = colour_data == cat
+            mean_conf = cluster_mean_conf[cat]
             ax.scatter(
                 conf[mask],
                 delta[mask],
-                label=str(cat),
+                label=f"Cluster {cat}  (conf={mean_conf:.2f})",
                 color=cat_cmap(i),
                 alpha=0.75,
                 s=sizes[mask],
                 linewidths=0,
             )
         leg = ax.legend(
-            title=colour_col,
+            title="Cluster (mean confidence)",
             bbox_to_anchor=(1.01, 1),
             loc="upper left",
             fontsize=8,
@@ -102,11 +111,170 @@ def scatter_confidence(
     save_dir = os.path.join(model_dir, "confidence_visualisations")
     os.makedirs(save_dir, exist_ok=True)
     plt.savefig(
-        os.path.join(save_dir, f"confidence_vs_delta_t{t}.png"),
+        os.path.join(save_dir, f"confidence_vs_delta_t{str(t).replace('.', 'p')}.png"),
         dpi=150,
         bbox_inches="tight",
     )
     plt.close(fig)
+
+
+def _draw_and_save_cluster_scatter(
+    x_vals: np.ndarray,
+    y_vals: np.ndarray,
+    x_label: str,
+    y_label: str,
+    title: str,
+    clusters: np.ndarray,
+    conf_center: np.ndarray,
+    feature_names: list,
+    save_path: str,
+    point_scale: float = 200,
+) -> None:
+    sizes = np.clip(conf_center, 0, 1) * point_scale + point_scale * 0.1
+    cluster_mean_conf = {
+        cat: conf_center[clusters == cat].mean() for cat in np.unique(clusters)
+    }
+    categories = sorted(np.unique(clusters))
+    cat_cmap = plt.get_cmap("Set2", max(len(categories), 3))
+
+    fig, ax = plt.subplots(figsize=(9, 7))
+    ax.set_facecolor("black")
+    fig.patch.set_facecolor("black")
+    ax.tick_params(colors="white")
+    for spine in ax.spines.values():
+        spine.set_edgecolor("#555555")
+    ax.grid(True, linestyle="--", alpha=0.3, color="#555555")
+
+    for i, cat in enumerate(categories):
+        mask = clusters == cat
+        mean_conf = cluster_mean_conf[cat]
+        ax.scatter(
+            x_vals[mask],
+            y_vals[mask],
+            label=f"Cluster {cat}  (conf={mean_conf:.2f})",
+            color=cat_cmap(i),
+            alpha=0.75,
+            s=sizes[mask],
+            linewidths=0,
+        )
+
+    leg = ax.legend(
+        title="Cluster (mean confidence)",
+        bbox_to_anchor=(1.01, 1),
+        loc="upper left",
+        fontsize=8,
+        facecolor="#2a2a2a",
+        edgecolor="#555555",
+        labelcolor="white",
+    )
+    if leg is not None:
+        leg.get_title().set_color("white")
+
+    ax.set_xlabel(x_label, fontsize=10, color="white")
+    ax.set_ylabel(y_label, fontsize=10, color="white")
+    ax.set_title(title, fontsize=11, color="white")
+    plt.tight_layout()
+
+    fig.canvas.draw()
+    if leg is not None:
+        leg_bb = leg.get_window_extent().transformed(ax.transAxes.inverted())
+        features_text = "Features:\n" + "\n".join(f"  {f}" for f in feature_names)
+        ax.text(
+            leg_bb.x0,
+            leg_bb.y0 - 0.05,
+            features_text,
+            transform=ax.transAxes,
+            fontsize=10.5,
+            verticalalignment="top",
+            horizontalalignment="left",
+            color="white",
+            clip_on=False,
+            bbox=dict(boxstyle="round", facecolor="#2a2a2a", edgecolor="#555555", alpha=0.9),
+        )
+
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    plt.savefig(save_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+
+def scatter_pca_confidence(
+    X: pd.DataFrame,
+    results: "ConfidenceResult",
+    model_type: str,
+    threshold: Optional[float] = None,
+    point_scale: float = 200,
+) -> None:
+    t = threshold if threshold is not None else results.primary_threshold
+    assignment = results.apply_to(X, threshold=t)
+    _df = assignment._df
+
+    scaler = StandardScaler()
+    pca = PCA(n_components=2)
+    X_scaled = scaler.fit_transform(X.values)
+    components = pca.fit_transform(X_scaled)
+
+    clusters = _df["cluster"].reset_index(drop=True).values
+    conf_center = _df["confidence_center"].astype(float).reset_index(drop=True).values
+
+    display_name = MODEL_TYPE_DISPLAY_NAMES.get(model_type, model_type)
+    save_dir = os.path.join(_make_model_vis_dir(display_name), "confidence_visualisations")
+    save_path = os.path.join(save_dir, f"pca_clusters_t{str(t).replace('.', 'p')}.png")
+
+    _draw_and_save_cluster_scatter(
+        x_vals=components[:, 0],
+        y_vals=components[:, 1],
+        x_label=f"PC1 ({pca.explained_variance_ratio_[0]*100:.1f}% var)",
+        y_label=f"PC2 ({pca.explained_variance_ratio_[1]*100:.1f}% var)",
+        title=f"PCA Clusters  |  threshold={t}  |  {display_name}\n(point size = confidence center)",
+        clusters=clusters,
+        conf_center=conf_center,
+        feature_names=X.columns.tolist(),
+        save_path=save_path,
+        point_scale=point_scale,
+    )
+
+
+def scatter_top_features_confidence(
+    X: pd.DataFrame,
+    results: "ConfidenceResult",
+    model_type: str,
+    threshold: Optional[float] = None,
+    point_scale: float = 200,
+) -> None:
+    t = threshold if threshold is not None else results.primary_threshold
+    assignment = results.apply_to(X, threshold=t)
+    _df = assignment._df
+
+    scaler = StandardScaler()
+    pca = PCA(n_components=2)
+    X_scaled = scaler.fit_transform(X.values)
+    pca.fit(X_scaled)
+
+    feat_names = X.columns.tolist()
+    top_x_idx = int(np.argmax(np.abs(pca.components_[0])))
+    top_y_idx = int(np.argmax(np.abs(pca.components_[1])))
+    x_feat = feat_names[top_x_idx]
+    y_feat = feat_names[top_y_idx]
+
+    clusters = _df["cluster"].reset_index(drop=True).values
+    conf_center = _df["confidence_center"].astype(float).reset_index(drop=True).values
+
+    display_name = MODEL_TYPE_DISPLAY_NAMES.get(model_type, model_type)
+    save_dir = os.path.join(_make_model_vis_dir(display_name), "confidence_visualisations")
+    save_path = os.path.join(save_dir, f"top_features_clusters_t{str(t).replace('.', 'p')}.png")
+
+    _draw_and_save_cluster_scatter(
+        x_vals=X[x_feat].values,
+        y_vals=X[y_feat].values,
+        x_label=f"{x_feat}  (top PC1 loading)",
+        y_label=f"{y_feat}  (top PC2 loading)",
+        title=f"Top PCA Features  |  threshold={t}  |  {display_name}\n(point size = confidence center)",
+        clusters=clusters,
+        conf_center=conf_center,
+        feature_names=feat_names,
+        save_path=save_path,
+        point_scale=point_scale,
+    )
 
 
 def plot_model_results(
@@ -234,7 +402,7 @@ def _make_model_vis_dir(target_name: str) -> str:
 
     save_dir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        "data_exploration_visualisations",
+        "visualisations",
         "models",
         f"recovery_{target_name}",
     )

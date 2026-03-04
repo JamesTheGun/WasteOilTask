@@ -161,7 +161,8 @@ def _train_ratio_with_vol_lgbm_recovery_ratio_model(
     confidence_result = make_confidence_model(
         X_train=X_train,
         X_test=X_test,
-        y_train=y_train,
+        y_train=y_train, 
+        y_train_pred=y_train_pred,
         y_test=y_test,
         y_test_pred=y_test_pred,
         model_type=type,

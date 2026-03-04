@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 
 import statsmodels.stats.proportion as smp
 import lightgbm
-from visualisation import _make_model_vis_dir, scatter_confidence
+from visualisation import _make_model_vis_dir, scatter_confidence, scatter_pca_confidence, scatter_top_features_confidence
 from model_constants import MODEL_TYPE_DISPLAY_NAMES
 
 CIKind = Literal["wilson", "beta"]
@@ -138,7 +138,6 @@ def _get_deltas_for_abs(deltas_abs, critical_abs_delta):
 
 def make_cluster_model(
     to_train_cluster: pd.DataFrame,
-    to_get_confidences: pd.DataFrame,
     *,
     features: Sequence[str],
     n_clusters: int,
@@ -297,6 +296,7 @@ def make_deltas_for_type(
 def make_confidence_model(
     X_train: pd.DataFrame,
     X_test: pd.DataFrame,
+    y_train_pred: pd.Series,
     y_train: pd.Series,
     y_test: pd.Series,
     y_test_pred: pd.Series,
@@ -305,6 +305,9 @@ def make_confidence_model(
     correctness_delta_thresholds_pct: Optional[list] = [0.1, 0.3, 0.5, 0.75, 1.0],
     correctness_delta_thresholds_abs: Optional[list] = None,
     visualise_model: bool = True,
+    cluster_on: Literal["train", "test"] = "train",
+    deltas_on: Literal["train", "test"] = "train",
+    visualise_on: Literal["train", "test"] = "test",
 ) -> ConfidenceResult:
     confirm_good_for_threshold_type(
         threshold_type,
@@ -312,29 +315,50 @@ def make_confidence_model(
         correctness_delta_thresholds_abs=correctness_delta_thresholds_abs,
     )
 
+    datasets = {
+        "train": (X_train, y_train, y_train_pred),
+        "test": (X_test, y_test, y_test_pred),
+    }
+    X_cluster, _, _ = datasets[cluster_on]
+    X_delta, y_delta, y_pred_delta = datasets[deltas_on]
+    X_vis, y_vis, y_pred_vis = datasets[visualise_on]
+
     results = _generate_results(
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-        y_test_pred,
-        threshold_type,
+        X_cluster=X_cluster,
+        X_delta=X_delta,
+        y_delta=y_delta,
+        y_pred_delta=y_pred_delta,
+        y_for_sd=y_train,
+        threshold_type=threshold_type,
         correctness_delta_thresholds_pct=correctness_delta_thresholds_pct,
         correctness_delta_thresholds_abs=correctness_delta_thresholds_abs,
     )
 
     if results and visualise_model:
-        delta_test = make_deltas_for_type(
+        delta_vis = make_deltas_for_type(
             type=threshold_type,
-            y_true=y_test,
-            y_pred=y_test_pred,
+            y_true=y_vis,
+            y_pred=y_pred_vis,
             y_for_sd=y_train,
         )
         for threshold in results.thresholds:
             scatter_confidence(
-                delta_test,
+                delta_vis,
                 results,
+                X_vis,
                 colour_col="cluster",
+                model_type=model_type,
+                threshold=threshold,
+            )
+            scatter_pca_confidence(
+                X_vis,
+                results,
+                model_type=model_type,
+                threshold=threshold,
+            )
+            scatter_top_features_confidence(
+                X_vis,
+                results,
                 model_type=model_type,
                 threshold=threshold,
             )
@@ -343,26 +367,26 @@ def make_confidence_model(
 
 
 def _generate_results(
-    X_train: pd.DataFrame,
-    X_test: pd.DataFrame,
-    y_train: pd.Series,
-    y_test: pd.Series,
-    y_pred_test: pd.Series,
+    X_cluster: pd.DataFrame,
+    X_delta: pd.DataFrame,
+    y_delta: pd.Series,
+    y_pred_delta: pd.Series,
+    y_for_sd: pd.Series,
     threshold_type: Literal["abs", "pct"],
     correctness_delta_thresholds_pct: Optional[list] = [0.1, 0.3, 0.5, 0.75, 1.0],
     correctness_delta_thresholds_abs: Optional[list] = None,
 ) -> ConfidenceResult:
 
-    delta_test = make_deltas_for_type(
-        type=threshold_type, y_true=y_test, y_pred=y_pred_test, y_for_sd=y_train
+    deltas = make_deltas_for_type(
+        type=threshold_type, y_true=y_delta, y_pred=y_pred_delta, y_for_sd=y_for_sd
     )
 
-    df_with_delta_test = X_test.copy()
-    df_with_delta_test["deltas"] = delta_test.values
+    df_with_deltas = X_delta.copy()
+    df_with_deltas["deltas"] = deltas.values
 
     cluster_model = None
     features = None
-    predicted_clusters = None
+    predicted_clusters_delta = None
     thresholds = (
         correctness_delta_thresholds_pct
         if threshold_type == "pct"
@@ -373,19 +397,18 @@ def _generate_results(
     cluster_confidences_by_threshold = {}
 
     for theshold in thresholds:
-        if predicted_clusters is None:
+        if cluster_model is None:
             cluster_model, features = make_cluster_model(
-                X_train,
-                X_test,
-                features=X_train.columns.tolist(),
+                X_cluster,
+                features=X_cluster.columns.tolist(),
                 n_clusters=5,
                 critical_abs_delta=theshold,
             )
-            predicted_clusters = cluster_model.predict(X_test[features])
+            predicted_clusters_delta = cluster_model.predict(X_delta[features])
 
         cluster_confidences = {}
-        for cluster in np.unique(predicted_clusters):
-            cluster_deltas = df_with_delta_test[predicted_clusters == cluster]["deltas"]
+        for cluster in np.unique(predicted_clusters_delta):
+            cluster_deltas = df_with_deltas[predicted_clusters_delta == cluster]["deltas"]
             confidence = get_cluster_confidence(
                 theshold,
                 cluster_deltas,
@@ -400,15 +423,15 @@ def _generate_results(
 
         results_dict = pd.DataFrame(
             {
-                "cluster": predicted_clusters,
+                "cluster": predicted_clusters_delta,
                 "confidence_upper": [
-                    cluster_confidences[int(c)].upper for c in predicted_clusters
+                    cluster_confidences[int(c)].upper for c in predicted_clusters_delta
                 ],
                 "confidence_center": [
-                    cluster_confidences[int(c)].center for c in predicted_clusters
+                    cluster_confidences[int(c)].center for c in predicted_clusters_delta
                 ],
                 "confidence_lower": [
-                    cluster_confidences[int(c)].lower for c in predicted_clusters
+                    cluster_confidences[int(c)].lower for c in predicted_clusters_delta
                 ],
             }
         )

@@ -89,6 +89,7 @@ def do_implied_model(
     confidence_dict = make_confidence_model(
         X_train,
         X_test,
+        y_pred_train_impl,
         y_true_train_impl,
         y_true_test_impl,
         y_pred_test_impl,
@@ -102,7 +103,7 @@ def do_implied_model(
         X_test,
         y_pred_test_impl,
         X_not_encoded=X_test_not_encoded,
-        confidence_dict=confidence_dict,
+        confidence_result=confidence_dict.apply_to(X_test),
     )
 
     save_predictions(predictions, IMPLIED_RECOVERY_RATIO_PREDICTIONS_FILENAME)

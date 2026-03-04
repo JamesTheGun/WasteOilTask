@@ -134,7 +134,7 @@ def make_and_save_predictions(
         X,
         predictions,
         X_not_encoded=X_not_encoded,
-        confidence_dict=confidence_assignment,
+        confidence_result=confidence_assignment,
     )
     save_predictions(predictions_dict, predictions_filename)
     return predictions
